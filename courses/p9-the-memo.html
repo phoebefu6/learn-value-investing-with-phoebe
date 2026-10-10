@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 9 of 10. A one-page investment memo built from real 10-K figures: the owner's paragraph, a justified starting point, a range, what a test price implies, and kill criteria written before any decision. Plus the value-versus-growth evidence, taught as the disagreement it is.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="A memo that says what would prove it wrong - learn value investing with phoebe">
+<meta property="og:description" content="Analyst session 9 of 10. Six blocks on one page, three kill criteria that are observable, dated and specific, and the value-premium evidence that nobody has settled.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/courses/p9-the-memo.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="A memo that says what would prove it wrong - learn value investing with phoebe">
+<meta name="twitter:description" content="Analyst session 9 of 10. A one-page memo with kill criteria written before any decision.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 9 · A memo that says what would prove it wrong - learn value investing with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-value-investing-with-phoebe</a> / Analyst session 9 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Value Investing with Phoebe · Analyst session 9 of 10</div>
+    <h1>A memo that says what would <span class="accent">prove it wrong</span></h1>
+    <p class="sub">Eight sessions of numbers end here, on one page of prose. A memo is not a sales document for a decision you have already made. It is a test you set yourself: what the business is, where your estimate starts and why, how wide the range is, what a price would have to believe, and, written first and dated, the specific things that would show you were wrong. Tonight we write one on Procter &amp; Gamble's ten-year owner earnings, then you write one for a filer of your own. We finish with the one question a memo cannot answer, whether value investing as a factor strategy still pays, because the honest answer is that the evidence disagrees with itself.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Analyst</span>
+      <span class="chip audience">Analysts, finance and data people who write up a judgment for someone else to check</span>
+      <span class="chip audience">Python, standard library only</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · The memo, kill criteria, the disagreement</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: one memo for one filer</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">By now you can compute owner earnings from the filings, normalise them, discount them, reverse a test price into the growth it needs, and check that growth against base rates and fade. Each of those steps produced a number, and each number came with a choice you made. A memo is where the choices are written down in an order that stops you from cheating: the business before the numbers, the numbers before any price, and the conditions for being wrong before you know whether you would like to be right.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone builds</span>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>A memo about a business, not a recommendation.</strong> The worked example uses Procter &amp; Gamble's figures because its filings are public and long. The kill criteria written for it are teaching examples, not a view on the company, and no market price appears anywhere: every price on this page is a test price you type, taken from the source map's half-or-double results.</p>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A one-page memo template with six blocks in a fixed order, three kill criteria for a real filer that a stranger could check against next year's 10-K, a short Python step that prints your filer's range and implied growth straight from the source map, and one honest paragraph on the value-versus-growth evidence that you can paste into any memo without overclaiming.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers memo structure</span>
+      <h2>A memo is a test you set yourself</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A good memo fits on one page and is read top to bottom in the order it was written. Six blocks: the business in four sentences, the starting point and why you chose it, the range, what a price implies, the risks, and the kill criteria. Five of the six can be written without any price at all, and they should be, because the moment a price is in your head every block after it starts leaning towards it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn one-page memo with six stacked blocks. 1, the business in four sentences, from Owner session 1's owner's paragraph. 2, the starting point and why, justified by the ladder, where the five-year rung won at the 3- and 5-year hold-outs. 3, the range: nine cases, discount rate plus or minus 1 point and growth plus or minus 2 points, from Analyst session 6. 4, what the price implies, from Analyst session 5's half or double test. 5, the risks, including Analyst session 1's three known errors. 6, highlighted in brass, kill criteria, dated and written before any decision.">
+        <defs>
+          <filter id="vp9aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="91" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp9aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp9aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp9aH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp9aL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp9aS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp9aB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp9aW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp9aN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp9aH" x="30" y="26">ONE PAGE, SIX BLOCKS, WRITTEN TOP TO BOTTOM</text>
+        <text class="vp9aS" x="400" y="26">the order is the discipline: a price first appears in block 4</text>
+
+        <g filter="url(#vp9aSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="44" width="520" height="350" rx="6" transform="rotate(-0.4 300 219)" fill="#FFFFFF"/>
+          <!-- paperclip -->
+          <path d="M84 32 L84 62 Q84 70 92 70 Q100 70 100 62 L100 38 Q100 32 94 32 Q88 32 88 38 L88 58" stroke-width="1.6"/>
+          <rect x="60" y="60" width="480" height="46" rx="5" transform="rotate(0.4 300 83)" fill="#EEF5F0"/>
+          <rect x="60" y="114" width="480" height="46" rx="5" transform="rotate(-0.3 300 137)" fill="#EEF5F0"/>
+          <rect x="60" y="168" width="480" height="46" rx="5" transform="rotate(0.3 300 191)" fill="url(#vp9aHc)"/>
+          <rect x="60" y="222" width="480" height="46" rx="5" transform="rotate(-0.4 300 245)" fill="#FFFFFF"/>
+          <rect x="60" y="276" width="480" height="46" rx="5" transform="rotate(0.3 300 299)" fill="#EEF5F0"/>
+          <rect x="60" y="330" width="480" height="46" rx="5" transform="rotate(-0.3 300 353)" fill="#93701C" stroke="#93701C"/>
+          <path d="M598 83 L548 83" marker-end="url(#vp9aAr)"/>
+          <path d="M598 137 L548 137" marker-end="url(#vp9aAr)"/>
+          <path d="M598 191 L548 191" marker-end="url(#vp9aAr)"/>
+          <path d="M598 245 L548 245" marker-end="url(#vp9aAr)"/>
+          <path d="M598 299 L548 299" marker-end="url(#vp9aAr)"/>
+          <path d="M598 353 L548 353" marker-end="url(#vp9aAr)"/>
+        </g>
+
+        <text class="vp9aL" x="74" y="80">1 · The business in four sentences</text>
+        <text class="vp9aS" x="74" y="97">what it sells, why customers return, cost to stand still, what would break it</text>
+        <text class="vp9aL" x="74" y="134">2 · The starting point, and why</text>
+        <text class="vp9aS" x="74" y="151">which rung of the ladder, and the finding that justifies it</text>
+        <text class="vp9aL" x="74" y="188">3 · The range</text>
+        <text class="vp9aS" x="74" y="205">nine cases: discount rate +/- 1 point, growth +/- 2 points</text>
+        <text class="vp9aL" x="74" y="242">4 · What the price implies</text>
+        <text class="vp9aS" x="74" y="259">type a test price; the reverse DCF says what growth it needs</text>
+        <text class="vp9aL" x="74" y="296">5 · The risks</text>
+        <text class="vp9aS" x="74" y="313">what the approximation gets wrong, and what the business could lose</text>
+        <text class="vp9aW" x="74" y="350">6 · Kill criteria, dated, written before any decision</text>
+        <text class="vp9aW" x="74" y="367">observable, specific, checked against each new 10-K</text>
+
+        <text class="vp9aS" x="604" y="87">Owner session 1's owner's paragraph</text>
+        <text class="vp9aS" x="604" y="141">rung 2 won at 3- and 5-year hold-outs</text>
+        <text class="vp9aS" x="604" y="195">the valuation table, Analyst session 6</text>
+        <text class="vp9aS" x="604" y="249">Analyst session 5: half or double</text>
+        <text class="vp9aS" x="604" y="303">Analyst session 1's three known errors</text>
+        <text class="vp9aB" x="604" y="357">the test you set yourself</text>
+
+        <text class="vp9aN" x="30" y="428">Blocks 1, 2, 3, 5 and 6 are written before you see any price. Block 4 is the only one that uses one.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the brass block is the one that makes it a memo rather than a pitch: it is the only block that can tell you to stop</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Six blocks, and what each one is allowed to contain<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>1 · The business.</strong> Owner session 1's owner's paragraph, four sentences: what it sells, why customers come back, what it must spend just to stay where it is, what would break it. If any sentence is blank, stop: no number below can be trusted, because you do not yet know what it measures.</p>
+        <p><strong>2 · The starting point.</strong> Which rung you start from, last year's earnings, the five-year mean or the ten-year mean, and one sentence of evidence for the choice. The ladder in the source map is that evidence: the five-year rung had the smallest miss at the 3- and 5-year hold-outs, last year's earnings at the 4-year one, and every honest rung undershot because owner earnings rose sharply after 2020.</p>
+        <p><strong>3 · The range.</strong> The central value and the nine-case range from Analyst session 6, with the assumptions printed next to it. Buffett's 1986 line is the standard for this block: "I would rather be vaguely right than precisely wrong." A range that looks precise is a warning sign.</p>
+        <p><strong>4 · What the price implies.</strong> The only block that uses a price, and it is a test price you type. The reverse DCF from Analyst session 5 turns it into a growth rate, and the base rates from Analyst session 7 say how often growth like that has lasted.</p>
+        <p><strong>5 · The risks.</strong> Two kinds: what the numbers get wrong (the all-capex approximation, one-off years, a tag that leaves something out) and what the business could lose. Analyst session 8's fade belongs here.</p>
+        <p><strong>6 · Kill criteria.</strong> Part 2.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why write it before you know any price<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Owner session 6 taught anchoring, from Tversky and Kahneman's 1974 paper (reported): an estimate made after hearing a number drifts towards that number, even when you know it is irrelevant. A price is the most powerful anchor in investing because it arrives with a crowd's confidence attached. Write the range after seeing a price and the range quietly moves to contain it. Write the kill criteria after seeing a price and they are set just outside wherever the price would leave you comfortable.</p>
+        <p>The fix is mechanical, not heroic: write blocks 1, 2, 3, 5 and 6, put a date on them, and only then type a price into block 4. If the price changes your mind about block 3, you will at least see that it did, because block 3 already exists in writing. The full treatment of anchors, narrow ranges and the pre-mortem is in <a href="a6-mistakes-in-your-own-head.html">Owner session 6: The mistakes made in your own head</a>.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Buffett's 1977 test as a memo's spine.</strong> Berkshire's 1977 letter says it picks marketable stocks much as it would evaluate a whole business for acquisition, and wants four things: a business it can understand, with favourable long-term prospects, run by honest and competent people, available at a very attractive price. Three of the four are about the business; only the last needs a price. The six-block memo keeps the same proportion: the price waits until block 4, and it cannot rescue a page whose first block is blank.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers kill criteria and pre-commitment</span>
+      <h2>Kill criteria</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A kill criterion is a statement that, if it comes true, means your thesis was wrong. It has three properties: anyone can observe it, it has a date or a window, and it names a specific number. "Owner earnings below the ten-year average for three years" passes. "If the business deteriorates" fails all three, which is exactly why people like writing it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn table for Procter and Gamble on rung 3 with three columns: the thesis claim, what would kill it, and when you look. Earning power near 5.00 a share is killed by owner earnings below 5.00 in three fiscal years running, checked each 10-K from FY2027. Capex near its own history, a ten-year capex to D&amp;A ratio of 1.19, is killed by that ratio above 1.19 for three years with owner earnings not growing. Growth at least the range floor of 3 percent is killed by five-year owner earnings growth below 3 percent, measured at FY2031. FY2019, owner earnings 1.33, as a one-off is killed by another year near 1.33 within five years. A red panel shows the wrong way: exit if the story changes, which is not observable, not dated and not specific.">
+        <defs>
+          <filter id="vp9bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="93" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp9bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp9bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp9bH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp9bL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp9bS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp9bW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp9bN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp9bH" x="30" y="26">P&amp;G, RUNG 3: EACH CLAIM AND WHAT WOULD KILL IT</text>
+        <text class="vp9bS" x="400" y="26">criteria written for teaching, not a view on the company</text>
+
+        <g filter="url(#vp9bSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- calendar doodle -->
+          <rect x="806" y="8" width="30" height="26" rx="3" transform="rotate(3 821 21)" stroke-width="1.6"/>
+          <path d="M806 16 L836 17 M814 4 L814 11 M828 4 L828 11" stroke-width="1.6"/>
+          <!-- header row -->
+          <rect x="40" y="44" width="250" height="30" rx="4" transform="rotate(-0.3 165 59)" fill="#EEF5F0"/>
+          <rect x="300" y="44" width="360" height="30" rx="4" transform="rotate(0.3 480 59)" fill="#93701C" stroke="#93701C"/>
+          <rect x="670" y="44" width="170" height="30" rx="4" transform="rotate(-0.3 755 59)" fill="#EEF5F0"/>
+          <!-- row 1 -->
+          <rect x="40" y="84" width="250" height="52" rx="4" fill="#FFFFFF"/>
+          <rect x="300" y="84" width="360" height="52" rx="4" fill="#EEF5F0"/>
+          <rect x="670" y="84" width="170" height="52" rx="4" fill="#FFFFFF"/>
+          <!-- row 2 -->
+          <rect x="40" y="144" width="250" height="52" rx="4" fill="#FFFFFF"/>
+          <rect x="300" y="144" width="360" height="52" rx="4" fill="#EEF5F0"/>
+          <rect x="670" y="144" width="170" height="52" rx="4" fill="#FFFFFF"/>
+          <!-- row 3 -->
+          <rect x="40" y="204" width="250" height="52" rx="4" fill="#FFFFFF"/>
+          <rect x="300" y="204" width="360" height="52" rx="4" fill="#EEF5F0"/>
+          <rect x="670" y="204" width="170" height="52" rx="4" fill="#FFFFFF"/>
+          <!-- row 4 -->
+          <rect x="40" y="264" width="250" height="52" rx="4" fill="#FFFFFF"/>
+          <rect x="300" y="264" width="360" height="52" rx="4" fill="#EEF5F0"/>
+          <rect x="670" y="264" width="170" height="52" rx="4" fill="#FFFFFF"/>
+          <!-- wrong-way panel -->
+          <rect x="40" y="332" width="800" height="54" rx="6" transform="rotate(-0.2 440 359)" fill="#FEF2F2" stroke="#991B1B"/>
+        </g>
+
+        <text class="vp9bH" x="52" y="64">THE THESIS CLAIMS</text>
+        <text class="vp9bW" x="312" y="64">WHAT WOULD KILL IT</text>
+        <text class="vp9bH" x="682" y="64">WHEN YOU LOOK</text>
+
+        <text class="vp9bL" x="52" y="105">Earning power near 5.00 a share</text>
+        <text class="vp9bS" x="52" y="122">ten-year mean owner earnings</text>
+        <text class="vp9bL" x="312" y="105">Owner earnings below 5.00 a share</text>
+        <text class="vp9bS" x="312" y="122">in three fiscal years running</text>
+        <text class="vp9bS" x="682" y="105">each 10-K</text>
+        <text class="vp9bS" x="682" y="122">from FY2027 onwards</text>
+
+        <text class="vp9bL" x="52" y="165">Capex runs near its own history</text>
+        <text class="vp9bS" x="52" y="182">ten-year capex / D&amp;A ratio 1.19</text>
+        <text class="vp9bL" x="312" y="165">Capex / D&amp;A above 1.19</text>
+        <text class="vp9bS" x="312" y="182">for three years, owner earnings not growing</text>
+        <text class="vp9bS" x="682" y="165">capex and D&amp;A tags</text>
+        <text class="vp9bS" x="682" y="182">every 10-K</text>
+
+        <text class="vp9bL" x="52" y="225">Growth at least the range floor</text>
+        <text class="vp9bS" x="52" y="242">3% a year, low edge of the range</text>
+        <text class="vp9bL" x="312" y="225">Five-year owner earnings growth</text>
+        <text class="vp9bS" x="312" y="242">below 3% a year, measured at FY2031</text>
+        <text class="vp9bS" x="682" y="225">five-year mean vs</text>
+        <text class="vp9bS" x="682" y="242">the five before it</text>
+
+        <text class="vp9bL" x="52" y="285">FY2019 was a one-off</text>
+        <text class="vp9bS" x="52" y="302">owner earnings 1.33 that year</text>
+        <text class="vp9bL" x="312" y="285">A second year near FY2019's 1.33</text>
+        <text class="vp9bS" x="312" y="302">within the next five fiscal years</text>
+        <text class="vp9bS" x="682" y="285">each 10-K</text>
+        <text class="vp9bS" x="682" y="302">print every row</text>
+
+        <text class="vp9bL" x="56" y="354">Wrong way: "exit if the story changes"</text>
+        <text class="vp9bS" x="56" y="372">not observable, not dated, not specific; written afterwards it bends to fit whatever happened</text>
+
+        <text class="vp9bN" x="30" y="412">Each criterion names a number, a window and the filing that will show it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - every row in the brass column could be checked by a stranger next year; the red row could be argued about forever</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Observable, dated, specific, and calibrated to the filer<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Observable</strong> means the evidence will appear somewhere you and a stranger can both read it: a 10-K tag, a line in the cash flow statement. Not "management loses focus". <strong>Dated</strong> means a window: three fiscal years, by FY2031, in each 10-K from FY2027. A criterion with no window can always be postponed. <strong>Specific</strong> means a number you wrote down before the outcome was known.</p>
+        <p>The fourth property is easy to miss: <strong>calibrate to the filer's own history.</strong> A sensible-sounding generic rule is "capex rising above D&amp;A without growth". For Procter &amp; Gamble that rule fires on day one, because its ten-year capex to D&amp;A ratio is already 1.19, the highest of the four filers (Caterpillar 0.57, Exxon Mobil 0.82, Johnson &amp; Johnson 0.57). A criterion that is already true is not a test. So the P&amp;G version says "above 1.19, for three years, while owner earnings do not grow": the same idea, set against what the business has actually done.</p>
+        <p>And state what you will do. Not "sell", which is a trading decision and outside the scope of a memo, but "re-open the memo and redo blocks 2 and 3 from scratch". The criterion's job is to force the rewrite.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Pre-commitment, and why criteria written afterwards bend<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Pre-commitment is deciding now what a future observation will mean, so that the future you, who will want the thesis to be right, does not get a vote. It works for the same reason the memo order works: once you own a view, every new fact gets read in the light most kind to it. Owner session 6 calls this confirmation; a criterion written in advance is the cheapest defence against it.</p>
+        <p>A criterion written afterwards bends in three predictable ways. The number moves ("three years" becomes "three years, excluding the restructuring year"). The window stretches ("by FY2031" becomes "once the cycle turns"). Or the claim it was attached to is quietly swapped for a different claim that still holds. Each step sounds reasonable on its own, which is why the original must be dated and kept.</p>
+        <p>Buffett's 1989 letter lists twenty-five years of his own mistakes, and several are exactly the kind a dated criterion would have flagged early: a department store, Hochschild Kohn, bought below book value that returned little, and the general lesson that good managers cannot fix bad economics. A cheap price was the thesis; nothing in it said what would show the business itself was the problem. A memo forces that sentence to exist.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Procter &amp; Gamble on rung 3, worked through.</strong> Its ten-year mean owner earnings are 5.00 a share. At the defaults (a 9 percent discount rate, 10 years of 5 percent growth, then 2.5 percent), the central value is 95.16 a share and the nine-case range runs from 70.84 to 132.39. A test price at double the value, 190.33, implies 14.17 percent growth a year for ten years; a test price at half implies -4.31 percent. Block 4 then writes the sentence that matters: the double price asks for 14.17 percent a year from a business whose owner earnings per share grew 3.1 percent a year, nominal, from the mean of its first five years (3.84) to the mean of its last five (5.90). All figures from the source map; the test prices are typed, not quoted.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers contested evidence</span>
+      <h2>Teach the disagreement you cannot settle</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Every memo eventually meets a question bigger than the business: does buying cheap businesses pay, as a strategy? The honest memo does not answer it, because the research has not. What it can do is state both readings, give each its source and how firmly it is known, and then say why the memo's own conclusion does not depend on which side is right.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 382" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn balance scale with a level beam. Left pan: the premium got smaller, Fama and French 2020, reported: big stocks 4.3 percent to 0.6 percent a year, small stocks 7 percent to 4 percent, 1963-1991 versus 1991-2019, declines statistically indistinguishable from zero. Right pan: the yardstick moved, Arnott, Harvey, Kalesnik and Linnainmaa 2021, reported: value got cheaper relative to growth and intangibles distort book value. The brass fulcrum is labelled the memo, which values one business, not a factor portfolio.">
+        <defs>
+          <filter id="vp9cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="97" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp9cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp9cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp9cH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp9cL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp9cS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp9cB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp9cN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp9cH" x="30" y="26">TWO READINGS OF THE SAME DECADES, AND A LEVEL BEAM</text>
+        <text class="vp9cS" x="30" y="44">the value-versus-growth evidence, as reported; neither side is settled here</text>
+
+        <g filter="url(#vp9cSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M200 120 L680 120" stroke-width="3"/>
+          <path d="M200 120 L80 190 M200 120 L320 190"/>
+          <path d="M680 120 L560 190 M680 120 L800 190"/>
+          <rect x="60" y="190" width="280" height="134" rx="6" transform="rotate(-0.4 200 257)" fill="#EEF5F0"/>
+          <rect x="540" y="190" width="280" height="134" rx="6" transform="rotate(0.4 680 257)" fill="#EEF5F0"/>
+          <path d="M440 122 L408 182 L472 182 Z" fill="#93701C" stroke="#93701C"/>
+          <path d="M392 186 L488 186"/>
+        </g>
+
+        <text class="vp9cS" x="440" y="104" text-anchor="middle">level: the literature has not settled it</text>
+
+        <text class="vp9cH" x="76" y="212">The premium got smaller</text>
+        <text class="vp9cB" x="76" y="230">Fama and French 2020 · reported</text>
+        <text class="vp9cL" x="76" y="250">big stocks: 4.3% to 0.6% a year</text>
+        <text class="vp9cL" x="76" y="268">small stocks: 7% to 4% a year</text>
+        <text class="vp9cS" x="76" y="286">1963-1991 versus 1991-2019</text>
+        <text class="vp9cS" x="76" y="304">declines indistinguishable from zero</text>
+
+        <text class="vp9cH" x="556" y="212">The yardstick moved</text>
+        <text class="vp9cB" x="556" y="230">Arnott et al. 2021 · reported</text>
+        <text class="vp9cL" x="556" y="250">value got cheaper vs growth</text>
+        <text class="vp9cL" x="556" y="268">intangibles distort book value</text>
+        <text class="vp9cS" x="556" y="286">they read the weak run as</text>
+        <text class="vp9cS" x="556" y="304">a wider valuation spread</text>
+
+        <text class="vp9cB" x="440" y="208" text-anchor="middle">THE MEMO</text>
+        <text class="vp9cS" x="440" y="226" text-anchor="middle">values one business,</text>
+        <text class="vp9cS" x="440" y="242" text-anchor="middle">not a factor portfolio</text>
+
+        <text class="vp9cN" x="30" y="360">A memo can cite this disagreement. It cannot use it to justify one business's value.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - both pans carry a reported tier and the beam stays level; the brass fulcrum is why the memo does not need it to tip</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Two readings of the same decades<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The premium got smaller.</strong> Fama and French's 2020 paper "The Value Premium" (reported, via Chicago Booth Review) splits US returns at 1991. As summarised there, the big-stock value premium was 4.3 percent a year from 1963 to 1991 and 0.6 percent from 1991 to 2019; the small-stock premium went from 7 percent to 4 percent. Then the authors' own caution: monthly returns are volatile enough that they cannot reject equal expected premiums in both halves, so the declines look large but are statistically indistinguishable from zero.</p>
+        <p><strong>The yardstick moved.</strong> Arnott, Harvey, Kalesnik and Linnainmaa (2021, reported) argue that much of value's weak run came from value stocks getting cheaper relative to growth stocks, a widening spread rather than worse businesses, and that intangible assets distort book value, the measure most factor studies use to call a stock "value".</p>
+        <p>Neither reading says value "works" and neither says it "is dead". The first says the measured premium shrank by an amount the data cannot distinguish from chance. The second says the measurement itself is suspect. Both are reported here, not read at source, and a memo that cites either should say so.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What a memo should say about evidence it cannot resolve<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Three sentences are enough, and they go in block 5. First, what the disagreement is, with both sources and their tiers. Second, that it is about a factor, the average return of portfolios sorted on cheapness, usually measured with book value. Third, why the memo's conclusion does not depend on it: the memo values one business from its owner earnings, not from its book value, and its kill criteria are about that business.</p>
+        <p>What a memo must not do is borrow certainty. "Value has always outperformed" overclaims one side. "Value is dead, so the cheapness of this business is meaningless" overclaims the other. Both turn an unresolved literature into a premise. A reader who later learns the literature is disputed will trust nothing else on the page.</p>
+        <p>The same rule applies to any contested input: say there is a disagreement, give its shape, and show that your decision survives either answer. If it does not survive, that dependence is itself a risk and belongs in block 5 in plain words.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>One number, two honest sentences.</strong> The big-stock value premium in Fama and French's split fell from 4.3 percent a year to 0.6 percent (reported, via Chicago Booth Review). A memo that stops there is misleading. The honest version adds the authors' own next line in substance: the decline is statistically indistinguishable from zero. And then the counter-reading: Arnott and co-authors argue the period's weakness owed much to value getting cheaper and to intangibles distorting book value. Three clauses, two sources, both tiers stated, no verdict.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Write the memo for one filer</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">A worksheet with one short Python step. The Python does not compute anything new: it prints your filer's starting point, range and implied growth exactly as the source map records them, so the numbers in your memo are the ones the bench will reproduce. The prose is yours. Pick one of the four filers, or carry one you built yourself through sessions 1 to 8 and use your own figures, labelled as yours.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The memo pipeline as six hand-drawn steps in a snake. Top row left to right: 1 choose a filer, 2 the owner's paragraph in four sentences from Owner session 1, 3 the starting rung justified by the ladder finding. Down to the bottom row, right to left: 4 the range from the valuation table, 5 a test price where double implies 14.17 percent and half implies -4.31 percent, 6 in brass, three kill criteria, dated, before any decision.">
+        <defs>
+          <filter id="vp9dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="99" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp9dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp9dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp9dH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp9dS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp9dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp9dN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp9dH" x="30" y="26">SIX STEPS FROM A FILER TO A MEMO YOU CAN BE HELD TO</text>
+
+        <g filter="url(#vp9dSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="240" height="62" rx="8" transform="rotate(-0.6 150 87)" fill="#FFFFFF"/>
+          <rect x="320" y="56" width="240" height="62" rx="8" transform="rotate(0.5 440 87)" fill="#EEF5F0"/>
+          <rect x="610" y="56" width="240" height="62" rx="8" transform="rotate(-0.4 730 87)" fill="#EEF5F0"/>
+          <path d="M274 87 L314 87" marker-end="url(#vp9dAr)"/>
+          <path d="M564 87 L604 87" marker-end="url(#vp9dAr)"/>
+          <path d="M730 124 L730 170" marker-end="url(#vp9dAr)"/>
+          <rect x="610" y="176" width="240" height="62" rx="8" transform="rotate(0.5 730 207)" fill="url(#vp9dHc)"/>
+          <rect x="320" y="176" width="240" height="62" rx="8" transform="rotate(-0.5 440 207)" fill="#FFFFFF"/>
+          <rect x="30" y="176" width="240" height="62" rx="8" transform="rotate(0.6 150 207)" fill="#93701C" stroke="#93701C"/>
+          <path d="M606 207 L566 207" marker-end="url(#vp9dAr)"/>
+          <path d="M316 207 L276 207" marker-end="url(#vp9dAr)"/>
+          <!-- pencil doodle -->
+          <path d="M790 262 L840 248 L846 254 L796 268 Z" stroke-width="1.6"/>
+          <path d="M790 262 L780 268 L796 268" stroke-width="1.6"/>
+        </g>
+
+        <text class="vp9dH" x="150" y="82" text-anchor="middle">1 · choose a filer</text>
+        <text class="vp9dS" x="150" y="102" text-anchor="middle">one of four, or one you know</text>
+        <text class="vp9dH" x="440" y="82" text-anchor="middle">2 · the owner's paragraph</text>
+        <text class="vp9dS" x="440" y="102" text-anchor="middle">four sentences, Owner session 1</text>
+        <text class="vp9dH" x="730" y="82" text-anchor="middle">3 · the starting rung</text>
+        <text class="vp9dS" x="730" y="102" text-anchor="middle">justified by the ladder finding</text>
+        <text class="vp9dH" x="730" y="202" text-anchor="middle">4 · the range</text>
+        <text class="vp9dS" x="730" y="222" text-anchor="middle">from the valuation table</text>
+        <text class="vp9dH" x="440" y="202" text-anchor="middle">5 · a test price</text>
+        <text class="vp9dS" x="440" y="222" text-anchor="middle">double 14.17% · half -4.31%</text>
+        <text class="vp9dW" x="150" y="202" text-anchor="middle">6 · three kill criteria</text>
+        <text class="vp9dW" x="150" y="222" text-anchor="middle">dated, before any decision</text>
+
+        <text class="vp9dN" x="30" y="268">The Python step only prints numbers copied from the source map; the prose is the memo.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the snake ends on the brass box: everything before it exists so the kill criteria have numbers to name</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Step 1 · Choose a filer and write the header.</strong> One business, one date, one line on why you are writing about it. If you are using one of the four filers, write which fiscal year your numbers end in.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · the header</span>MEMO
+Filer: _______________________   Last fiscal year in the data: FY______
+Written on: ____-__-__          Price seen before writing? (yes / no): ____
+Why this business: _____________________________________________</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 2 · Block 1, the owner's paragraph.</strong> Four sentences, in the shape from <a href="a1-you-are-buying-a-business.html">Owner session 1</a>. If you cannot write the fourth sentence, what would break it, you are outside your circle of competence and the honest memo says so and stops.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · block 1</span>1. It sells: __________________________________________________
+2. Customers come back because: _______________________________
+3. To stay where it is, it must spend on: _____________________
+4. It would break if: _________________________________________</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 3 · Block 2, the starting rung and its justification.</strong> The ladder, as the source map records it, mean absolute error across the four filers. Pick a rung and write one sentence that cites this table, including its awkward parts.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · block 2</span>Hold-out    1 last year   2 five-year   3 ten-year   4 fade
+3 years       39.7%         28.4%         41.8%       36.5%
+4 years       26.8%         42.1%         47.9%       44.7%
+5 years       70.4%         47.4%         50.2%       47.7%
+
+Finding: the five-year rung won at the 3- and 5-year hold-outs,
+last year's earnings at 4; the ten-year rung never won; every
+honest rung undershot, because owner earnings rose after 2020.
+
+My rung: ___   Because: ____________________________________________
+What this choice gets wrong, in one line: _________________________
+
+Example (P&amp;G, rung 3): "Ten-year mean, 5.00 a share. It never won
+the ladder and every rung undershot, so this is a deliberate choice
+to err low; rung 2 would start at 5.90."</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 4 · Block 3, the range, printed from the map.</strong> Copy the numbers in; do not recompute them. Rung 1 has no range in the map and rung 4 equals rung 3 at the same settings, so the table holds rungs 2 and 3. Type any test price; the script says where it sits and, for the two map results, what growth it implies.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · block 3, from the source map</span># Every number here is copied from the source map. Nothing is computed fresh.
+# rung: (starting point per share, central value, range low, range high)
+MAP = {
+    "Caterpillar FY2025":       {2: (17.94, 341.59, 254.27, 475.21), 3: (13.17, 250.78, 186.67, 348.88)},
+    "Exxon Mobil FY2025":       {2: (8.87, 168.83, 125.67, 234.86),  3: (6.16, 117.34, 87.34, 163.24)},
+    "Johnson &amp; Johnson FY2025": {2: (10.21, 194.40, 144.70, 270.44), 3: (7.92, 150.81, 112.26, 209.80)},
+    "Procter &amp; Gamble FY2026":  {2: (5.90, 112.38, 83.65, 156.34),   3: (5.00, 95.16, 70.84, 132.39)},
+}
+RUNG = {2: "five-year mean owner earnings", 3: "ten-year mean owner earnings"}
+DEFAULTS = "r 9%, 10 years at 5%, terminal 2.5%; range r +/- 1, g +/- 2"
+IMPLIED = {"double": 14.17, "half": -4.31}   # rung 3 at the defaults, any base
+
+def memo_numbers(filer, rung, test_price, test=None):
+    base, value, low, high = MAP[filer][rung]
+    if test_price &lt; low:    where = "below the whole range"
+    elif test_price &gt; high: where = "above the whole range"
+    else:                   where = "inside the range"
+    print(f"{filer} · rung {rung} ({RUNG[rung]})")
+    print(f"  starting point {base:8.2f} a share")
+    print(f"  central value  {value:8.2f}   range {low:.2f} to {high:.2f}")
+    print(f"  assumptions    {DEFAULTS}")
+    print(f"  test price     {test_price:8.2f}   {where}")
+    if rung == 3 and test in IMPLIED:
+        print(f"  implied growth {IMPLIED[test]:8.2f}% a year for 10 years")
+    else:
+        print("  implied growth run Analyst session 5's reverse DCF on your price")
+
+memo_numbers("Procter &amp; Gamble FY2026", 3, 190.33, test="double")
+
+Procter &amp; Gamble FY2026 · rung 3 (ten-year mean owner earnings)
+  starting point     5.00 a share
+  central value     95.16   range 70.84 to 132.39
+  assumptions    r 9%, 10 years at 5%, terminal 2.5%; range r +/- 1, g +/- 2
+  test price       190.33   above the whole range
+  implied growth    14.17% a year for 10 years</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 5 · Block 4, what the test price implies.</strong> Run it twice, once at double the central value and once at half, and write one sentence for each that places the implied growth against something outside the model: the filer's own history, or the base rates from Analyst session 7. For P&amp;G the half case, a test price of 47.58, sits below the whole range and implies -4.31 percent a year.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · block 4</span>Test price (double): ________   implied growth: ______% a year
+Against history: __________________________________________________
+Test price (half):   ________   implied growth: ______% a year
+Against history: __________________________________________________
+
+Example (P&amp;G): "Double the value asks for 14.17% a year for ten
+years; its owner earnings per share grew 3.1% a year, nominal, from
+the first five years' mean (3.84) to the last five (5.90)."</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 6 · Block 6, three kill criteria, then block 5.</strong> Write the criteria before the risks, so the risks cannot soften them. Each one names a number, a window and the filing that will show it, and is calibrated to this filer's own history. Then list the risks, including the three known errors from <a href="p1-owner-earnings-from-the-filings.html">Analyst session 1</a> and one line on the value-versus-growth disagreement from Part 3.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · blocks 6 and 5</span>KILL CRITERIA (written ____-__-__, before any decision)
+K1  If ______________________ in ______ (window), shown by ______ (filing)
+K2  If ______________________ in ______ (window), shown by ______ (filing)
+K3  If ______________________ in ______ (window), shown by ______ (filing)
+If any fires: re-open this memo and redo blocks 2 and 3 from scratch.
+
+RISKS
+- The approximation: _____________________________________________
+- One-off years:     _____________________________________________
+- The business:      _____________________________________________
+- Contested evidence: value-premium findings are disputed (Fama and
+  French 2020, reported; Arnott et al. 2021, reported); this memo
+  values one business from owner earnings, not a factor.</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>File it with the date and leave it alone.</strong> Keep the memo exactly as written, even after you change your mind. The value of a kill criterion is entirely in the fact that it was set before the outcome; a memo edited later to match what happened is a diary, not a test.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before Analyst session 10</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Finish the memo</strong> for your filer, all six blocks on one page, dated, with the price-seen box in the header filled in honestly.</li>
+      <li><strong>Swap kill criteria with someone</strong> and grade each of theirs on the three properties: observable, dated, specific. Rewrite any that fail one, and check that none is already true today for that filer.</li>
+      <li><strong>Write the same memo from rung 2</strong> instead of your chosen rung. Which blocks change, and do any of your kill criteria now need a different number?</li>
+      <li><strong>Write the three-sentence block on contested evidence</strong> in your own words: the disagreement, both sources with their tiers, and why your memo's conclusion does not depend on which side is right.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Analyst session 9 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">1 · Which of these is a good kill criterion for a memo on Procter &amp; Gamble's rung-3 thesis?</p>
+      <button class="qopt" type="button">A · "Owner earnings per share below 5.00 in three fiscal years running, checked in each 10-K from FY2027"</button>
+      <button class="qopt" type="button">B · "If the business starts to deteriorate"</button>
+      <button class="qopt" type="button">C · "If the share price falls by a third"</button>
+      <button class="qopt" type="button">D · "Capex above D&amp;A in any year", applied as written</button>
+      <p class="qwhy">A is observable in the filing, has a window and names a number. B is none of those. C is about the price, not the thesis about the business. D sounds right but is already true: P&amp;G's ten-year capex to D&amp;A ratio is 1.19, so the criterion fires on day one and tests nothing until it is calibrated to the filer's history.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">2 · Why are blocks 1, 2, 3, 5 and 6 of the memo written before any price is looked at?</p>
+      <button class="qopt" type="button">A · Because prices are always wrong</button>
+      <button class="qopt" type="button">B · Because a price is an anchor: estimates made after seeing one drift towards it, so the range and the criteria quietly move to fit it (Owner session 6)</button>
+      <button class="qopt" type="button">C · Because the reverse DCF cannot run without a value first</button>
+      <button class="qopt" type="button">D · Because a memo should never mention a price</button>
+      <p class="qwhy">Anchoring (Tversky and Kahneman, 1974, reported) pulls an estimate towards a number heard first, even an irrelevant one. Writing the range and the kill criteria first, and dating them, makes any later drift visible. Block 4 still uses a price, a test price you type; the order is the point, not a ban.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">3 · What does the value-versus-growth evidence in Part 3 support saying in a memo?</p>
+      <button class="qopt" type="button">A · That value investing is dead, since the big-stock premium fell to 0.6 percent a year</button>
+      <button class="qopt" type="button">B · That value investing works, since small stocks still earned 4 percent a year</button>
+      <button class="qopt" type="button">C · That Arnott and co-authors proved the premium has fully returned</button>
+      <button class="qopt" type="button">D · That it is contested: the reported premium fell after 1991 but Fama and French find the decline statistically indistinguishable from zero, and Arnott and co-authors argue cheaper value stocks and distorted book values explain much of it</button>
+      <p class="qwhy">Both sources are reported, and they disagree about what the weaker period means. A memo states the disagreement with its tiers and shows that its conclusion, about one business's owner earnings, does not rest on either side.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Value premium 1963-1991 vs 1991-2019: big stocks 4.3% vs 0.6% a year, small 7% vs 4%; declines statistically indistinguishable from zero</span><span class="note">Fama, E. and French, K., "The Value Premium", 2020 (reported, via Chicago Booth Review)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Value stocks got cheaper relative to growth; intangibles distort book value</span><span class="note">Arnott, R., Harvey, C., Kalesnik, V. and Linnainmaa, J., "Reports of Value's Death May Be Greatly Exaggerated", Financial Analysts Journal, 2021 (reported)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">P&amp;G rung 3: 5.00 a share, value 95.16, range 70.84 to 132.39; double 14.17%, half -4.31%; capex / D&amp;A 1.19; FY2019 1.33; 3.84 to 5.90; the ladder table and every filer's range</span><span class="note">SEC EDGAR XBRL company facts, read from a public mirror; computed, valuations modelled at stated defaults</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The four tests: understandable, favourable long-term prospects, honest and competent people, very attractive price</span><span class="note">Buffett, W., Berkshire Hathaway shareholder letter, 1977 (read at source)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">"Vaguely right than precisely wrong"; Hochschild Kohn and good managers cannot fix bad economics</span><span class="note">Buffett, W., Berkshire Hathaway shareholder letter, 1986, appendix (read at source); Buffett, W., Berkshire Hathaway shareholder letter, 1989 (read at source)</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The owner's paragraph; anchoring and the pre-mortem</span><span class="note">Taught in Owner session 1 and Owner session 6; cross-linked, not re-taught. Tversky, A. and Kahneman, D., "Judgment under Uncertainty: Heuristics and Biases", Science, 1974 (reported)</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 9 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Six blocks, in order</b><span>Business, starting point, range, what the price implies, risks, kill criteria.</span></div>
+      <div class="cheat-item"><b>Price last</b><span>Only block 4 uses a price, and it is a test price you type.</span></div>
+      <div class="cheat-item"><b>A good kill criterion</b><span>Observable, dated, specific, and not already true for this filer.</span></div>
+      <div class="cheat-item"><b>Date it, keep it</b><span>A criterion edited after the outcome is a diary, not a test.</span></div>
+      <div class="cheat-item"><b>Cite the rung's evidence</b><span>Five-year won at 3 and 5 years; every honest rung undershot.</span></div>
+      <div class="cheat-item"><b>Contested means contested</b><span>State both sides and tiers; never claim value works or is dead.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You have a memo with a range, a test price and three criteria that could prove you wrong. Analyst session 10 puts every rung of the ladder on one bench: the four filers, the hold-outs, the anti-lever that misses by two orders of magnitude, the break button that shows why terminal growth cannot reach the discount rate, and the one sentence you should be able to say about any intrinsic value you compute.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Analyst session 9 of 10 · learn-value-investing-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p8-how-long-excess-returns-last.html">← Prev: How long excess returns last</a> &nbsp;·&nbsp; <a href="p10-the-intrinsic-value-bench.html">Next: The intrinsic value bench →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

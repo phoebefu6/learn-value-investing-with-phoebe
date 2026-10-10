@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 7 of 10. The outside view from the Base Rate Book: how fast companies really grow, why analysts' forecasts are too optimistic and too narrow, and why a growth assumption should fade. Then four real filers' growth histories, computed from 10-K facts, placed against the base rates with the right caveats.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="How often fast growth lasts - learn value investing with phoebe">
+<meta property="og:description" content="Analyst session 7 of 10. Base rates for sales and earnings growth, forecasts that are too narrow, a fade rule tested on four real filers, and why four survivors teach little about base rates.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/courses/p7-how-often-growth-lasts.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How often fast growth lasts - learn value investing with phoebe">
+<meta name="twitter:description" content="Analyst session 7 of 10. The outside view on growth, and why the range should be wider, not just lower.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 7 · How often fast growth lasts - learn value investing with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-value-investing-with-phoebe</a> / Analyst session 7 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Value Investing with Phoebe · Analyst session 7 of 10</div>
+    <h1>How often fast growth <span class="accent">lasts</span></h1>
+    <p class="sub">Every discounted cash flow you built in sessions 4 to 6 carried a growth rate, and you chose it by looking at one company. Tonight we look at a thousand. The Base Rate Book followed the largest companies in the world since 1950, dead ones included, and measured how fast they actually grew, how wrong the forecasts were, and how quickly a good run faded. Then we compute our four filers' own growth from their 10-K facts and learn why they cannot be dropped straight onto that distribution. The aim is not a lower growth number. It is a wider, more honest range.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Analyst</span>
+      <span class="chip audience">Analysts, finance and data people who forecast growth for a living</span>
+      <span class="chip audience">Python, standard library only</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Base rates, narrow forecasts, the fade</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: four filers' growth, placed</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">In Analyst session 6 you found that growth and the discount rate move the answer more than anything else. That makes the growth rate the input most worth checking against something other than your own story about the company. A forecast built from the company's own history is the inside view. The outside view asks a plainer question first: of all the companies that looked like this one, how fast did they grow, and how many kept it up? Start there, then adjust for what is genuinely different about the business in front of you.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone builds</span>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Two kinds of number tonight, kept apart.</strong> The base rates come from Mauboussin, Callahan and Majd's Base Rate Book, read at source in a hosted copy of the Credit Suisse PDF; they are inflation-adjusted. The four filers' growth rates are computed from SEC XBRL company facts, read from a public mirror; they are nominal. Nothing here says whether any of the four companies is worth buying, and no market price appears.</p>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The three base rates that should sit beside any growth forecast you write, the one fact about analysts' forecasts that should widen every range you draw, a fade rule you can state in one sentence, and a twenty-five-line Python script that computes each filer's long-run owner earnings growth and prints it with the caveat that stops anyone comparing it to the wrong thing.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the outside view</span>
+      <h2>The outside view</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The Base Rate Book took the top 1,000 global companies by market capitalisation from 1950 to 2015, across all sectors and about 60 percent of world market value, and kept the companies that later disappeared. That last choice matters: about half of all public companies cease to exist within ten years of listing, and a sample of today's survivors would quietly drop them. Figures are adjusted for inflation to 2015 dollars. The result for three-year sales growth is a distribution, and its shape is the lesson.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn right-skewed distribution of three-year real sales growth for the top 1,000 global companies, 1950 to 2015. The hump sits just above zero and a long tail runs to the right. The median, 5.4 percent, is marked in brass; the mean, 8.1 percent, sits to its right, pulled up by the tail. The standard deviation is 18.7 percent. On the left, 23 percent of companies shrank in real terms over three years.">
+        <defs>
+          <filter id="vp7aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp7aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp7aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp7aH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp7aL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp7aS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp7aB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp7aA { font: 700 11px Inter, sans-serif; fill: #2D5240; }
+          .vp7aN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp7aH" x="30" y="26">THREE-YEAR SALES GROWTH, REAL, TOP 1,000 GLOBAL COMPANIES, 1950-2015</text>
+        <text class="vp7aS" x="590" y="26">shape sketched; the three numbers are the book's</text>
+
+        <g filter="url(#vp7aSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M60 240 L820 240"/>
+          <path d="M60 238 C200 236 280 200 330 120 C350 88 370 84 390 100 C440 150 520 210 820 236 L820 240 L60 240 Z" fill="url(#vp7aHc)"/>
+          <path d="M382 240 L382 68" stroke="#93701C" stroke-width="3"/>
+          <path d="M416 240 L416 68" stroke-dasharray="5 5"/>
+          <path d="M313 240 L313 248"/>
+          <path d="M567 240 L567 248"/>
+          <path d="M150 130 L176 222" marker-end="url(#vp7aAr)"/>
+          <path d="M540 172 L700 210" marker-end="url(#vp7aAr)"/>
+        </g>
+
+        <text class="vp7aB" x="376" y="60" text-anchor="end">median 5.4%</text>
+        <text class="vp7aL" x="422" y="60">mean 8.1%</text>
+        <text class="vp7aS" x="70" y="120">23% shrank, real, over 3 years</text>
+        <text class="vp7aS" x="520" y="160">a few fast growers pull the mean up</text>
+        <text class="vp7aS" x="600" y="110">standard deviation 18.7 points</text>
+        <text class="vp7aA" x="60" y="262">-20%</text>
+        <text class="vp7aA" x="313" y="262" text-anchor="middle">0%</text>
+        <text class="vp7aA" x="567" y="262" text-anchor="middle">+20%</text>
+        <text class="vp7aA" x="820" y="262" text-anchor="end">+40%</text>
+        <text class="vp7aA" x="440" y="280" text-anchor="middle">compound annual sales growth over three years, inflation-adjusted</text>
+
+        <text class="vp7aN" x="30" y="304">Dead companies included. Growth rates and their spread both fall as companies get bigger.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the typical company sits at the brass line, not at the mean; the tail is a handful of companies, not a destination</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Inside view against outside view<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The <strong>inside view</strong> builds a forecast from the specifics: this company's products, its last five years, the management's plan. It is detailed, it feels well informed, and it is where almost every growth assumption comes from. The <strong>outside view</strong> ignores the specifics at first and asks what happened to a large reference class of similar cases. Its answer is blunt, and it is usually less exciting.</p>
+        <p>The working method is to do both, in that order. Start from the base rate: real sales growth of 5.4 percent a year at the median, with a standard deviation of 18.7 points around it, and lower and tighter for the biggest companies. Then move away from it only as far as the evidence about this business justifies, and write down why. A forecast of 15 percent real growth for a decade is not forbidden. It is a claim that this company will sit far out in the right tail, and it needs an argument to match.</p>
+        <p>Size is the first adjustment. The book finds that both the level of growth and its spread decline as companies get larger, so a very large company's reference class is narrower and slower than the full distribution in the figure.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the median beats the mean here<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>When a distribution has a long right tail, the mean is dragged toward the tail by a small number of extreme values. The median is the middle company: half grew faster, half slower. Here the mean is 8.1 percent and the median 5.4 percent, a gap of 2.7 points a year, which compounds into a large difference over a ten-year first stage.</p>
+        <p>If you pick one company and want the growth rate most likely to describe it, the median is the better anchor, because most companies are nowhere near the tail. The mean is the right number for a different question, the average growth across a whole portfolio of companies, where the few fast growers really are in the pot. Using the mean as the default for one company quietly assumes it has a fair share of the tail's luck built in.</p>
+        <p>The spread tells you as much as the centre. A standard deviation of 18.7 points means two companies one standard deviation either side of the median differ by more than 37 points a year. That is the honest width of "a typical company", before anything specific is known.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The companies that are not in a survivor sample.</strong> The Base Rate Book's sample keeps the companies that were later acquired, merged or went bust, and the book reports that about half of all public companies cease to exist within ten years of listing. It also finds that 23 percent of companies had negative real sales growth over three years, and 20 percent shrank over five. A growth assumption built only from companies that are still around today has silently removed the left side of this distribution before the analysis began.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers forecast width</span>
+      <h2>Forecasts are too narrow</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The book compares analysts' forecasts of three-year net income growth with what companies had actually done. The standard deviation of the forecasts was 19.2 percent. The standard deviation of actual past growth was 34.6 percent. In the book's words, the forecasts were "too optimistic and too narrow": they leaned high, and they imagined far less dispersion than reality delivers. Earnings growth, the book adds, is not very persistent.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 334" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two hand-drawn bell curves of three-year net income growth. A tall narrow brass curve, analysts' forecasts, standard deviation 19.2 percent, sits slightly to the right. A low wide hatched curve, what actually happened, standard deviation 34.6 percent, spreads much further in both directions. Brackets under the axis show one standard deviation of each. On the left, 31 percent of companies had lower net income over three years.">
+        <defs>
+          <filter id="vp7bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="73" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp7bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp7bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp7bH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp7bL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp7bS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp7bB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp7bN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp7bH" x="30" y="26">THREE-YEAR NET INCOME GROWTH: WHAT ANALYSTS EXPECT, WHAT HAPPENS</text>
+        <text class="vp7bS" x="560" y="26">curves sketched; the two spreads are the book's</text>
+
+        <g filter="url(#vp7bSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 250 L840 250"/>
+          <path d="M40 244 L60 243 L80 241 L100 238 L120 236 L140 232 L160 228 L180 224 L200 219 L220 214 L240 209 L260 203 L280 198 L300 192 L320 187 L340 182 L360 178 L380 175 L400 172 L420 171 L440 170 L460 171 L480 172 L500 175 L520 178 L540 182 L560 187 L580 192 L600 198 L620 203 L640 209 L660 214 L680 219 L700 224 L720 228 L740 232 L760 236 L780 238 L800 241 L820 243 L840 244 L840 250 L40 250 Z" fill="url(#vp7bHc)"/>
+          <path d="M210 246 L230 244 L250 240 L270 234 L290 225 L310 214 L330 200 L350 184 L370 166 L390 148 L410 132 L430 118 L450 109 L470 106 L490 109 L510 118 L530 132 L550 148 L570 166 L590 184 L610 200 L630 214 L650 225 L670 234 L690 240 L710 244 L730 246 L730 250 L210 250 Z" fill="#F8F0DC" stroke="#93701C" stroke-width="2.6"/>
+          <path d="M374 266 L374 278 M374 272 L566 272 M566 266 L566 278" stroke="#93701C"/>
+          <path d="M267 284 L267 296 M267 290 L613 290 M613 284 L613 296"/>
+          <path d="M150 128 L170 218" marker-end="url(#vp7bAr)"/>
+        </g>
+
+        <text class="vp7bB" x="560" y="110">forecasts: SD 19.2%</text>
+        <text class="vp7bL" x="660" y="196">what happened: SD 34.6%</text>
+        <text class="vp7bS" x="50" y="120">31% had lower net income over 3 years</text>
+        <text class="vp7bB" x="580" y="276">one forecast SD</text>
+        <text class="vp7bS" x="627" y="294">one actual SD</text>
+
+        <text class="vp7bN" x="30" y="318">The forecast curve also leans to the right of the actual one: too optimistic as well as too narrow.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the gap between the two widths is the confidence nobody earned; a range built from forecasts is too tight before you start</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What 19.2 against 34.6 does to your range<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A standard deviation of 34.6 points for actual three-year earnings growth means outcomes scatter far more than any single forecast suggests. Forecasts with a spread of 19.2 points are, on average, behaving as if the future were a little over half as uncertain as it turns out to be. Lean optimistic on top of that, and the typical forecast both sits too high and is held with too much confidence.</p>
+        <p>For a valuation, the practical consequence is about the range, not the point. In Analyst session 6 you built a range from the discount rate plus or minus one point and growth plus or minus two. If your growth input came from forecasts, those two points are almost certainly too few for earnings, because the forecasts you started from were narrower than the world. Widen the growth band, or at least write down that it is a floor on the uncertainty, not a measure of it.</p>
+        <p>The left tail is real too. The book finds 31 percent of companies had lower net income after three years, 29 percent after five, and 24 percent after ten. Roughly one company in four earned less a decade later. Any bear case that never lets earnings fall is not a bear case.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Sales growth persists more than earnings growth<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The book reports that sales growth is more persistent than earnings growth. Earnings sit at the bottom of the income statement, after costs that do not move one for one with sales, so a small change in sales or margins can produce a large swing in profit. That is why the earnings distribution in the figure is so much wider than the sales distribution in Part 1, and why a growth forecast anchored on sales is usually steadier than one anchored on last year's profit.</p>
+        <p>Growth also explains less of shareholder returns than a story might suggest. The book reports a correlation between sales growth and total shareholder return of 0.20 over one year, 0.25 over three years and 0.28 over five. Positive, rising with the horizon, and still modest: growth matters, but it is far from the whole explanation, which is one reason the price paid for that growth matters so much. The book also reports that median sales growth correlates with US GDP growth at 0.66.</p>
+        <p>For owner earnings, which sit even closer to the bottom line than net income because capital spending is subtracted too, expect less persistence still. The one-off years you met in Analyst session 2 are the same effect seen up close.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>One in four, ten years on.</strong> In the Base Rate Book's sample of the world's largest companies, 33 percent had negative real net income growth in a given year, and 24 percent had lower net income ten years later. These are not small, fragile firms; they are the top 1,000 by market value at the time. If a quarter of giants can earn less after a decade, a valuation that assumes steady growth for ten years needs a reason why this company is in the other three quarters.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers fading growth, tested</span>
+      <h2>Fade the growth</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">If high growth rarely lasts and forecasts lean high, the sensible default is to let any above-normal growth fade toward a modest long-run rate. The bench's rung 4 does exactly that: start from the ten-year mean owner earnings, grow it at half its own past growth, capped at 8 percent and floored at -5, and fade that rate in a straight line to 2.5 percent over five years. Then test it, the way every rung is tested: hold out the last years, forecast them from what was known at the start, and measure the miss.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn chart of assumed growth rate against forecast year, years 0 to 10. A dashed line high across the top is the anti-lever, the best single past year's growth held every year. The brass line is rung 4: it starts at g0, half the past growth capped at 8 percent, falls in a straight line to 2.5 percent at year 5, and stays there. Rungs 2 and 3 sit flat at zero growth along the axis.">
+        <defs>
+          <filter id="vp7cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="79" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp7cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp7cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp7cH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp7cL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp7cS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp7cB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp7cA { font: 700 11px Inter, sans-serif; fill: #2D5240; }
+          .vp7cN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp7cH" x="30" y="26">THE GROWTH RATE EACH RUNG ASSUMES, YEAR BY YEAR</text>
+        <text class="vp7cS" x="380" y="26">shapes, not values: g0 differs for each filer</text>
+
+        <g filter="url(#vp7cSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M100 250 L800 250"/>
+          <path d="M100 250 L100 70"/>
+          <path d="M100 66 L800 66" stroke-dasharray="7 6"/>
+          <path d="M100 110 L450 200 L800 200" stroke="#93701C" stroke-width="3.4"/>
+          <path d="M450 200 L450 250" stroke="#C8D6CC" stroke-dasharray="4 4"/>
+          <path d="M100 250 L800 250" stroke="#3E6B55" stroke-width="3"/>
+          <path d="M800 250 L800 258"/>
+          <path d="M450 250 L450 258"/>
+          <rect x="560" y="96" width="220" height="56" rx="8" transform="rotate(0.6 670 124)" fill="#EEF5F0"/>
+          <path d="M556 132 C520 150 500 170 470 190" marker-end="url(#vp7cAr)"/>
+        </g>
+
+        <text class="vp7cS" x="110" y="56">anti-lever: last year's earnings at the best single past year's growth, every year</text>
+        <text class="vp7cB" x="92" y="114" text-anchor="end">g0</text>
+        <text class="vp7cA" x="92" y="204" text-anchor="end">2.5%</text>
+        <text class="vp7cA" x="92" y="254" text-anchor="end">0%</text>
+        <text class="vp7cB" x="600" y="190">rung 4: 2.5% from year 5 on</text>
+        <text class="vp7cS" x="560" y="242">rungs 2 and 3: flat, no growth</text>
+        <text class="vp7cL" x="574" y="118">g0 = half the past growth,</text>
+        <text class="vp7cL" x="574" y="138">capped 8%, floored -5%</text>
+        <text class="vp7cA" x="100" y="272" text-anchor="middle">year 0</text>
+        <text class="vp7cA" x="450" y="272" text-anchor="middle">year 5</text>
+        <text class="vp7cA" x="800" y="272" text-anchor="middle">year 10</text>
+
+        <text class="vp7cN" x="30" y="304">Past growth here is the compound rate between the two five-year halves of the last ten years.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the fade spends its optimism early and settles at an economy-like rate; the anti-lever never lets go of its best year</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What the ladder found, stated as found<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>At the default five-year hold-out, mean absolute miss across the four filers: rung 4, the fade, missed by <strong>47.7 percent</strong>; rung 3, the flat ten-year mean, by 50.2 percent; rung 2, the flat five-year mean, by 47.4 percent; last year's net income by 70.4 percent; and the anti-lever by 19,614.8 percent. Fading half the past growth helped a little over holding the ten-year mean flat, and the five-year mean still edged it.</p>
+        <p>The more important finding is the direction. <strong>Every honest rung undershot.</strong> At five years the bias equals minus the mean miss: all four companies' owner earnings rose sharply after 2020, and no rule built from the years before saw it coming. Exxon Mobil is the clearest case: from 2020, the fade forecast 3.74 dollars a share a year against an actual 8.87, a miss of 57.8 percent.</p>
+        <p>So the base rates in Parts 1 and 2 do not simply argue for lower growth. Over this window, lower would have been worse. They argue for <strong>wider ranges</strong>: outcomes scatter more than forecasts do, in both directions, and a range that cannot contain a boom is as wrong as one that cannot contain a bust. The fade is a sensible centre; it is not a forecast you should hold tightly.</p>
+        <p>Because rung 4 starts from rung 3's base, its value at the same sliders equals rung 3's in the bench; the fade changes the forecast of the hold-out years, which is what the ladder scores.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Survivorship, and why four survivors teach little about base rates<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Our four filers grew their owner earnings per share at between 3.1 and 9.2 percent a year over their runs: Caterpillar 9.2, Exxon Mobil 8.1, Johnson &amp; Johnson 7.3 and Procter &amp; Gamble 3.1. Those are real numbers, computed in the build-along, and they are almost useless as a base rate.</p>
+        <p>First, all four are long-lived giants. They were chosen because their filings are long, and a long filing history exists only for a company that survived. Survivorship removes exactly the cases the Base Rate Book was careful to keep: the half of listed companies that disappear within ten years. Four survivors describe what happened to four survivors.</p>
+        <p>Second, the units differ. The filers' rates are nominal and include inflation; the book's are inflation-adjusted. They measure owner earnings per share over ten to fourteen years, not sales over three. A nominal 9.2 percent and a real 8.1 percent mean are not the same kind of number, and putting them on one axis invites a comparison that cannot be made.</p>
+        <p>What the four histories are good for is a sanity check on one company: does a forecast for Procter &amp; Gamble far above its own 3.1 percent nominal history have an argument behind it? The base rate tells you how unusual a forecast is across companies; the company's own history tells you how unusual it is for that company. You want both, and you want to know which one you are reading.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Where the fade landed, company by company.</strong> At the five-year hold-out the fade's misses were: Caterpillar from 2020, 8.20 forecast against 17.94 actual (-54.3 percent); Exxon Mobil from 2020, 3.74 against 8.87 (-57.8 percent); Johnson &amp; Johnson from 2020, 5.53 against 10.21 (-45.9 percent); Procter &amp; Gamble from 2021, 3.96 against 5.90 (-32.9 percent). Four undershoots, all in the same direction, in the same years. When every method misses the same way at the same time, the lesson is about the period, and about range width, not about picking a cleverer method.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Compute your filers' history, then place it</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Python 3, standard library only. The script reads the data file <code>vi-sample.js</code>, the same SEC XBRL facts the bench uses, stored as millions of dollars times ten and shares in millions times a hundred. It computes owner earnings per share for every year, averages the first five and the last five years of each run so one odd year cannot set the answer, and turns the two averages into a compound growth rate. Then you place each result against the base rates on paper, with the caveat that keeps the comparison honest.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 296" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two hand-drawn strips on the same 0 to 10 percent scale with a brass wall between them. Top strip, the four filers' nominal owner earnings per share growth over 10 to 14 years: Procter and Gamble 3.1 percent, Johnson and Johnson 7.3, Exxon Mobil 8.1, Caterpillar 9.2. Bottom strip, the Base Rate Book's three-year real sales growth, 1950 to 2015: median 5.4 percent, mean 8.1 percent. The wall says the two strips measure different things and cannot be lined up directly.">
+        <defs>
+          <filter id="vp7dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="83" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp7dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp7dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp7dH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp7dL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp7dS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp7dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp7dA { font: 700 11px Inter, sans-serif; fill: #2D5240; }
+          .vp7dN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp7dH" x="30" y="26">PLACING FOUR HISTORIES AGAINST A BASE RATE</text>
+        <text class="vp7dS" x="120" y="54">top: your filers, nominal owner earnings per share, first five vs last five years</text>
+
+        <g filter="url(#vp7dSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M120 110 L820 110"/>
+          <circle cx="337" cy="110" r="6" fill="#EEF5F0"/>
+          <circle cx="631" cy="110" r="6" fill="#EEF5F0"/>
+          <circle cx="687" cy="110" r="6" fill="#EEF5F0"/>
+          <circle cx="764" cy="110" r="6" fill="#EEF5F0"/>
+          <rect x="120" y="148" width="700" height="36" rx="6" transform="rotate(-0.4 470 166)" fill="#93701C" stroke="#93701C"/>
+          <path d="M120 220 L820 220"/>
+          <path d="M498 220 L498 212 M498 220 L498 228" stroke-width="3"/>
+          <path d="M687 212 L687 228" stroke-width="3"/>
+        </g>
+
+        <text class="vp7dL" x="337" y="94" text-anchor="middle">P&amp;G 3.1%</text>
+        <text class="vp7dL" x="631" y="94" text-anchor="middle">J&amp;J 7.3%</text>
+        <text class="vp7dL" x="687" y="134" text-anchor="middle">Exxon 8.1%</text>
+        <text class="vp7dL" x="764" y="94" text-anchor="middle">Caterpillar 9.2%</text>
+        <text class="vp7dA" x="120" y="128">0%</text>
+        <text class="vp7dA" x="820" y="128" text-anchor="end">10%</text>
+        <text class="vp7dW" x="470" y="171" text-anchor="middle">a wall: nominal vs real · owner earnings vs sales · 10 to 14 years vs 3</text>
+        <text class="vp7dL" x="498" y="206" text-anchor="middle">median 5.4%</text>
+        <text class="vp7dL" x="687" y="206" text-anchor="middle">mean 8.1%</text>
+        <text class="vp7dA" x="120" y="238">0%</text>
+        <text class="vp7dA" x="820" y="238" text-anchor="end">10%</text>
+        <text class="vp7dS" x="120" y="258">bottom: Base Rate Book, three-year real sales growth, 1950-2015, dead companies included</text>
+
+        <text class="vp7dN" x="30" y="282">Exxon's 8.1% and the book's 8.1% mean are the same digits and different quantities. That is the trap.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the scales look shared and are not; every placement you write must cross the wall in words, not by lining up dots</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Step 1 · Load the sample.</strong> The data file is JavaScript that assigns one JSON object. Read the text after <code>window.VI_SAMPLE = </code> and let the JSON decoder stop at the end of the object.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · load</span>import json
+
+PATH = "assets/vi-sample.js"   # adjust to where you saved the file
+
+def load_sample(path):
+    text = open(path, encoding="utf-8").read()
+    start = text.index("window.VI_SAMPLE = ") + len("window.VI_SAMPLE = ")
+    data, _ = json.JSONDecoder().raw_decode(text[start:])
+    return data["companies"]</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 2 · Owner earnings per share, every year.</strong> Net income plus D&amp;A minus all capex, divided by diluted shares. Undo the storage scaling: dollar fields divide by 10, shares by 100. This is the all-capex approximation from Analyst session 1, with its known errors.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · per share</span>def oe_per_share(c):
+    # stored as millions x10 and shares millions x100
+    return [(ni + da - cx) / 10 / (sh / 100)
+            for ni, da, cx, sh in zip(c["ni"], c["da"], c["capex"], c["sh"])]</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 3 · First five, last five, and the rate between them.</strong> The centre of the first five years and the centre of the last five are n - 5 years apart, so that is the compounding period. Averaging five years at each end is the normalising habit from Analyst session 2.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · the history</span>def history(c):
+    oe = oe_per_share(c)
+    first, last = sum(oe[:5]) / 5, sum(oe[-5:]) / 5
+    years = len(oe) - 5          # centre of first five to centre of last five
+    cagr = (last / first) ** (1 / years) - 1
+    return first, last, years, cagr</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 4 · Run it for all four filers.</strong> What it printed when these pages ran it:</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · run, and what it printed</span>for c in load_sample(PATH):
+    first, last, years, cagr = history(c)
+    print(f"{c['name']:18} {c['fy'][0]}-{c['fy'][-1]}  {first:5.2f} -&gt; {last:5.2f}"
+          f"  {cagr:5.1%} a year over {years} years")
+
+Caterpillar        2007-2025   5.21 -&gt; 17.94   9.2% a year over 14 years
+Exxon Mobil        2011-2025   4.08 -&gt;  8.87   8.1% a year over 10 years
+Johnson &amp; Johnson  2010-2025   4.69 -&gt; 10.21   7.3% a year over 11 years
+Procter &amp; Gamble   2008-2026   3.84 -&gt;  5.90   3.1% a year over 14 years</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 5 · Place each history, in words.</strong> No code: a worksheet. For each filer, write where its rate would sit against the Base Rate Book, and then the sentence that says why the placement is only rough. Inflation over these years is not in the source map, so do not subtract a number you have not sourced; say which way the adjustment goes.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · placement worksheet</span>Base rates (real, 3-year sales CAGR, top 1,000 global, 1950-2015):
+  median 5.4%   mean 8.1%   standard deviation 18.7 points
+  growth and its spread fall with size
+
+For each filer:
+  Company: ____________   nominal owner earnings/share growth: ____ %
+  1. Real growth would be lower than this by inflation.  Direction: ______
+  2. Relative to the median, before that adjustment:  above / near / below
+  3. Owner earnings are less persistent than sales:  does that widen or
+     narrow the range you would put around this rate?  ______________
+  4. Survivor?  yes / no.  What did the sample leave out?  ____________
+  5. One sentence a reader of your valuation should see:
+     "______________________________________________________________"</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 6 · Feed it back into a range.</strong> Take the filer whose history you placed most confidently. Write a low, central and high growth rate for its first stage, and justify the width with the Part 2 fact, not with the company's own past. Then check whether your low case ever lets owner earnings fall: roughly one large company in four earned less ten years later.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · from base rate to range</span>Filer: ____________
+  low growth  ____ %   because ____________________________________
+  central     ____ %   because ____________________________________
+  high growth ____ %   because ____________________________________
+
+  Width (high - low): ____ points.
+  Forecasts have a spread of 19.2 vs 34.6 actual. Is my width honest?  ____
+  Does my low case ever let owner earnings fall?  yes / no</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Same digits, different quantities.</strong> Exxon Mobil's history and the Base Rate Book's mean both print as 8.1 percent. One is nominal owner earnings per share over ten years for one survivor; the other is real three-year sales growth across a thousand companies, dead ones included. Whenever two numbers match this neatly, check the units before you check the conclusion.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before Analyst session 8</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Change the window.</strong> Rerun Step 3 with three-year averages at each end instead of five. Which filer's rate moves most, and which single year is responsible?</li>
+      <li><strong>Write the outside view first</strong> for a company you know: its size, its reference class, and the base rate you would start from before looking at its own history. Then write the inside view and the one fact that justifies any gap between them.</li>
+      <li><strong>Widen a range you already built.</strong> Take your Analyst session 6 sensitivity grid and redo the growth band using the Part 2 finding. How much wider is the value range, and does the central value change?</li>
+      <li><strong>List the dead.</strong> Name three companies in an industry you know that no longer file on their own, through acquisition, merger or failure. Write one line on how a sample of today's survivors in that industry would mislead a growth forecast.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Analyst session 7 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">1 · You are forecasting growth for a very large company. What does starting from the outside view mean?</p>
+      <button class="qopt" type="button">A · Taking the management's own long-term target as the starting point</button>
+      <button class="qopt" type="button">B · Extending the company's own last five years of growth</button>
+      <button class="qopt" type="button">C · Using the mean of all companies, because it includes the fast growers</button>
+      <button class="qopt" type="button">D · Starting from the growth of a large reference class of similar companies, such as the Base Rate Book's median adjusted for size, then moving away only as far as specific evidence justifies</button>
+      <p class="qwhy">The outside view begins with what happened to many similar cases, and for a single company the median is the better anchor than a mean pulled up by the tail. The company's own story then adjusts that anchor, with reasons written down.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · Analysts' forecasts of three-year net income growth had a standard deviation of 19.2 percent; actual past growth had 34.6 percent. What does that mean for a valuation range?</p>
+      <button class="qopt" type="button">A · Forecasts imagine far less dispersion than reality delivers, and lean optimistic, so a growth band built from them is too narrow and should be widened in both directions</button>
+      <button class="qopt" type="button">B · Forecasts are accurate on average, so the range can stay as it is</button>
+      <button class="qopt" type="button">C · Actual growth is always lower than forecasts, so cut growth by half</button>
+      <button class="qopt" type="button">D · The gap only matters for small companies</button>
+      <p class="qwhy">The book calls the forecasts "too optimistic and too narrow". Narrowness is about width, not just level: outcomes scatter far more than forecasts allow, so a range anchored on forecasts understates the uncertainty before any other error is added.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">3 · Rung 4 fades half the past growth to 2.5 percent over five years. At the five-year hold-out it missed by 47.7 percent against 50.2 percent for the flat ten-year mean, and every honest rung undershot. What is the right lesson?</p>
+      <button class="qopt" type="button">A · Fading is proven to be the best forecasting method</button>
+      <button class="qopt" type="button">B · Growth should always be set to zero, because forecasts are too optimistic</button>
+      <button class="qopt" type="button">C · Fading is a sensible centre because high growth rarely lasts, but outcomes scatter in both directions, so base rates argue for wider ranges, not simply lower growth</button>
+      <button class="qopt" type="button">D · The anti-lever should be used instead, since every honest rung undershot</button>
+      <p class="qwhy">The fade did a little better than holding the ten-year mean flat, and the five-year mean edged it at 47.4 percent. All honest rungs undershot because earnings rose after 2020; lower growth would have missed by more. The anti-lever missed by 19,614.8 percent. The honest response is a wider range around a sensible centre.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Sample design, dead companies included, about half cease to exist within ten years; 3-year sales CAGR mean 8.1%, median 5.4%, SD 18.7%; 23% and 20% shrank; growth and spread fall with size; forecasts SD 19.2% vs actual 34.6%, "too optimistic and too narrow"; 31%, 29%, 24% lower net income at 3, 5, 10 years; sales more persistent than earnings; correlations 0.20, 0.25, 0.28 and 0.66</span><span class="note">Mauboussin, M., Callahan, D. and Majd, D., "The Base Rate Book", Credit Suisse, 2016 (read at source, hosted copy)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Four filers' owner earnings growth: 5.21 to 17.94, 4.08 to 8.87, 4.69 to 10.21, 3.84 to 5.90; the ladder at the five-year hold-out, rung 4 47.7% vs rung 3 50.2%; the per-filer fade misses</span><span class="note">SEC EDGAR XBRL company facts, read from a public mirror after the SEC refused the build machine; computed, and recomputed by the build-along script</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Nominal against real</span><span class="note">Named as a caveat; no inflation series is sourced, so no real-terms conversion of the filers' rates is claimed</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">A widely quoted small-company persistence figure</span><span class="note">Circulates in summaries of the book; its table could not be read cleanly at source, so it is not used</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">How long high returns on capital last</span><span class="note">Analyst session 8; moats as economics are taught in Economics Foundations session 6, linked, not re-taught</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 7 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Outside view first</b><span>Start from a reference class, then adjust for the specifics, in writing.</span></div>
+      <div class="cheat-item"><b>The base rate</b><span>3-year real sales growth: median 5.4%, mean 8.1%, SD 18.7. Lower and tighter for giants.</span></div>
+      <div class="cheat-item"><b>Median for one company</b><span>The mean is pulled up by a few fast growers in the tail.</span></div>
+      <div class="cheat-item"><b>Forecasts are too narrow</b><span>SD 19.2% forecast vs 34.6% actual. Widen the growth band.</span></div>
+      <div class="cheat-item"><b>Fade, but widen</b><span>Half past growth to 2.5% over five years. A centre, not a certainty.</span></div>
+      <div class="cheat-item"><b>Check the units</b><span>Nominal vs real, earnings vs sales, survivors vs everyone.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Growth is one half of what makes a business worth more than its current earnings. The other half is how long it can keep earning returns above its cost of capital while it grows. Analyst session 8 treats a moat as exactly that valuation input, and uses the Base Rate Book again: companies sorted by their returns, and how fast the gap between the best and the worst closes over ten years.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Analyst session 7 of 10 · learn-value-investing-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p6-which-input-moves-the-answer.html">← Prev: Which input moves the answer</a> &nbsp;·&nbsp; <a href="p8-how-long-excess-returns-last.html">Next: How long excess returns last →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Value investing as a reasoning discipline, not stock picking. A six-session Owner track with no code (what you own, value as a range, margin of safety, the edge of what you know, Mr Market, the mistakes in your own head) and a ten-session Analyst track on real 10-K filings (owner earnings, normalising, return on capital, DCF, reverse DCF, sensitivity, base rates, moats as an input, the memo, the bench). Educational, not investment advice. Free, by Phoebe Fu.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Learn Value Investing with Phoebe">
+<meta property="og:description" content="Four companies' real 10-K filings, five forecasting rules checked against what happened next, and a margin of safety against a price you type. Educational, not investment advice.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Learn Value Investing with Phoebe">
+<meta name="twitter:description" content="Two tracks, four real companies' 10-K filings, a bench that values them in your browser against a price you type. Educational, not investment advice.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Learn Value Investing with Phoebe</title>
+<link rel="stylesheet" href="assets/style.css?v=2">
+<style>
+
+  .stats-row { display: flex; gap: 2.4rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .stat b { display: block; font-size: 2.1rem; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .72rem; opacity: 1; text-transform: uppercase; letter-spacing: .09em; font-weight: 600; }
+
+  .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .course-card {
+    border: 1px solid var(--hairline);
+    border-top: 4px solid var(--diff, var(--indigo));
+    border-radius: var(--radius);
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
+    position: relative;
+  }
+  .course-card:hover { border-color: var(--indigo-soft); border-top-color: var(--diff, var(--indigo)); box-shadow: 0 8px 28px rgba(var(--shadow-rgb),.16); transform: translateY(-3px); }
+  .course-card .cicon { font-size: 1.7rem; line-height: 1; }
+  .course-card .cnum { font-size: .72rem; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: .1em; }
+  .course-card h3 { font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
+  .course-card p { font-size: .85rem; color: var(--muted); flex: 1; }
+  .course-card .meta { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+  .diff-legend { display: flex; gap: 1rem; margin-top: 1.6rem; font-size: .74rem; color: var(--muted); font-weight: 600; flex-wrap: wrap; }
+  .diff-legend i { display: inline-block; width: .85rem; height: .35rem; border-radius: 999px; margin-right: .35rem; vertical-align: middle; }
+
+  .paths { margin-top: 2.6rem; }
+  .paths h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+  .paths .plede { color: var(--muted); font-size: .92rem; margin-bottom: .8rem; }
+  .path { display: flex; gap: .55rem; align-items: center; padding: .75rem 0; border-bottom: .5px solid var(--hairline); flex-wrap: wrap; }
+  .path:last-child { border-bottom: none; }
+  .path b { min-width: 15.5rem; font-size: .9rem; }
+  .path .pstep { background: var(--indigo-50); color: var(--indigo); border-radius: 999px; padding: .16rem .68rem; font-weight: 700; font-size: .8rem; text-decoration: none; transition: all .12s ease; }
+  .path .pstep:hover { background: var(--indigo); color: #fff; }
+  .path .parr { color: var(--muted); font-weight: 700; }
+
+  .mm-section { margin-top: 1.6rem; }
+  .mm-section h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .2rem; }
+  .mm-section .mm-lede { color: var(--muted); font-size: .92rem; margin-bottom: .4rem; }
+  .mm-wrap { border: 1px solid var(--hairline); border-radius: var(--radius); background: linear-gradient(180deg,#fff,var(--indigo-50)); padding: .6rem; overflow-x: auto; }
+  .mm-svg { width: 100%; height: auto; display: block; max-width: 60rem; margin: 0 auto; min-width: 34rem; }
+  .mm-link { cursor: pointer; text-decoration: none; }
+  .mm-node rect { transition: opacity .15s ease, filter .15s ease; }
+  .mm-node text { pointer-events: none; }
+  .mm-link:hover .mm-node rect { filter: brightness(1.06); }
+  .mm-edge { transition: opacity .15s ease; }
+
+  .not-this { border: 1px solid var(--hairline); border-left: 4px solid var(--clay); border-radius: var(--radius); background: #fff; padding: 1.1rem 1.3rem; margin-top: 1.2rem; }
+  .not-this h3 { font-size: .95rem; font-weight: 800; margin-bottom: .5rem; }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn with Phoebe · Entrepreneurship &amp; Business</div>
+    <h1>Learn <span class="accent">Value Investing</span> with Phoebe</h1>
+    <p class="sub">Value investing, in the Graham and Buffett sense, is a way of reasoning before it is a way of buying: keep the price of a share and the value of a business in two different columns, estimate the value as a range, and leave a gap. These sixteen sessions teach it twice. The Owner track does it without a spreadsheet, on a constructed family business. The Analyst track does it on four large US companies' real 10-K filings, from owner earnings to a discounted cash flow to the growth a price implies. The bench in the last session checks five forecasting rules against what the filings later showed: holding out the last five years, the five-year average of owner earnings missed by 47.4 percent and last year's earnings by 70.4, and the rule a hopeful analyst reaches for, compounding the best year's growth, missed by 19,614.8 percent. No market prices, no tickers, no tips. Educational, not investment advice.</p>
+    <div class="stats-row">
+      <div class="stat"><b data-count="16">16</b><span>sessions, two tracks</span></div>
+      <div class="stat"><b data-count="4">4</b><span>real companies' 10-K filings</span></div>
+      <div class="stat"><b data-count="69">69</b><span>filer-years on the bench</span></div>
+      <div class="stat"><b data-count="5">5</b><span>rungs, computed live</span></div>
+      <div class="stat"><b data-count="0">0</b><span>market prices shown</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Owner track 🧭 <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· six sessions, no code</span></h2>
+      <p class="plede">For anyone who wants to think about a business the way an owner does. What a share is, why value is a range, the margin of safety, the edge of what you know, Mr Market, and the mistakes made in your own head. The running case is Halden Tiles, a constructed family business; every Halden figure is invented and labelled so.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/a1-you-are-buying-a-business.html" style="--diff:#5B8C5A">
+        <span class="cicon">🏪</span>
+        <span class="cnum">Owner session 1 · start here</span>
+        <h3>You are buying a business</h3>
+        <p>A share as a slice of the owners' future cash. Profit versus what is left after the spend to stand still. Value as cash that has not arrived yet, and the four questions Buffett asked in 1977 before any number.</p>
+        <span class="meta"><span class="pill amber">▶ Start here</span></span>
+      </a>
+      <a class="course-card" href="courses/a2-value-is-a-range.html" style="--diff:#5B8C5A">
+        <span class="cicon">📐</span>
+        <span class="cnum">Owner session 2</span>
+        <h3>Value is a range, not a number</h3>
+        <p>Three honest views of one business, the input that widens the answer most, and why nearly half the value sits beyond year ten. Halden's range: 8.2 to 15.8 million.</p>
+        <span class="meta"><span class="pill">vaguely right</span></span>
+      </a>
+      <a class="course-card" href="courses/a3-the-margin-of-safety.html" style="--diff:#5B8C5A">
+        <span class="cicon">🌉</span>
+        <span class="cnum">Owner session 3</span>
+        <h3>The margin of safety</h3>
+        <p>The gap between value and price, measured against value. Buffett's bridge for heavier trucks, a margin that is positive against one view and negative against another, and how big a gap to ask for.</p>
+        <span class="meta"><span class="pill">the gap, not the discount</span></span>
+      </a>
+      <a class="course-card" href="courses/a4-the-edge-of-what-you-know.html" style="--diff:#5B8C5A">
+        <span class="cicon">⭕</span>
+        <span class="cnum">Owner session 4</span>
+        <h3>The edge of what you know</h3>
+        <p>The circle of competence, where its boundary is, how to test it before it tests you, and the too-hard tray that costs nothing to fill.</p>
+        <span class="meta"><span class="pill">know the boundary</span></span>
+      </a>
+      <a class="course-card" href="courses/a5-mr-market.html" style="--diff:#5B8C5A">
+        <span class="cicon">🎭</span>
+        <span class="cnum">Owner session 5</span>
+        <h3>Mr Market quotes, you decide</h3>
+        <p>Graham's moody partner as Buffett told it in 1987: a price that swings while the business barely moves, and why a quote is there to serve you, not to guide you.</p>
+        <span class="meta"><span class="pill">temperament</span></span>
+      </a>
+      <a class="course-card" href="courses/a6-mistakes-in-your-own-head.html" style="--diff:#5B8C5A">
+        <span class="cicon">🧠</span>
+        <span class="cnum">Owner session 6</span>
+        <h3>The mistakes made in your own head</h3>
+        <p>Anchoring, forecasts that are too narrow, loss aversion, and Buffett's own list of twenty-five years of mistakes, from cigar butts to the institutional imperative.</p>
+        <span class="meta"><span class="pill">too narrow by half</span></span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Analyst track 🔬 <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· ten sessions, browser and Python</span></h2>
+      <p class="plede">For the people who build the number and have to defend it. Owner earnings from tagged 10-K facts, normalising through a cycle, return on capital, a discounted cash flow by hand and in reverse, sensitivity, base rates of growth, a moat as a valuation input, and the memo that says what would prove it wrong. Four filers throughout: Caterpillar, Exxon Mobil, Johnson &amp; Johnson and Procter &amp; Gamble.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/p1-owner-earnings-from-the-filings.html" style="--diff:#FBBF24">
+        <span class="cicon">🧾</span>
+        <span class="cnum">Analyst session 1 · start here</span>
+        <h3>Owner earnings from the filings</h3>
+        <p>Tagged facts, the sieve, net income plus D&amp;A minus capex per share, and the three places the approximation is wrong. Johnson &amp; Johnson's owner earnings beat its profit; Exxon's sat far below for five years.</p>
+        <span class="meta"><span class="pill amber">▶ Start here</span></span>
+      </a>
+      <a class="course-card" href="courses/p2-normalising-through-a-cycle.html" style="--diff:#FBBF24">
+        <span class="cicon">🔄</span>
+        <span class="cnum">Analyst session 2</span>
+        <h3>Normalising through a cycle</h3>
+        <p>Five- and ten-year averages, telling a cycle from a one-off, and Exxon's 2020 loss next to its 2022 record. Where you start decides what you see.</p>
+        <span class="meta"><span class="pill">one year is a hostage</span></span>
+      </a>
+      <a class="course-card" href="courses/p3-return-on-invested-capital.html" style="--diff:#FBBF24">
+        <span class="cicon">🏭</span>
+        <span class="cnum">Analyst session 3</span>
+        <h3>Return on invested capital</h3>
+        <p>Returns against the cost of capital, why growth only adds value above it, and growth as reinvestment times return.</p>
+        <span class="meta"><span class="pill">g = reinvestment x ROC</span></span>
+      </a>
+      <a class="course-card" href="courses/p4-a-dcf-by-hand.html" style="--diff:#FBBF24">
+        <span class="cicon">🧮</span>
+        <span class="cnum">Analyst session 4</span>
+        <h3>A discounted cash flow, by hand</h3>
+        <p>Two stages, a discount rate you choose, a terminal value, and why 57 percent of the value sits beyond year ten at the default inputs.</p>
+        <span class="meta"><span class="pill">most value is far away</span></span>
+      </a>
+      <a class="course-card" href="courses/p5-what-the-price-assumes.html" style="--diff:#FBBF24">
+        <span class="cicon">🔁</span>
+        <span class="cnum">Analyst session 5</span>
+        <h3>What the price already assumes</h3>
+        <p>The reverse discounted cash flow: a price you type turned into the growth it needs. Double the value needs 14.17 percent a year.</p>
+        <span class="meta"><span class="pill">price as a forecast</span></span>
+      </a>
+      <a class="course-card" href="courses/p6-which-input-moves-the-answer.html" style="--diff:#FBBF24">
+        <span class="cicon">🎚️</span>
+        <span class="cnum">Analyst session 6</span>
+        <h3>Which input moves the answer</h3>
+        <p>Sensitivity grids, the range from one point of discount rate and two of growth, and the input you must argue hardest.</p>
+        <span class="meta"><span class="pill">the input to argue</span></span>
+      </a>
+      <a class="course-card" href="courses/p7-how-often-growth-lasts.html" style="--diff:#FBBF24">
+        <span class="cicon">📉</span>
+        <span class="cnum">Analyst session 7</span>
+        <h3>How often fast growth lasts</h3>
+        <p>Base rates from the Base Rate Book: forecasts too narrow by half, earnings growth that does not persist, and the growth fade.</p>
+        <span class="meta"><span class="pill">19.2 vs 34.6</span></span>
+      </a>
+      <a class="course-card" href="courses/p8-how-long-excess-returns-last.html" style="--diff:#FBBF24">
+        <span class="cicon">🏰</span>
+        <span class="cnum">Analyst session 8</span>
+        <h3>How long excess returns last</h3>
+        <p>A moat as a valuation input: how many years returns stay above the cost of capital, and returns that halve their lead in ten years.</p>
+        <span class="meta"><span class="pill">18 to 9 points</span></span>
+      </a>
+      <a class="course-card" href="courses/p9-the-memo.html" style="--diff:#FBBF24">
+        <span class="cicon">📝</span>
+        <span class="cnum">Analyst session 9</span>
+        <h3>A memo that says what would prove it wrong</h3>
+        <p>The investment memo as a test you set yourself: the thesis, the range, the kill criteria, and the disputed evidence on value as a strategy.</p>
+        <span class="meta"><span class="pill">kill criteria</span></span>
+      </a>
+      <a class="course-card" href="courses/p10-the-intrinsic-value-bench.html" style="--diff:#F87171">
+        <span class="cicon">🎛️</span>
+        <span class="cnum">Analyst session 10 · bench night</span>
+        <h3>The intrinsic value bench</h3>
+        <p>Four filers, five rules checked against the filings, the anti-lever that misses by 19,614.8 percent, the break button, and a margin of safety against a price you type.</p>
+        <span class="meta"><span class="pill amber">★ the bench</span></span>
+      </a>
+    </div>
+
+    <div class="diff-legend">
+      <span><i style="background:#5B8C5A"></i>owner</span>
+      <span><i style="background:#FBBF24"></i>analyst</span>
+      <span><i style="background:#F87171"></i>bench night</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Your passport 🎫</h2>
+      <p class="plede">Clear all three quiz questions in a session and it gets stamped. Sixteen stamps means you can describe a business as its owner, write its value as a range, say what a price assumes, and name the input that would prove you wrong. Stamps live in this browser only.</p>
+    </div>
+    <div class="pp-strip"></div>
+  </section>
+
+  <section class="section">
+    <div class="not-this">
+      <h3>What this is not, so you land in the right place 🧭</h3>
+      <table class="clean">
+        <tr><th>If your question is</th><th>Go here instead</th></tr>
+        <tr><td>How do I read an income statement, a cash flow statement and a balance sheet, or why cash and profit differ?</td><td><a href="https://phoebefu6.github.io/learn-finance-with-phoebe/">Finance: Reading the Numbers ↗</a></td></tr>
+        <tr><td>Why do some businesses keep their customers and their returns: network effects, switching costs, moats as economics?</td><td><a href="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a6-games-and-moats.html">Economics, Games and moats ↗</a></td></tr>
+        <tr><td>Why is money later worth less than money now?</td><td><a href="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a5-money-inflation-and-interest.html">Economics, Money, inflation and interest ↗</a></td></tr>
+        <tr><td>What should I buy, when should I sell, how should I build a portfolio?</td><td>Nowhere on these pages. Educational, not investment advice: no tips, no prices, no tickers.</td></tr>
+        <tr><td><strong>I want to reason about what a business is worth, say it as a range, and know what would prove me wrong.</strong></td><td><strong>you are in the right place</strong></td></tr>
+      </table>
+      <p style="margin-top:.7rem;font-size:.86rem;color:var(--muted)"><strong>Educational, not investment advice.</strong> A reasoning discipline taught on one constructed business and four real companies' filings. Whether cheap-looking stocks beat dear ones as a strategy is genuinely disputed in the research, and the pages teach that disagreement rather than taking a side.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths">
+      <h2>Choose your path 🗺️</h2>
+      <p class="plede">Three doors into the same habit: price in one column, value in another, and a range in between.</p>
+      <div class="path"><b>🧭 I want the reasoning, no code</b>
+        <a class="pstep" href="courses/a1-you-are-buying-a-business.html">O1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a2-value-is-a-range.html">O2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a3-the-margin-of-safety.html">O3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a4-the-edge-of-what-you-know.html">O4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a5-mr-market.html">O5</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a6-mistakes-in-your-own-head.html">O6</a>
+        <span style="font-size:.82rem;color:var(--muted)">the six ideas on one constructed business</span>
+      </div>
+      <div class="path"><b>🔬 I want to value from the filings</b>
+        <a class="pstep" href="courses/p1-owner-earnings-from-the-filings.html">A1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p2-normalising-through-a-cycle.html">A2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p4-a-dcf-by-hand.html">A4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p5-what-the-price-assumes.html">A5</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p10-the-intrinsic-value-bench.html">A10</a>
+        <span style="font-size:.82rem;color:var(--muted)">owner earnings, the cycle, the DCF, the reverse, the bench</span>
+      </div>
+      <div class="path"><b>🧠 I want to know when I am wrong</b>
+        <a class="pstep" href="courses/a2-value-is-a-range.html">O2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a6-mistakes-in-your-own-head.html">O6</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p7-how-often-growth-lasts.html">A7</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p9-the-memo.html">A9</a>
+        <span style="font-size:.82rem;color:var(--muted)">ranges, biases, base rates, the memo</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>What is honest here 🧾</h2>
+      <p class="plede">The Analyst spine is real public filings, recomputed for these pages and recomputed again on the bench. Where a figure comes from a letter, a book or a paper, the page names it and says whether it was read at source; where nothing citable exists, the page says that instead.</p>
+    </div>
+    <table class="clean">
+      <tr><th>Claim</th><th>Status</th></tr>
+      <tr><td>Every filer figure and every bench number: owner earnings, the ladder, values, ranges, implied growth</td><td><strong>Really computed</strong> from SEC EDGAR XBRL company facts for Caterpillar, Exxon Mobil, Johnson &amp; Johnson and Procter &amp; Gamble; the SEC refused the build machine, so the records were read from a public mirror and spot-checked against the SEC's own data; the bench recomputes every number in your browser and a separate Python reference agrees with it</td></tr>
+      <tr><td>Owner earnings</td><td><strong>An approximation,</strong> labelled everywhere: net income plus depreciation and amortisation minus all capital spending, because filings do not separate the spend to stand still from the spend to grow</td></tr>
+      <tr><td>Values, ranges, margins of safety, implied growth</td><td><strong>Modelled</strong> under four inputs you choose; no value is a recommendation</td></tr>
+      <tr><td>Buffett's letters, Damodaran's terminal-value rule, the Base Rate Book</td><td><strong>Read at source</strong> for these pages, named on each page that uses them</td></tr>
+      <tr><td>Graham's books, Expectations Investing, the behavioural papers</td><td><strong>Reported,</strong> paraphrased, never quoted</td></tr>
+      <tr><td>Whether value investing beats the market as a strategy</td><td><strong>Not claimed.</strong> The research genuinely disagrees, and the pages teach the disagreement</td></tr>
+      <tr><td>Halden Tiles, its cousin, its prices</td><td><strong>Constructed,</strong> and the page says so each time</td></tr>
+    </table>
+  </section>
+
+  <section class="section mm-section">
+    <h2>The knowledge map 🧠</h2>
+    <p class="mm-lede">Both tracks at a glance - hover a session to spotlight its concepts, click any node to jump in.</p>
+    <div class="mm-wrap"><div id="mindmap"></div></div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>learn-value-investing-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span>Neighbours on the shelf: <a href="https://phoebefu6.github.io/learn-finance-with-phoebe/">Finance ↗</a> &nbsp;·&nbsp; <a href="https://phoebefu6.github.io/learn-economics-with-phoebe/">Economics ↗</a></span>
+  </footer>
+
+</main>
+
+<script>
+window.MINDMAP_DATA = {
+ "title": "Value\ninvesting",
+ "centerColor": "#1C3628",
+ "sessions": [
+  {
+   "label": "You are buying\na business",
+   "href": "courses/a1-you-are-buying-a-business.html",
+   "color": "#5B8C5A",
+   "concepts": [
+    {
+     "label": "A share is a slice",
+     "href": "courses/a1-you-are-buying-a-business.html"
+    },
+    {
+     "label": "Value is future cash",
+     "href": "courses/a1-you-are-buying-a-business.html"
+    },
+    {
+     "label": "Four gates, price last",
+     "href": "courses/a1-you-are-buying-a-business.html"
+    }
+   ]
+  },
+  {
+   "label": "Value is a range",
+   "href": "courses/a2-value-is-a-range.html",
+   "color": "#5B8C5A",
+   "concepts": [
+    {
+     "label": "Three honest views",
+     "href": "courses/a2-value-is-a-range.html"
+    },
+    {
+     "label": "The input that widens it",
+     "href": "courses/a2-value-is-a-range.html"
+    },
+    {
+     "label": "Most value is far away",
+     "href": "courses/a2-value-is-a-range.html"
+    }
+   ]
+  },
+  {
+   "label": "The margin\nof safety",
+   "href": "courses/a3-the-margin-of-safety.html",
+   "color": "#5B8C5A",
+   "concepts": [
+    {
+     "label": "The gap, against value",
+     "href": "courses/a3-the-margin-of-safety.html"
+    },
+    {
+     "label": "The bridge and the trucks",
+     "href": "courses/a3-the-margin-of-safety.html"
+    },
+    {
+     "label": "How big a margin",
+     "href": "courses/a3-the-margin-of-safety.html"
+    }
+   ]
+  },
+  {
+   "label": "The edge of\nwhat you know",
+   "href": "courses/a4-the-edge-of-what-you-know.html",
+   "color": "#5B8C5A",
+   "concepts": [
+    {
+     "label": "Circle of competence",
+     "href": "courses/a4-the-edge-of-what-you-know.html"
+    },
+    {
+     "label": "Testing the edge",
+     "href": "courses/a4-the-edge-of-what-you-know.html"
+    },
+    {
+     "label": "The too-hard tray",
+     "href": "courses/a4-the-edge-of-what-you-know.html"
+    }
+   ]
+  },
+  {
+   "label": "Mr Market quotes,\nyou decide",
+   "href": "courses/a5-mr-market.html",
+   "color": "#5B8C5A",
+   "concepts": [
+    {
+     "label": "The moody partner",
+     "href": "courses/a5-mr-market.html"
+    },
+    {
+     "label": "Use the quote",
+     "href": "courses/a5-mr-market.html"
+    },
+    {
+     "label": "Temperament",
+     "href": "courses/a5-mr-market.html"
+    }
+   ]
+  },
+  {
+   "label": "Mistakes in\nyour own head",
+   "href": "courses/a6-mistakes-in-your-own-head.html",
+   "color": "#5B8C5A",
+   "concepts": [
+    {
+     "label": "Anchoring",
+     "href": "courses/a6-mistakes-in-your-own-head.html"
+    },
+    {
+     "label": "Too sure, too narrow",
+     "href": "courses/a6-mistakes-in-your-own-head.html"
+    },
+    {
+     "label": "Cigar butts and peers",
+     "href": "courses/a6-mistakes-in-your-own-head.html"
+    }
+   ]
+  },
+  {
+   "label": "Owner earnings\nfrom filings",
+   "href": "courses/p1-owner-earnings-from-the-filings.html",
+   "color": "#FBBF24",
+   "concepts": [
+    {
+     "label": "Tagged facts, the sieve",
+     "href": "courses/p1-owner-earnings-from-the-filings.html"
+    },
+    {
+     "label": "NI + D&A - capex",
+     "href": "courses/p1-owner-earnings-from-the-filings.html"
+    },
+    {
+     "label": "Three known errors",
+     "href": "courses/p1-owner-earnings-from-the-filings.html"
+    }
+   ]
+  },
+  {
+   "label": "Normalising\na cycle",
+   "href": "courses/p2-normalising-through-a-cycle.html",
+   "color": "#FBBF24",
+   "concepts": [
+    {
+     "label": "Five and ten years",
+     "href": "courses/p2-normalising-through-a-cycle.html"
+    },
+    {
+     "label": "Cycle or one-off",
+     "href": "courses/p2-normalising-through-a-cycle.html"
+    },
+    {
+     "label": "Where you start",
+     "href": "courses/p2-normalising-through-a-cycle.html"
+    }
+   ]
+  },
+  {
+   "label": "Return on\ninvested capital",
+   "href": "courses/p3-return-on-invested-capital.html",
+   "color": "#FBBF24",
+   "concepts": [
+    {
+     "label": "ROIC vs cost of capital",
+     "href": "courses/p3-return-on-invested-capital.html"
+    },
+    {
+     "label": "Growth as reinvestment",
+     "href": "courses/p3-return-on-invested-capital.html"
+    },
+    {
+     "label": "Value-adding growth",
+     "href": "courses/p3-return-on-invested-capital.html"
+    }
+   ]
+  },
+  {
+   "label": "A DCF\nby hand",
+   "href": "courses/p4-a-dcf-by-hand.html",
+   "color": "#FBBF24",
+   "concepts": [
+    {
+     "label": "Two stages",
+     "href": "courses/p4-a-dcf-by-hand.html"
+    },
+    {
+     "label": "The discount rate",
+     "href": "courses/p4-a-dcf-by-hand.html"
+    },
+    {
+     "label": "The terminal value",
+     "href": "courses/p4-a-dcf-by-hand.html"
+    }
+   ]
+  },
+  {
+   "label": "What the price\nassumes",
+   "href": "courses/p5-what-the-price-assumes.html",
+   "color": "#FBBF24",
+   "concepts": [
+    {
+     "label": "Reverse DCF",
+     "href": "courses/p5-what-the-price-assumes.html"
+    },
+    {
+     "label": "Implied growth",
+     "href": "courses/p5-what-the-price-assumes.html"
+    },
+    {
+     "label": "Price as a forecast",
+     "href": "courses/p5-what-the-price-assumes.html"
+    }
+   ]
+  },
+  {
+   "label": "Which input\nmoves it",
+   "href": "courses/p6-which-input-moves-the-answer.html",
+   "color": "#FBBF24",
+   "concepts": [
+    {
+     "label": "Sensitivity grid",
+     "href": "courses/p6-which-input-moves-the-answer.html"
+    },
+    {
+     "label": "The honest range",
+     "href": "courses/p6-which-input-moves-the-answer.html"
+    },
+    {
+     "label": "The input to argue",
+     "href": "courses/p6-which-input-moves-the-answer.html"
+    }
+   ]
+  },
+  {
+   "label": "How often\ngrowth lasts",
+   "href": "courses/p7-how-often-growth-lasts.html",
+   "color": "#FBBF24",
+   "concepts": [
+    {
+     "label": "Base rates",
+     "href": "courses/p7-how-often-growth-lasts.html"
+    },
+    {
+     "label": "Forecasts too narrow",
+     "href": "courses/p7-how-often-growth-lasts.html"
+    },
+    {
+     "label": "The growth fade",
+     "href": "courses/p7-how-often-growth-lasts.html"
+    }
+   ]
+  },
+  {
+   "label": "How long excess\nreturns last",
+   "href": "courses/p8-how-long-excess-returns-last.html",
+   "color": "#FBBF24",
+   "concepts": [
+    {
+     "label": "A moat as an input",
+     "href": "courses/p8-how-long-excess-returns-last.html"
+    },
+    {
+     "label": "Returns regress",
+     "href": "courses/p8-how-long-excess-returns-last.html"
+    },
+    {
+     "label": "The fade period",
+     "href": "courses/p8-how-long-excess-returns-last.html"
+    }
+   ]
+  },
+  {
+   "label": "The memo",
+   "href": "courses/p9-the-memo.html",
+   "color": "#FBBF24",
+   "concepts": [
+    {
+     "label": "Thesis and range",
+     "href": "courses/p9-the-memo.html"
+    },
+    {
+     "label": "Kill criteria",
+     "href": "courses/p9-the-memo.html"
+    },
+    {
+     "label": "Teach the dispute",
+     "href": "courses/p9-the-memo.html"
+    }
+   ]
+  },
+  {
+   "label": "The intrinsic\nvalue bench",
+   "href": "courses/p10-the-intrinsic-value-bench.html",
+   "color": "#F87171",
+   "concepts": [
+    {
+     "label": "The ladder, checked",
+     "href": "courses/p10-the-intrinsic-value-bench.html"
+    },
+    {
+     "label": "The anti-lever",
+     "href": "courses/p10-the-intrinsic-value-bench.html"
+    },
+    {
+     "label": "The break button",
+     "href": "courses/p10-the-intrinsic-value-bench.html"
+    }
+   ]
+  }
+ ]
+};
+</script>
+<script src="assets/mindmap.js?v=1"></script>
+<script src="assets/app.js?v=2"></script>
+</body>
+</html>

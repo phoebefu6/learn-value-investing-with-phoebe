@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 3 of 10. Return on invested capital on a constructed manufacturer, why growth only adds value above the cost of capital, Damodaran's growth = reinvestment rate x return on capital, and ten-year capex / D&amp;A from four real filers' 10-K facts as a crude reinvestment signal.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Return on invested capital - learn value investing with phoebe">
+<meta property="og:description" content="Analyst session 3 of 10. ROIC against the cost of capital, the same growth creating or destroying value, and g = reinvestment x return on capital, checked against four real filers' capex / D&amp;A.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/courses/p3-return-on-invested-capital.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Return on invested capital - learn value investing with phoebe">
+<meta name="twitter:description" content="Analyst session 3 of 10. ROIC, the cost of capital, and why growth is reinvestment times return.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 3 · Return on invested capital - learn value investing with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-value-investing-with-phoebe</a> / Analyst session 3 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Value Investing with Phoebe · Analyst session 3 of 10</div>
+    <h1>Return on <span class="accent">invested capital</span></h1>
+    <p class="sub">Owner earnings tell you how much a business throws off. They do not tell you how much money had to be tied up to throw it off, and that is the number that decides whether growth is good news. Tonight we measure the return on the money tied up, set it against what that money costs, and see the same growth rate create value at one return and destroy it at another. The return-on-capital numbers come from a small manufacturer we invented, Brightwell Pumps, because the real filings in the sample do not carry invested capital. The real filers come back in Part 3, through the one reinvestment signal their facts do support.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Analyst</span>
+      <span class="chip audience">Analysts, finance and data people who want to know when growth is worth paying for</span>
+      <span class="chip audience">Python, standard library only</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Return, cost of capital, reinvestment</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: reinvestment, return, growth</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Analyst sessions 1 and 2 gave you owner earnings per share for four companies, normalised across a cycle. Every valuation from Analyst session 4 onward grows those earnings for years and then forever. Growth is not free: a business grows by putting money back in, and the money it puts back in earns some return. If that return is below what the money could earn elsewhere at the same risk, every extra dollar of growth makes the owners poorer. Reading the balance sheet itself is not taught here; it lives in <a href="https://phoebefu6.github.io/learn-finance-with-phoebe/">Finance: Reading the Numbers ↗</a>. Here the balance sheet is an input.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone builds</span>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Two kinds of number tonight, kept apart.</strong> Brightwell Pumps is constructed: every figure about it is invented for teaching, and the page says so each time. The four filers' capex / D&amp;A ratios are computed from their 10-K facts, read from the same SEC mirror as Analyst session 1. Invested capital for the real filers is not in the sample, so no real return on capital appears anywhere on this page.</p>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A return-on-capital calculation you can defend in both of its forms, a one-line test for whether a growth story adds value or destroys it, Damodaran's link between growth, reinvestment and return written as Python you can rerun, and the four real filers' ten-year capex / D&amp;A ratios with the sentence that says what they do and do not prove.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers ROIC and the cost of capital</span>
+      <h2>Return on the money tied up</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Return on invested capital is after-tax operating profit divided by the capital the business needs to run. You can count that capital from the financing side, equity plus debt minus the cash the business does not need, or from the operating side, operating assets minus operating liabilities. Done carefully, the two sides meet. The ratio means nothing alone: it matters only against the cost of capital, the return the owners and lenders could expect elsewhere for the same risk.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 332" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Constructed Brightwell Pumps. Invested capital of 80 million, equity 70 plus debt 30 minus excess cash 20, flows into the business, which produces after-tax operating profit of 12.0 million, 16.0 less 25 percent tax. A gauge from 0 to 30 percent shows the return on invested capital at 15.0 percent, with a tick marking a 9 percent cost of capital to its left.">
+        <defs>
+          <filter id="vp3aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="83" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp3aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp3aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp3aH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp3aL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp3aS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp3aB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp3aV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp3aN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp3aH" x="30" y="26">CAPITAL IN, PROFIT OUT, THE RATIO ON A GAUGE</text>
+        <text class="vp3aS" x="370" y="26">Brightwell Pumps, constructed, millions</text>
+
+        <g filter="url(#vp3aSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="60" width="200" height="150" rx="8" transform="rotate(-0.6 130 135)" fill="#FFFFFF"/>
+          <path d="M44 156 L216 156" stroke-width="1.4"/>
+          <path d="M236 135 L276 135" marker-end="url(#vp3aAr)"/>
+          <rect x="282" y="70" width="170" height="130" rx="8" transform="rotate(0.5 367 135)" fill="#EEF5F0"/>
+          <!-- doodle: a pump -->
+          <circle cx="367" cy="154" r="22" fill="url(#vp3aHc)"/>
+          <path d="M367 154 L367 136"/>
+          <path d="M367 154 L383 164"/>
+          <path d="M367 154 L351 164"/>
+          <path d="M389 154 L422 154 L422 140"/>
+          <path d="M458 135 L498 135" marker-end="url(#vp3aAr)"/>
+          <rect x="504" y="84" width="150" height="100" rx="8" transform="rotate(-0.5 579 134)" fill="#FFFFFF"/>
+          <path d="M660 135 L690 135" marker-end="url(#vp3aAr)"/>
+          <!-- the gauge -->
+          <path d="M695 200 A80 80 0 0 1 855 200"/>
+          <path d="M695 200 L855 200" stroke-width="1.4"/>
+          <path d="M739.7 151.5 L720.9 125.6" stroke-width="3"/>
+          <path d="M775 200 L775 130" stroke="#93701C" stroke-width="4"/>
+          <circle cx="775" cy="200" r="5" fill="#93701C" stroke="#93701C"/>
+        </g>
+
+        <text class="vp3aH" x="44" y="84">INVESTED CAPITAL</text>
+        <text class="vp3aS" x="44" y="108">equity 70</text>
+        <text class="vp3aS" x="44" y="126">+ debt 30</text>
+        <text class="vp3aS" x="44" y="144">- excess cash 20</text>
+        <text class="vp3aV" x="44" y="184">= 80 million</text>
+        <text class="vp3aB" x="130" y="232" text-anchor="middle">the denominator</text>
+        <text class="vp3aH" x="367" y="96" text-anchor="middle">BRIGHTWELL PUMPS</text>
+        <text class="vp3aS" x="367" y="114" text-anchor="middle">constructed maker</text>
+        <text class="vp3aS" x="367" y="222" text-anchor="middle">where the capital works</text>
+        <text class="vp3aH" x="518" y="106">AFTER-TAX</text>
+        <text class="vp3aH" x="518" y="122">OPERATING PROFIT</text>
+        <text class="vp3aV" x="518" y="152">12.0 million</text>
+        <text class="vp3aS" x="518" y="172">16.0 less 25% tax</text>
+        <text class="vp3aB" x="579" y="206" text-anchor="middle">the numerator</text>
+        <text class="vp3aH" x="775" y="100" text-anchor="middle">ROIC GAUGE</text>
+        <text class="vp3aB" x="712" y="120" text-anchor="end">9%</text>
+        <text class="vp3aS" x="695" y="216" text-anchor="middle">0%</text>
+        <text class="vp3aS" x="855" y="216" text-anchor="middle">30%</text>
+        <text class="vp3aV" x="775" y="230" text-anchor="middle">15.0%</text>
+        <text class="vp3aS" x="775" y="248" text-anchor="middle">tick: cost of capital 9%</text>
+        <text class="vp3aS" x="775" y="264" text-anchor="middle">right of the tick: value added</text>
+
+        <text class="vp3aN" x="30" y="300">ROIC = 12.0 / 80 = 15.0%, against a 9% cost of capital. Every Brightwell figure is constructed.</text>
+        <text class="vp3aN" x="30" y="318">Operating assets 110 - operating liabilities 30 = the same 80, seen from the other side.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the brass needle only means something next to the tick; 15 percent is good because the money costs 9</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What goes in the denominator, and why the choice matters<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The numerator is the easy half: operating profit after the tax the business would pay on it, before interest, so that it belongs to lenders and owners together. The denominator is where every analyst makes choices. <strong>Financing side:</strong> equity plus debt, minus the cash the business does not need to operate, because idle cash is not working in the business and would drag the return down for a reason that has nothing to do with pumps. For Brightwell that is 70 plus 30 minus 20, so 80 million. <strong>Operating side:</strong> the assets that make the product, factories, stock, money owed by customers, minus the operating liabilities suppliers effectively lend for free, 110 minus 30, the same 80.</p>
+        <p>Each choice moves the answer. Call all of Brightwell's cash "needed" and the denominator is 100, the return 12.0 percent instead of 15.0. Leave out leased equipment the business cannot run without and the return looks better than the economics. The professional habit is to write the denominator down line by line, so that a reader who disagrees can change one line, not argue about the whole number.</p>
+        <p>The cost of capital here is a constructed 9 percent, a judgment about the return investors could expect elsewhere for Brightwell's risk. How to derive it (CAPM, betas) is outside these ten sessions; the intuition that money has a price over time is in <a href="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a5-money-inflation-and-interest.html">Economics: money, inflation and interest ↗</a>.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Goodwill in or out: both views, and what each one judges<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Suppose 20 million of Brightwell's 80 is goodwill from buying a valve maker a few years ago (constructed). Goodwill is the premium paid over the value of the assets acquired. Two respectable views:</p>
+        <p><strong>Goodwill in: 12.0 / 80 = 15.0 percent.</strong> This is the return on everything the owners actually paid, acquisition premiums included. It judges management as allocators of capital: if they overpaid for the valve maker, this number shows it.</p>
+        <p><strong>Goodwill out: 12.0 / 60 = 20.0 percent.</strong> This is the return on the operating assets the business runs on today. It judges the underlying economics: what another dollar invested in the existing operation is likely to earn, since organic growth does not require paying anyone's acquisition premium again.</p>
+        <p>Neither is the correct one. They answer different questions, and the gap between them, 5 points here, is itself information about how much of the business was bought rather than built. Report both, and say which one a valuation leans on.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>A department store bought below book value.</strong> In his 1989 letter Buffett lists Hochschild Kohn, a department store Berkshire bought for less than its book value, among the mistakes of his first twenty-five years: the capital was cheap to acquire and still returned little. A low price on the capital does not lift the return the capital earns. His summary of the lesson: "Time is the friend of the wonderful business." A business that earns little on what it ties up stays a poor business whatever you paid for the stake.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers growth versus the cost of capital</span>
+      <h2>Growth only adds value above the cost of capital</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Take Brightwell's 12.0 million of after-tax operating profit next year and grow it 3 percent a year forever. To grow, the business must reinvest part of that profit, and how much depends on the return the reinvestment earns. At a 15 percent return it reinvests a fifth and hands owners the rest. At 6 percent it must reinvest half to buy the same growth. Same growth line, very different cash for the owners, and the gap shows up directly in value.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 346" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Constructed Brightwell Pumps, value today in millions at a 9 percent cost of capital with 3 percent growth forever. Starting from 12.0 next year, the path that reinvests 20 percent at a 15 percent return reaches a value of 160.0. The path that reinvests 50 percent at a 6 percent return reaches 100.0. A dashed middle line at 133.3 is the value at a 9 percent return, the same as standing still with no growth.">
+        <defs>
+          <filter id="vp3bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="89" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp3bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp3bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp3bH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp3bL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp3bS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp3bB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp3bV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp3bN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp3bH" x="30" y="26">SAME 3% GROWTH, TWO RETURNS ON WHAT IS REINVESTED</text>
+        <text class="vp3bS" x="30" y="44">value today in millions, constructed Brightwell Pumps, cost of capital 9%</text>
+
+        <g filter="url(#vp3bSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="120" cy="183" r="16" fill="#EEF5F0"/>
+          <path d="M140 183 L626 183" stroke-dasharray="6 6" stroke-width="1.6"/>
+          <path d="M140 180 C260 150 440 126 626 124" marker-end="url(#vp3bAr)"/>
+          <path d="M140 186 C260 216 440 250 626 256" marker-end="url(#vp3bAr)"/>
+          <circle cx="640" cy="124" r="7" fill="#93701C" stroke="#93701C"/>
+          <circle cx="640" cy="183" r="7" fill="#EEF5F0"/>
+          <circle cx="640" cy="256" r="7" fill="#FFFFFF"/>
+          <!-- doodle: a small stack of coins -->
+          <ellipse cx="808" cy="136" rx="14" ry="5" fill="#FFFFFF"/>
+          <ellipse cx="808" cy="128" rx="14" ry="5" fill="#FFFFFF"/>
+          <ellipse cx="808" cy="120" rx="14" ry="5" fill="#F8F0DC" stroke="#93701C"/>
+        </g>
+
+        <text class="vp3bS" x="230" y="112">owners keep 9.6 next year (80% of 12.0)</text>
+        <text class="vp3bS" x="230" y="300">owners keep 6.0 next year (50% of 12.0)</text>
+        <text class="vp3bL" x="120" y="222" text-anchor="middle">12.0 next year</text>
+        <text class="vp3bS" x="120" y="238" text-anchor="middle">g = 3% both ways</text>
+        <text class="vp3bV" x="656" y="130">160.0</text>
+        <text class="vp3bB" x="656" y="148">reinvest 20% at 15%</text>
+        <text class="vp3bV" x="656" y="189">133.3</text>
+        <text class="vp3bS" x="656" y="207">at 9%, or standing still</text>
+        <text class="vp3bV" x="656" y="262">100.0</text>
+        <text class="vp3bS" x="656" y="280">reinvest 50% at 6%</text>
+
+        <text class="vp3bN" x="30" y="330">Value = NOPAT x (1 - g / ROIC) / (r - g), with r 9% and g 3% forever. Constructed; your numbers will differ.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the growth line is identical on both paths; only the return on the reinvested money decides whether growth added 26.7 or subtracted 33.3</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Same growth, opposite verdicts<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The value formula on the figure is a growing perpetuity of the cash owners actually receive: next year's after-tax operating profit, times the share not reinvested, divided by the discount rate minus growth. The share reinvested is growth divided by the return on the reinvestment. All Brightwell numbers below are constructed arithmetic.</p>
+        <p><strong>Standing still:</strong> no growth, nothing reinvested, 12.0 / 0.09 = 133.3. <strong>Reinvest at 15 percent:</strong> 3 percent growth needs 20 percent of profit reinvested, owners keep 9.6, value 9.6 / 0.06 = 160.0. Growth added 26.7. <strong>Reinvest at 6 percent:</strong> the same 3 percent growth needs 50 percent reinvested, owners keep 6.0, value 6.0 / 0.06 = 100.0. Growth subtracted 33.3. <strong>Reinvest at exactly 9 percent:</strong> 33 percent reinvested, value 133.3, identical to standing still.</p>
+        <p>That last line is the whole session in one number. Growth at a return equal to the cost of capital adds nothing; above it, growth is worth paying for; below it, a growth forecast lowers the value. A model that grows earnings without asking what the growth costs has silently assumed the first kind of business.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Good managers cannot fix bad economics (1989, read at source)<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Read Buffett's 1989 letter, the section on mistakes of the first twenty-five years, at berkshirehathaway.com. Two of the mistakes he names are this Part in prose. Buying a cheap textile business, Berkshire itself, and the habit he calls "cigar butt" investing, buying poor businesses because they are cheap, both fail for the same reason: the price was low, but the capital went on earning little. And he writes that good managers cannot fix bad economics that skilled management does not rescue a business whose economics are poor.</p>
+        <p>In the language of tonight: management can move a return a little, but if the business earns below its cost of capital on what it reinvests, a better manager mostly makes it grow faster in the wrong direction. How long a business can keep earning above its cost of capital is the valuation input called a moat, and the subject of Analyst session 8; the economics of why some businesses can is in <a href="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a6-games-and-moats.html">Economics: games and moats ↗</a>.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Berkshire's own textile mills.</strong> The business Berkshire Hathaway was named after was a textile maker, bought because it was cheap. The 1989 letter counts it as a mistake, alongside the department store in Part 1. The lesson Buffett draws is not that the managers were poor; it is that the economics of the business set a ceiling on what anyone could earn on the capital tied up in it. Reinvesting in a business like that is the lower path on the figure, drawn in real life.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers g = reinvestment rate x return on capital</span>
+      <h2>Growth is reinvestment times return</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Damodaran's valuation slides on terminal value state the link in its stable-growth form: the reinvestment a business needs equals its stable growth rate divided by its return on capital. Turn it round and growth is the reinvestment rate times the return on capital. It is an identity, not a forecast, and it is the cheapest consistency check in valuation. For the real filers we cannot compute the return, but their 10-K facts do show one crude signal of reinvestment: how capital spending compares with depreciation over ten years.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 352" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four hand-drawn bars of ten-year capex divided by depreciation and amortisation, ratio of ten-year totals from 10-K facts. Caterpillar fiscal 2016 to 2025, 0.57, with its capex tag omitting leased equipment. Exxon Mobil fiscal 2016 to 2025, 0.82, with 2020 D&amp;A including write-downs. Johnson and Johnson fiscal 2016 to 2025, 0.57. Procter and Gamble fiscal 2017 to 2026, 1.19, the only one above a dashed line at 1.0 where capex equals D&amp;A.">
+        <defs>
+          <filter id="vp3cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="97" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp3cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp3cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp3cH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp3cL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp3cS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp3cB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp3cV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp3cN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp3cH" x="30" y="26">TEN-YEAR CAPEX / D&amp;A, LAST TEN FISCAL YEARS</text>
+        <text class="vp3cS" x="30" y="44">ratio of ten-year totals, from 10-K facts, all-capex as in Analyst session 1</text>
+
+        <g filter="url(#vp3cSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 260 L840 260"/>
+          <!-- scale: 1.0 = 150 px above the baseline -->
+          <rect x="80" y="174.5" width="80" height="85.5" rx="4" transform="rotate(-0.6 120 217)" fill="url(#vp3cHc)"/>
+          <rect x="280" y="137" width="80" height="123" rx="4" transform="rotate(0.5 320 198)" fill="url(#vp3cHc)"/>
+          <rect x="480" y="174.5" width="80" height="85.5" rx="4" transform="rotate(-0.4 520 217)" fill="url(#vp3cHc)"/>
+          <rect x="680" y="81.5" width="80" height="178.5" rx="4" transform="rotate(0.4 720 171)" fill="url(#vp3cHc)"/>
+          <path d="M40 110 L840 110" stroke="#93701C" stroke-width="2.4" stroke-dasharray="8 6"/>
+          <!-- doodle: a wrench -->
+          <path d="M806 80 L830 56"/>
+          <circle cx="834" cy="52" r="6"/>
+        </g>
+
+        <text class="vp3cB" x="44" y="100">1.0 · capex equals D&amp;A</text>
+        <text class="vp3cV" x="120" y="166" text-anchor="middle">0.57</text>
+        <text class="vp3cV" x="320" y="130" text-anchor="middle">0.82</text>
+        <text class="vp3cV" x="520" y="166" text-anchor="middle">0.57</text>
+        <text class="vp3cV" x="720" y="73" text-anchor="middle">1.19</text>
+        <text class="vp3cL" x="120" y="280" text-anchor="middle">Caterpillar</text>
+        <text class="vp3cL" x="320" y="280" text-anchor="middle">Exxon Mobil</text>
+        <text class="vp3cL" x="520" y="280" text-anchor="middle">Johnson &amp; Johnson</text>
+        <text class="vp3cL" x="720" y="280" text-anchor="middle">Procter &amp; Gamble</text>
+        <text class="vp3cS" x="120" y="296" text-anchor="middle">FY2016-FY2025</text>
+        <text class="vp3cS" x="320" y="296" text-anchor="middle">FY2016-FY2025</text>
+        <text class="vp3cS" x="520" y="296" text-anchor="middle">FY2016-FY2025</text>
+        <text class="vp3cS" x="720" y="296" text-anchor="middle">FY2017-FY2026</text>
+        <text class="vp3cB" x="120" y="314" text-anchor="middle">capex tag omits leased fleet</text>
+        <text class="vp3cB" x="320" y="314" text-anchor="middle">D&amp;A includes 2020 write-downs</text>
+        <text class="vp3cB" x="520" y="314" text-anchor="middle">amortises bought intangibles</text>
+        <text class="vp3cB" x="720" y="314" text-anchor="middle">the only one above 1.0</text>
+
+        <text class="vp3cN" x="30" y="338">Capex below D&amp;A does not prove no reinvestment: acquisitions, R&amp;D and intangibles are not capex.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three of four sit well below the line; each has a reason in its own filing that is not "stopped reinvesting"</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Reading capex / D&amp;A as a crude reinvestment signal<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Depreciation is a rough stand-in for the wear on existing assets; capital spending above it suggests the asset base is growing, below it suggests it is shrinking or being replaced more cheaply. Over the last ten fiscal years the ratio of total capex to total D&amp;A was 0.57 for Caterpillar, 0.82 for Exxon Mobil, 0.57 for Johnson &amp; Johnson and 1.19 for Procter &amp; Gamble. Read naively, only P&amp;G put back more physical capital than wore out.</p>
+        <p>Now the honest caveats, one per filer. <strong>Caterpillar:</strong> its capex tag leaves out equipment its finance arm buys to lease, while its D&amp;A includes depreciation on that fleet, so 0.57 understates what it spends. <strong>Exxon Mobil:</strong> fiscal 2020's D&amp;A of 46,009 million included large write-downs, which inflate the denominator. <strong>Johnson &amp; Johnson:</strong> much of its D&amp;A is amortisation of acquired intangibles; its reinvestment shows up as acquisitions and research spending, neither of which is capex. And for all four: capex below D&amp;A does not prove the business stopped reinvesting. It proves only that this one line was smaller than that one line.</p>
+        <p>That is why the signal is crude and why it cannot replace a return on capital. It tells you where to look in the filing, not what you will find.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why a terminal growth rate needs reinvestment to be consistent<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Damodaran's terminal-value slides set two rules for the forever stage of a valuation. The stable growth rate cannot exceed the growth rate of the economy, though it can be lower, and the riskfree rate is a simple proxy for nominal economic growth. And the reinvestment in stable growth equals the stable growth rate divided by the stable-period return on capital (Damodaran, A., valuation class slides, terminal value session, NYU Stern, 2023, read at source).</p>
+        <p>Here is the arithmetic, labelled as arithmetic. A terminal growth rate of 2.5 percent at a 10 percent return on capital requires reinvesting 2.5 / 10 = 25 percent of earnings, every year, forever. A model that assumes 2.5 percent terminal growth while handing all of earnings to owners has assumed an infinite return on capital, which no business earns. Analyst session 4 uses 2.5 percent terminal growth on owner earnings; this rule is the reason to ask, there, what reinvestment that number quietly assumes.</p>
+        <p>A useful corollary from Part 2: if the stable-period return on capital equals the cost of capital, the terminal growth rate stops mattering to value at all. Whether a particular business deserves a stable return above its cost of capital is the moat question of Analyst session 8.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Procter &amp; Gamble, the one above the line.</strong> Across fiscal 2017 to 2026 P&amp;G's capital spending ran at 1.19 times its D&amp;A, and its ten-year owner earnings, 127.2 billion, sat below its ten-year net income, 132.6 billion: the extra capex is exactly what pulled owner earnings under profit. For the other three, owner earnings came out above net income over the same window (Caterpillar 69.8 vs 59.1 billion, Exxon Mobil 260.4 vs 217.6, J&amp;J 206.6 vs 177.8). Whether P&amp;G's extra spending is growth or the cost of standing still is Buffett's term (c), and the filing cannot answer it.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Reinvestment, return, growth</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Python 3, standard library only. The first three steps run on constructed Brightwell Pumps, so the printed values are arithmetic on invented inputs: change an input and your numbers will differ. The last steps reuse the reader from Analyst session 1, <code>companyfacts</code>, <code>annual</code> and <code>CONCEPTS</code>, unchanged, and the ratios they print must equal the ones in Part 3.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as four hand-drawn steps left to right: compute ROIC as after-tax operating profit over invested capital; compute the reinvestment rate as growth over return; value the business at three returns; compute ten-year capex over D&amp;A for the four real filers. Under each, the check: 15.0 and 20.0 percent; 20 percent reinvested at 15 percent; 160.0, 133.3 and 100.0; 0.57, 0.82, 0.57 and 1.19.">
+        <defs>
+          <filter id="vp3dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="103" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp3dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp3dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp3dH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp3dS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp3dB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp3dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp3dN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp3dH" x="30" y="26">THREE CONSTRUCTED STEPS, ONE REAL ONE, AND THE CHECK AFTER EACH</text>
+
+        <g filter="url(#vp3dSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="180" height="60" rx="8" transform="rotate(-0.6 120 86)" fill="#EEF5F0"/>
+          <rect x="246" y="56" width="180" height="60" rx="8" transform="rotate(0.5 336 86)" fill="#EEF5F0"/>
+          <rect x="462" y="56" width="180" height="60" rx="8" transform="rotate(-0.4 552 86)" fill="#EEF5F0"/>
+          <rect x="678" y="56" width="180" height="60" rx="8" transform="rotate(0.6 768 86)" fill="#93701C" stroke="#93701C"/>
+          <path d="M214 86 L240 86" marker-end="url(#vp3dAr)"/>
+          <path d="M430 86 L456 86" marker-end="url(#vp3dAr)"/>
+          <path d="M646 86 L672 86" marker-end="url(#vp3dAr)"/>
+          <rect x="30" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="246" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="462" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="678" y="140" width="180" height="56" rx="6" fill="url(#vp3dHc)" stroke="#C8D6CC"/>
+        </g>
+
+        <text class="vp3dH" x="120" y="82" text-anchor="middle">1 · ROIC</text>
+        <text class="vp3dS" x="120" y="100" text-anchor="middle">NOPAT / invested capital</text>
+        <text class="vp3dH" x="336" y="82" text-anchor="middle">2 · reinvest</text>
+        <text class="vp3dS" x="336" y="100" text-anchor="middle">rate = g / ROIC</text>
+        <text class="vp3dH" x="552" y="82" text-anchor="middle">3 · value</text>
+        <text class="vp3dS" x="552" y="100" text-anchor="middle">at three returns</text>
+        <text class="vp3dW" x="768" y="82" text-anchor="middle">4 · real filers</text>
+        <text class="vp3dW" x="768" y="100" text-anchor="middle">capex / D&amp;A, 10 yrs</text>
+        <text class="vp3dB" x="120" y="164" text-anchor="middle">check: 15.0% and 20.0%</text>
+        <text class="vp3dS" x="120" y="182" text-anchor="middle">goodwill in, goodwill out</text>
+        <text class="vp3dB" x="336" y="164" text-anchor="middle">check: 20% at 15%</text>
+        <text class="vp3dS" x="336" y="182" text-anchor="middle">buys 3% growth</text>
+        <text class="vp3dB" x="552" y="164" text-anchor="middle">check: 160 / 133.3 / 100</text>
+        <text class="vp3dS" x="552" y="182" text-anchor="middle">9% equals standing still</text>
+        <text class="vp3dB" x="768" y="164" text-anchor="middle">check: matches the map</text>
+        <text class="vp3dS" x="768" y="182" text-anchor="middle">0.57 0.82 0.57 1.19</text>
+
+        <text class="vp3dN" x="30" y="226">Steps 1 to 3 are constructed and say so. Step 4 must reproduce the real ratios exactly, or the reader has drifted.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the brass step is the only one touching real filings, and it carries an assert, not a hope</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Step 1 · ROIC, from both sides, goodwill in and out.</strong> Every input is constructed. The assert makes the two routes to invested capital agree before any ratio is printed.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · return on invested capital</span># Brightwell Pumps: CONSTRUCTED, every figure invented (millions)
+op_profit, tax_rate = 16.0, 0.25
+equity, debt, excess_cash = 70.0, 30.0, 20.0
+op_assets, op_liabs = 110.0, 30.0
+goodwill = 20.0
+cost_of_capital = 0.09          # a judgment, also constructed
+
+nopat = op_profit * (1 - tax_rate)
+ic_financing = equity + debt - excess_cash
+ic_operating = op_assets - op_liabs
+assert ic_financing == ic_operating, "the two sides of invested capital disagree"
+
+roic = nopat / ic_financing
+roic_ex_gw = nopat / (ic_financing - goodwill)
+print(f"NOPAT {nopat:.1f}  capital {ic_financing:.0f}  ROIC {roic:.1%}  "
+      f"ex-goodwill {roic_ex_gw:.1%}  spread {roic - cost_of_capital:+.1%}")
+
+# arithmetic on constructed inputs; your numbers will differ if you change them:
+# NOPAT 12.0  capital 80  ROIC 15.0%  ex-goodwill 20.0%  spread +6.0%</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 2 · Growth is reinvestment times return.</strong> Two one-line functions, Damodaran's identity read in both directions.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · g = reinvestment x ROC</span>def growth(reinvest_rate, roc):
+    return reinvest_rate * roc
+
+def reinvestment_needed(g, roc):
+    return g / roc
+
+print(f"Brightwell reinvesting 20% at {roic:.0%}: growth {growth(0.20, roic):.1%}")
+print(f"2.5% terminal growth at 10% return: reinvest {reinvestment_needed(0.025, 0.10):.0%}")
+
+# arithmetic, not data:
+# Brightwell reinvesting 20% at 15%: growth 3.0%
+# 2.5% terminal growth at 10% return: reinvest 25%</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 3 · Value the same growth at three returns.</strong> Treat 12.0 as next year's after-tax operating profit. The guard refuses growth at or above the discount rate, because that perpetuity never converges.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · when growth adds value</span>def value(nopat_next, g, roc, r):
+    if g &gt;= r:
+        raise ValueError("growth at or above the discount rate: the perpetuity does not converge")
+    return nopat_next * (1 - reinvestment_needed(g, roc)) / (r - g)
+
+g, r = 0.03, cost_of_capital
+print(f"standing still        value {nopat / r:6.1f}")
+for roc in (0.15, 0.09, 0.06):
+    print(f"ROIC {roc:4.0%}  reinvest {reinvestment_needed(g, roc):4.0%}  "
+          f"value {value(nopat, g, roc, r):6.1f}")
+
+# arithmetic on constructed inputs:
+# standing still        value  133.3
+# ROIC  15%  reinvest  20%  value  160.0
+# ROIC   9%  reinvest  33%  value  133.3
+# ROIC   6%  reinvest  50%  value  100.0</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 4 · Ten-year capex / D&amp;A for the real filers.</strong> Paste the Analyst session 1 reader above this step. Join on the years where every field exists, exactly as owner earnings did, keep the last ten, and divide the totals.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · capex / D&amp;A from p1's reader</span>def capex_to_da(cik, n=10):
+    f = companyfacts(cik)
+    got = {k: annual(f, c, "shares" if k == "sh" else "USD") for k, c in CONCEPTS.items()}
+    years = sorted(set.intersection(*[set(v) for v in got.values()]))[-n:]
+    ratio = sum(got["capex"][y] for y in years) / sum(got["da"][y] for y in years)
+    return years[0], years[-1], ratio</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 5 · Run it, and assert against the source map.</strong> These are the values these pages computed from the 10-K facts. If yours differ, print which concept fed which years before blaming the filing.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · run, check, and what it printed</span>MAP = {"Caterpillar": 0.57, "Exxon Mobil": 0.82,
+       "Johnson &amp; Johnson": 0.57, "Procter &amp; Gamble": 1.19}
+
+for cik, name in [("0000018230", "Caterpillar"), ("0000034088", "Exxon Mobil"),
+                  ("0000200406", "Johnson &amp; Johnson"), ("0000080424", "Procter &amp; Gamble")]:
+    y0, y1, ratio = capex_to_da(cik)
+    print(f"{name:18} FY{y0}-FY{y1}  capex / D&amp;A {ratio:.2f}")
+    assert round(ratio, 2) == MAP[name], f"{name}: {ratio:.3f} does not match the map"
+
+Caterpillar        FY2016-FY2025  capex / D&amp;A 0.57
+Exxon Mobil        FY2016-FY2025  capex / D&amp;A 0.82
+Johnson &amp; Johnson  FY2016-FY2025  capex / D&amp;A 0.57
+Procter &amp; Gamble   FY2017-FY2026  capex / D&amp;A 1.19</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 6 · Write the caveat next to each ratio.</strong> A ratio without its caveat becomes a claim about reinvestment the filing does not support. One line per filer, naming what the capex line leaves out or what inflates the D&amp;A.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · the label travels with the number</span># capex / D&amp;A, ratio of ten-year totals, all capex, 10-K facts, latest filing
+# Caterpillar        0.57  ______________________________________________
+# Exxon Mobil        0.82  ______________________________________________
+# Johnson &amp; Johnson  0.57  ______________________________________________
+# Procter &amp; Gamble   1.19  ______________________________________________
+# For all four: below 1.0 does not prove no reinvestment (acquisitions, R&amp;D, intangibles).</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep constructed and computed in separate cells.</strong> Steps 1 to 3 are a teaching model; step 5 is evidence. The day someone pastes Brightwell's 15 percent next to Caterpillar's 0.57 in one table, a reader will assume both came from a filing. Label the cell, not just the notebook.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before Analyst session 4</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Move Brightwell's denominator.</strong> Treat all its cash as needed for operations, then treat 10 million of its supplier credit as debt. Recompute ROIC each time and write one sentence on which choice you would defend to a sceptical reader.</li>
+      <li><strong>Find the break-even return.</strong> In step 3, sweep the return on reinvestment from 4 to 20 percent in steps of 1 and print value. Confirm the value crosses the standing-still line exactly at the cost of capital, and explain why in one line.</li>
+      <li><strong>Average the yearly ratios instead.</strong> Change step 4 to the mean of each year's capex / D&amp;A rather than the ratio of totals. Which filer moves most, and which single year causes it?</li>
+      <li><strong>Write the reinvestment sentence for one filer.</strong> For the company of your choice, state what its ten-year capex / D&amp;A suggests, the caveat that weakens it, and the one line in its 10-K you would read next to find reinvestment that is not capex.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Analyst session 3 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">1 · A business earns a 12 percent return on invested capital. Is that good?</p>
+      <button class="qopt" type="button">A · Yes, anything above 10 percent is a good return</button>
+      <button class="qopt" type="button">B · Yes, as long as it is higher than last year</button>
+      <button class="qopt" type="button">C · It cannot be judged without the share price</button>
+      <button class="qopt" type="button">D · It depends on the cost of capital: 12 percent creates value if the money costs 9, and destroys it if the money costs 14</button>
+      <p class="qwhy">A return is only good relative to what the capital could earn elsewhere at the same risk. The spread between ROIC and the cost of capital, not the ROIC alone, decides whether reinvesting adds value.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · Brightwell (constructed) grows 3 percent a year forever at a 9 percent cost of capital. When does that growth destroy value?</p>
+      <button class="qopt" type="button">A · Never, because growth always raises future earnings</button>
+      <button class="qopt" type="button">B · Only when growth is above 9 percent</button>
+      <button class="qopt" type="button">C · When the reinvested money earns below 9 percent: at 6 percent it must reinvest half its profit and is worth 100.0 against 133.3 for standing still</button>
+      <button class="qopt" type="button">D · When the reinvested money earns above 9 percent, because it reinvests too little</button>
+      <p class="qwhy">The same growth needs more reinvestment at a lower return. Below the cost of capital, the cash given up to grow is worth more than the growth it buys; at exactly 9 percent the two cancel and value equals standing still.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · A valuation assumes 2.5 percent growth forever and a 10 percent return on capital in that stable stage. What reinvestment does that imply?</p>
+      <button class="qopt" type="button">A · 25 percent of earnings, from g = reinvestment rate x return on capital, so 2.5 / 10</button>
+      <button class="qopt" type="button">B · None, because stable growth is free</button>
+      <button class="qopt" type="button">C · 10 percent of earnings, the same as the return</button>
+      <button class="qopt" type="button">D · 2.5 percent of earnings, the same as the growth</button>
+      <p class="qwhy">Damodaran's stable-growth reinvestment is g / ROC. A model that keeps 2.5 percent growth while paying out all earnings has assumed an infinite return on capital. This is arithmetic, and it is the consistency check to run on any terminal value.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Stable growth cannot exceed the economy's growth; riskfree rate as its proxy; reinvestment in stable growth = g / ROC</span><span class="note">Damodaran, A., valuation class slides, terminal value session, NYU Stern, 2023 (read at source)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Hochschild Kohn; the textile business; cigar butts; good managers cannot fix bad economics; the one quoted line</span><span class="note">Buffett, W., Berkshire Hathaway shareholder letter, 1989 (read at source)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Ten-year capex / D&amp;A: 0.57, 0.82, 0.57, 1.19; ten-year net income vs owner earnings; Exxon 2020 D&amp;A</span><span class="note">SEC EDGAR XBRL company facts, read from a public mirror after the SEC refused the build machine; computed, with values spot-checked against the SEC's own API</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Brightwell Pumps: every ROIC, goodwill, reinvestment and value figure; the 9 percent cost of capital</span><span class="note">Constructed for teaching; no real company's invested capital is in the sample</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Deriving the cost of capital (CAPM, betas)</span><span class="note">Named, not taught; the 9 percent is a stated judgment</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Moats as economics; reading the balance sheet</span><span class="note">Taught in Economics and Finance; linked, not re-taught. How long excess returns last is Analyst session 8</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>ROIC</b><span>After-tax operating profit / (equity + debt - excess cash), or operating assets - operating liabilities.</span></div>
+      <div class="cheat-item"><b>The spread decides</b><span>ROIC minus cost of capital. Positive: growth adds value. Zero: growth adds nothing.</span></div>
+      <div class="cheat-item"><b>Goodwill in or out</b><span>In judges capital allocation; out judges the operating economics. Report both.</span></div>
+      <div class="cheat-item"><b>g = reinvestment x ROC</b><span>Reinvestment needed = g / ROC. 2.5% at 10% means 25% of earnings, forever.</span></div>
+      <div class="cheat-item"><b>Capex / D&amp;A is crude</b><span>Below 1.0 does not prove no reinvestment: acquisitions, R&amp;D, intangibles.</span></div>
+      <div class="cheat-item"><b>Label the cell</b><span>Constructed model and computed evidence never share a table unlabelled.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You can now say when growth is worth something and what reinvestment a growth rate quietly assumes. Analyst session 4 puts it to work: a two-stage discounted cash flow by hand on P&amp;G's ten-year owner earnings, year by year, with the discount rate as a choice you state, a terminal value that turns out to carry more than half of the answer, and the reinvestment question from tonight waiting inside that terminal growth rate.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Analyst session 3 of 10 · learn-value-investing-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p2-normalising-through-a-cycle.html">← Prev: Normalising through a cycle</a> &nbsp;·&nbsp; <a href="p4-a-dcf-by-hand.html">Next: A discounted cash flow, by hand →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

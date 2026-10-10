@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 5 of 10. Reverse DCF: hold the discount rate, the years and terminal growth fixed, type a test price, and solve for the growth that price already assumes. Then hold that growth up against base rates and the filers' own history.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="What the price already assumes - learn value investing with phoebe">
+<meta property="og:description" content="Analyst session 5 of 10. Run the DCF backwards: a test price of twice the value implies 14.17 percent a year for ten years, on any base. Is that plausible?">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/courses/p5-what-the-price-assumes.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What the price already assumes - learn value investing with phoebe">
+<meta name="twitter:description" content="Analyst session 5 of 10. Reverse DCF on a typed test price, and the base rates that judge the answer.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 5 · What the price already assumes - learn value investing with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-value-investing-with-phoebe</a> / Analyst session 5 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Value Investing with Phoebe · Analyst session 5 of 10</div>
+    <h1>What the price <span class="accent">already assumes</span></h1>
+    <p class="sub">Analyst session 4 turned a base and a growth guess into a value. Tonight we run the same machine backwards. Keep the discount rate, the ten years and the terminal growth exactly where they were, type a test price, and solve for the one growth rate that makes the value equal it. The answer is not a forecast. It is a claim the price is making, written in the same units as your own guess, so you can ask the only question that matters: is that believable for this business? Every price on this page is a test price you type, never a market quote.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Analyst</span>
+      <span class="chip audience">Analysts, finance and data people who want to read what a price is betting on</span>
+      <span class="chip audience">Python, standard library only</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Backwards, half and double, plausible?</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the reverse function</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">You leave Analyst session 4 with a function, <code>dcf(base, r, n, g, gt)</code>, and one carefully labelled number: P&amp;G at 95.16 a share, from a ten-year mean owner earnings base of 5.00, growing 5 percent a year for ten years and 2.5 percent after, discounted at 9 percent. The weakest input in that sentence is the 5 percent, because nobody knows the next ten years. Tonight we stop guessing it and ask what a price would need it to be.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone builds</span>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Test prices, not market prices.</strong> Every price below is one you type to interrogate the model: half the value, the value itself, twice the value. None is a quote for any company, and nothing here says whether any price is cheap or dear to pay. Discounting as the price of time lives in <a href="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a5-money-inflation-and-interest.html">Economics Foundations session 5 ↗</a>.</p>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A twenty-line <code>reverse()</code> that solves for implied growth by bisection, the two numbers that hold on every rung-3 base at the defaults (twice the value implies 14.17 percent a year, half implies -4.31 percent), and a habit: before you argue about a value, say what growth a price would need, and set it beside how often companies have actually grown that fast.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers reverse DCF</span>
+      <h2>Run the model backwards</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A forward DCF takes four judgments and returns a value. A reverse DCF fixes three of them, the discount rate, the length of stage one and the terminal growth, takes a price as given, and returns the fourth: the stage-one growth that would make the model's value equal that price. Mauboussin and Rappaport built a whole method on this turn, called expectations investing (reported): start from the price and read the expectations it implies, instead of starting from your own forecast and defending it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 384" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same DCF machine drawn twice. Forward: inputs base 5.00, r 9 percent, 10 years, terminal 2.5 percent and growth 5 percent go into dcf and come out as a value of 95.16. Backward: a typed test price of 190.33 goes into reverse and comes out as implied growth of 14.17 percent a year for years 1 to 10, filling the growth slot. Below, a bisection doodle on a growth line from -50 to 100 percent: five nested brackets, each half the last, closing on 14.17 percent.">
+        <defs>
+          <filter id="vp5aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp5aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp5aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp5aH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp5aL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp5aS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp5aB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp5aV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp5aW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp5aA { font: 700 11px Inter, sans-serif; fill: #2D5240; }
+          .vp5aN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp5aH" x="30" y="26">ONE MACHINE, RUN BOTH WAYS</text>
+        <text class="vp5aS" x="300" y="26">P&amp;G rung 3, r 9%, 10 years, terminal 2.5%, dollars per share</text>
+
+        <g filter="url(#vp5aSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- forward row -->
+          <rect x="40" y="50" width="230" height="66" rx="8" transform="rotate(-0.6 155 83)" fill="#FFFFFF"/>
+          <path d="M278 83 L338 83" marker-end="url(#vp5aAr)"/>
+          <rect x="346" y="50" width="170" height="66" rx="8" transform="rotate(0.5 431 83)" fill="#EEF5F0"/>
+          <path d="M524 83 L584 83" marker-end="url(#vp5aAr)"/>
+          <rect x="592" y="50" width="200" height="66" rx="8" transform="rotate(-0.4 692 83)" fill="#EEF5F0"/>
+          <!-- backward row -->
+          <rect x="592" y="150" width="200" height="66" rx="8" transform="rotate(0.6 692 183)" fill="url(#vp5aHc)"/>
+          <path d="M584 183 L524 183" marker-end="url(#vp5aAr)"/>
+          <rect x="346" y="150" width="170" height="66" rx="8" transform="rotate(-0.5 431 183)" fill="#EEF5F0"/>
+          <path d="M338 183 L278 183" marker-end="url(#vp5aAr)"/>
+          <rect x="40" y="150" width="230" height="66" rx="8" transform="rotate(0.5 155 183)" fill="#93701C" stroke="#93701C"/>
+          <path d="M155 146 L155 124" stroke-dasharray="4 4" stroke-width="1.4" marker-end="url(#vp5aAr)"/>
+          <!-- bisection doodle -->
+          <path d="M300 266 L840 266"/>
+          <path d="M300 260 L300 272"/>
+          <path d="M840 260 L840 272"/>
+          <path d="M300 284 L840 284 M300 279 L300 289 M840 279 L840 289" stroke-width="1.6"/>
+          <path d="M300 298 L570 298 M300 293 L300 303 M570 293 L570 303" stroke-width="1.6"/>
+          <path d="M435 312 L570 312 M435 307 L435 317 M570 307 L570 317" stroke-width="1.6"/>
+          <path d="M502 326 L570 326 M502 321 L502 331 M570 321 L570 331" stroke-width="1.6"/>
+          <path d="M502 340 L536 340 M502 335 L502 345 M536 335 L536 345" stroke-width="1.6"/>
+          <path d="M531 270 L531 346" stroke="#93701C" stroke-dasharray="3 4" stroke-width="1.4"/>
+          <circle cx="531" cy="266" r="6" fill="#93701C" stroke="#93701C"/>
+        </g>
+
+        <text class="vp5aA" x="308" y="74" text-anchor="middle">forward</text>
+        <text class="vp5aA" x="554" y="174" text-anchor="middle">backward</text>
+
+        <text class="vp5aH" x="54" y="72">INPUTS YOU CHOOSE</text>
+        <text class="vp5aS" x="54" y="90">base 5.00 · r 9% · 10 yrs · 2.5%</text>
+        <text class="vp5aB" x="54" y="106">growth 5% a year: a guess</text>
+        <text class="vp5aH" x="431" y="78" text-anchor="middle">dcf()</text>
+        <text class="vp5aS" x="431" y="96" text-anchor="middle">grow, discount, add</text>
+        <text class="vp5aS" x="692" y="70" text-anchor="middle">value</text>
+        <text class="vp5aV" x="692" y="92" text-anchor="middle">95.16</text>
+        <text class="vp5aS" x="692" y="108" text-anchor="middle">at 5% growth</text>
+
+        <text class="vp5aH" x="692" y="172" text-anchor="middle">TEST PRICE YOU TYPE</text>
+        <text class="vp5aV" x="692" y="194" text-anchor="middle">190.33</text>
+        <text class="vp5aS" x="692" y="210" text-anchor="middle">twice the value, typed</text>
+        <text class="vp5aH" x="431" y="178" text-anchor="middle">reverse()</text>
+        <text class="vp5aS" x="431" y="196" text-anchor="middle">bisect on growth</text>
+        <text class="vp5aW" x="54" y="176">IMPLIED GROWTH</text>
+        <text class="vp5aW" x="54" y="198">14.17% a year, years 1-10</text>
+
+        <text class="vp5aH" x="30" y="266">BISECTION ON THE GROWTH LINE</text>
+        <text class="vp5aS" x="30" y="286">start with -50% to 100%</text>
+        <text class="vp5aS" x="30" y="302">value too low at the middle? keep the top</text>
+        <text class="vp5aS" x="30" y="318">value too high? keep the bottom half</text>
+        <text class="vp5aS" x="30" y="334">each bracket is half the last one</text>
+        <text class="vp5aS" x="300" y="254" text-anchor="middle">-50%</text>
+        <text class="vp5aS" x="840" y="254" text-anchor="middle">100%</text>
+        <text class="vp5aB" x="531" y="254" text-anchor="middle">14.17%</text>
+
+        <text class="vp5aN" x="30" y="370">Five halvings drawn; the code does 200. The growth slot is the only input that moves; the other three stay as chosen.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the reverse run does not add a new judgment; it moves the guess from growth to price and tells you what the guess was</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why start from the price<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A forward DCF invites an argument about your growth guess, and you will usually win it with yourself. A reverse DCF changes the question. Given a price, the model hands back the growth the price needs, and now the burden sits on that number: does this business look like one that compounds owner earnings at that rate for ten years? You can disagree with a price without pretending to know the future. You only have to find its implied growth implausible.</p>
+        <p>Two cautions keep the tool honest. First, the implied growth is only as meaningful as the three inputs you held fixed; change the discount rate and the answer moves, which the self-study card in Part 3 works through. Second, the result inherits every label on the base: here, owner earnings by the all-capex approximation, averaged over ten years, from 10-K facts (Analyst sessions 1 and 2).</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Bisection, 200 halvings, and why it converges<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>There is no formula that inverts a two-stage DCF for growth, so we search. The search works because the value only ever rises as stage-one growth rises: every year's cash is bigger, and so is the terminal cash. A function that only rises crosses any price at most once. Pick a low growth whose value sits below the price and a high growth whose value sits above it, try the middle, and keep whichever half still has the price between its ends.</p>
+        <p>Each try halves the bracket. Starting from -50 to 100 percent, a width of 1.5, ten halvings leave a bracket about 0.0015 wide, a fifth of a percentage point; around sixty leave it narrower than the gap between neighbouring double-precision numbers near 14 percent. Two hundred is far more than needed, and it is cheap: two hundred calls of a ten-year loop. The guard matters more than the count. If the typed price sits below the value at -50 percent, or above the value at 100 percent, there is no answer inside the bracket, and the function must say so instead of returning an edge.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Halden Tiles, run backwards.</strong> The Owner track met the same move on a constructed business. The cousin asks 1.00 million for 10 percent of Halden Tiles, which implies 10.0 million for the whole. Holding 10 percent and 2 percent terminal growth fixed, that price implies owner earnings shrinking about 1.4 percent a year for ten years (constructed figures, from the source map). The question then is not "what is Halden worth" but "do you believe Halden shrinks that fast", which a buyer can actually argue about with evidence.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers implied growth at half and double</span>
+      <h2>Half and double</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Type two test prices on P&amp;G's rung-3 value of 95.16 and the machine answers. At 190.33, twice the value, the price assumes 14.17 percent a year for ten years. At 47.58, half the value, it assumes -4.31 percent, owner earnings shrinking every year for a decade. At 95.16 it hands back the 5.00 percent you put in, which is the check that the reverse function is the forward one turned round.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 366" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Implied growth against test price as a multiple of the central value. Three computed points: half the value, 47.58, implies -4.31 percent a year; the value, 95.16, implies 5.00 percent, the input; twice the value, 190.33, implies 14.17 percent. A hand-drawn curve joins them, rising steeply at first and then flattening. A dashed zero line marks no growth.">
+        <defs>
+          <filter id="vp5bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="77" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp5bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp5bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp5bH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp5bL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp5bS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp5bB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp5bV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp5bA { font: 700 11px Inter, sans-serif; fill: #2D5240; }
+          .vp5bN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp5bH" x="30" y="26">WHAT EACH TEST PRICE ASSUMES</text>
+        <text class="vp5bS" x="300" y="26">P&amp;G rung 3 at the defaults; the same three answers on any rung-3 base</text>
+        <text class="vp5bA" x="118" y="50">implied growth a year, years 1-10</text>
+
+        <g filter="url(#vp5bSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M110 60 L110 290 L812 290"/>
+          <path d="M104 70 L110 70 M104 220 L110 220 M104 270 L110 270" stroke-width="1.6"/>
+          <path d="M112 220 L812 220" stroke="#C8D6CC" stroke-dasharray="5 5" stroke-width="1.4"/>
+          <path d="M120 263 Q 220 205 347 170 Q 560 115 800 78" stroke="#2D5240" stroke-width="2.4"/>
+          <circle cx="120" cy="263" r="6" fill="#FFFFFF"/>
+          <circle cx="347" cy="170" r="6" fill="#EEF5F0"/>
+          <circle cx="800" cy="78" r="8" fill="#93701C" stroke="#93701C"/>
+          <path d="M120 284 L120 296 M347 284 L347 296 M800 284 L800 296" stroke-width="1.6"/>
+        </g>
+
+        <text class="vp5bS" x="100" y="74" text-anchor="end">15%</text>
+        <text class="vp5bS" x="100" y="224" text-anchor="end">0%</text>
+        <text class="vp5bS" x="100" y="274" text-anchor="end">-5%</text>
+        <text class="vp5bS" x="806" y="214" text-anchor="end">no growth</text>
+
+        <text class="vp5bL" x="136" y="278">-4.31%</text>
+        <text class="vp5bL" x="362" y="194">5.00%</text>
+        <text class="vp5bS" x="362" y="210">your input, handed back</text>
+        <text class="vp5bV" x="784" y="64" text-anchor="end">14.17%</text>
+
+        <text class="vp5bL" x="140" y="310" text-anchor="middle">0.5x · 47.58</text>
+        <text class="vp5bL" x="347" y="310" text-anchor="middle">1x · 95.16</text>
+        <text class="vp5bB" x="792" y="310" text-anchor="middle">2x · 190.33</text>
+        <text class="vp5bA" x="460" y="330" text-anchor="middle">typed test price, as a multiple of the central value</text>
+
+        <text class="vp5bN" x="30" y="354">Only the three dots are computed; the curve between them is drawn by hand to show the shape.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - doubling the price adds about nine points of growth a year; halving it takes away about nine, and pushes growth below zero</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Reading 14.17 and -4.31<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>14.17 percent a year for ten years</strong> is what a test price of twice the value needs, with everything after year 10 still growing at 2.5 percent and still discounted at 9 percent. It means owner earnings per share roughly three and three-quarter times larger by year 10. That is the claim; whether it is plausible is Part 3.</p>
+        <p><strong>-4.31 percent a year</strong> is what half the value needs: ten straight years of shrinking owner earnings before settling into 2.5 percent growth. A price that low is not saying "no growth". It is saying "decline, for a decade".</p>
+        <p>Notice the asymmetry in the curve. Going from 1x to 2x adds 9.17 points of growth; going from 1x to 0.5x takes away 9.31. Because so much of the value sits beyond year 10 (57.0 percent at these defaults, Analyst session 4), stage-one growth has to move a long way to move the total.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the answer is scale-free<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every term in the DCF is the base multiplied by something that depends only on r, n, g and gt. Double the base and the value doubles; so does the test price at "twice the value". The ratio between price and value is all the reverse function ever sees. That is why Caterpillar's rung-3 value of 250.78, Exxon Mobil's 117.34, J&amp;J's 150.81 and P&amp;G's 95.16 all give 14.17 percent at twice their value and -4.31 percent at half, at the same defaults.</p>
+        <p>The practical point: implied growth depends on the price-to-value ratio and on the three fixed inputs, not on which company or which base. Change the base and you change the value, so a given price implies a different growth. Change the discount rate and you change the mapping itself.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The test price is the learner's, by design.</strong> The four filers' names appear because their 10-K facts are public and long, but no market price for any of them appears on any page. 47.58, 95.16 and 190.33 are half, one and two times a model value the learner built. Typing a real quote into the same function is a reasonable private exercise; the page stays with test prices so that the lesson is the mechanism, not a verdict on a security.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers judging implied growth against base rates</span>
+      <h2>Is the implied growth plausible?</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">An implied growth rate means nothing until you set it beside two things: how fast companies in general have grown, and how fast this company has grown. The first comes from the Base Rate Book (read at source, hosted copy). The second comes from the filers' own owner earnings, which you computed in Analyst sessions 1 and 2. Neither is a forecast; both are reference points a claim of 14.17 percent has to beat.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 358" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hatched bars for the four filers' compound growth in owner earnings per share, mean of the first five years against mean of the last five, nominal: Caterpillar 9.2 percent over 14 years, Exxon Mobil 8.1 percent over 10, Johnson and Johnson 7.3 percent over 11, Procter and Gamble 3.1 percent over 14. A brass line at 14.17 percent, what a test price of twice the value assumes, sits above every bar. A dashed line at 5 percent marks the default input.">
+        <defs>
+          <filter id="vp5cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="83" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp5cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp5cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp5cH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp5cL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp5cS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp5cB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp5cV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp5cN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp5cH" x="30" y="26">WHAT THE FILERS DID, AGAINST WHAT 2X ASSUMES</text>
+        <text class="vp5cS" x="400" y="26">owner earnings per share, first five vs last five years, nominal</text>
+
+        <g filter="url(#vp5cSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M80 260 L780 260"/>
+          <!-- 12 px per percentage point -->
+          <rect x="120" y="150" width="80" height="110" rx="4" transform="rotate(-0.6 160 205)" fill="url(#vp5cHc)"/>
+          <rect x="280" y="163" width="80" height="97" rx="4" transform="rotate(0.5 320 211)" fill="url(#vp5cHc)"/>
+          <rect x="440" y="172" width="80" height="88" rx="4" transform="rotate(-0.4 480 216)" fill="url(#vp5cHc)"/>
+          <rect x="600" y="223" width="80" height="37" rx="4" transform="rotate(0.6 640 241)" fill="url(#vp5cHc)"/>
+          <path d="M80 90 L780 90" stroke="#93701C" stroke-width="3"/>
+          <path d="M80 200 L690 200" stroke="#4F5F55" stroke-dasharray="5 5" stroke-width="1.4"/>
+        </g>
+
+        <text class="vp5cB" x="90" y="78">14.17% a year: what a test price of twice the value assumes</text>
+        <text class="vp5cS" x="700" y="204">5%: the default input</text>
+
+        <text class="vp5cV" x="160" y="140" text-anchor="middle">9.2%</text>
+        <text class="vp5cV" x="320" y="153" text-anchor="middle">8.1%</text>
+        <text class="vp5cV" x="480" y="162" text-anchor="middle">7.3%</text>
+        <text class="vp5cL" x="640" y="217" text-anchor="middle">3.1%</text>
+
+        <text class="vp5cL" x="160" y="280" text-anchor="middle">Caterpillar</text>
+        <text class="vp5cL" x="320" y="280" text-anchor="middle">Exxon Mobil</text>
+        <text class="vp5cL" x="480" y="280" text-anchor="middle">J&amp;J</text>
+        <text class="vp5cL" x="640" y="280" text-anchor="middle">P&amp;G</text>
+        <text class="vp5cS" x="160" y="296" text-anchor="middle">5.21 to 17.94, 14 yrs</text>
+        <text class="vp5cS" x="320" y="296" text-anchor="middle">4.08 to 8.87, 10 yrs</text>
+        <text class="vp5cS" x="480" y="296" text-anchor="middle">4.69 to 10.21, 11 yrs</text>
+        <text class="vp5cS" x="640" y="296" text-anchor="middle">3.84 to 5.90, 14 yrs</text>
+
+        <text class="vp5cN" x="30" y="326">These are nominal, so they include inflation. The Base Rate Book's 8.1% mean and 5.4% median are</text>
+        <text class="vp5cN" x="30" y="344">real 3-year sales growth: a different measure, read beside the bars, never on the same scale.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - not one of the four filers' own histories reaches the brass line, and P&amp;G's sits below even the 5 percent default</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Two reference points, and why they are not the same thing<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The base rates.</strong> Across the top 1,000 global companies by market value since 1950, the Base Rate Book (read at source, hosted copy) finds three-year sales growth with a mean of 8.1 percent and a median of 5.4 percent a year, inflation-adjusted, with a standard deviation of 18.7 percent. 23 percent of companies had negative real sales growth over three years. Growth rates, and their spread, decline as companies get bigger: the four filers here are all large.</p>
+        <p><strong>The filers' own history.</strong> Mean owner earnings per share over each run's first five years against its last five: Caterpillar 9.2 percent a year, Exxon Mobil 8.1, J&amp;J 7.3, P&amp;G 3.1. These are nominal, so they include inflation, while the base rates are real; and they are owner earnings per share, not sales. The two must not be compared digit for digit. What survives the mismatch is direction: 14.17 percent for ten years sits above every filer's own nominal record and well above the real median for companies of any size.</p>
+        <p>None of that says 14.17 percent is impossible. It says a test price of twice the value is a bet on an outcome these businesses have not produced, and the person making it should be able to name why the next decade differs from the last.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Implied growth depends on the discount rate you chose<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Hold the test price at 190.33 and raise the discount rate from 9 to 10 percent. Every year's cash is now worth less today, so the same price needs more growth to justify it: implied growth rises. Lower the rate to 8 percent and implied growth falls. The reverse DCF did not remove the discount rate judgment from Analyst session 4; it kept it, quietly, inside the answer.</p>
+        <p>So an implied growth figure travels with its rate, just as a value does: "190.33 implies 14.17 percent a year for ten years at 9 percent, 2.5 percent terminal". Run <code>reverse()</code> at 8 and 10 percent yourself in homework 2 and print the two answers; the size of the swing is the honest width of the claim. Analyst session 6 builds the full grid of which input moves the answer most.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Forecasts that are too narrow.</strong> The Base Rate Book compares analysts' forecasts of three-year net income growth with what actually happened: the forecasts had a standard deviation of 19.2 percent against 34.6 percent for actual past growth, which the authors call "too optimistic and too narrow". An implied growth rate is a forecast the price makes for you, and it deserves the same suspicion. How often fast growth actually lasts, and how quickly it fades, is <a href="p7-how-often-growth-lasts.html">Analyst session 7</a>.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Write the reverse function</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Python 3, standard library only, no data fetch. We reuse Analyst session 4's <code>dcf()</code> unchanged and wrap a bisection around it. The base is P&amp;G's ten-year mean owner earnings per share unrounded, 4.998525, which displays as 5.00; using the rounded 5.00 would shift every value slightly and break the check that 95.16 gives back 5.00 percent. The outputs printed below are what this code printed when run.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as four hand-drawn steps left to right: bracket growth between -50 and 100 percent; halve the bracket 200 times; check that dcf at the implied growth gives back the price; print three test prices. Under each step, the check: the price must sit inside the bracket, the bracket shrinks below any printed digit, 14.17 percent gives back 190.33, and 95.16 gives back 5.00 percent.">
+        <defs>
+          <filter id="vp5dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="89" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp5dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp5dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp5dH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp5dS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp5dB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp5dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp5dN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp5dH" x="30" y="26">FOUR STEPS, AND THE CHECK AFTER EACH</text>
+
+        <g filter="url(#vp5dSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="180" height="60" rx="8" transform="rotate(-0.6 120 86)" fill="url(#vp5dHc)"/>
+          <rect x="246" y="56" width="180" height="60" rx="8" transform="rotate(0.5 336 86)" fill="#EEF5F0"/>
+          <rect x="462" y="56" width="180" height="60" rx="8" transform="rotate(-0.4 552 86)" fill="#EEF5F0"/>
+          <rect x="678" y="56" width="180" height="60" rx="8" transform="rotate(0.6 768 86)" fill="#93701C" stroke="#93701C"/>
+          <path d="M214 86 L240 86" marker-end="url(#vp5dAr)"/>
+          <path d="M430 86 L456 86" marker-end="url(#vp5dAr)"/>
+          <path d="M646 86 L672 86" marker-end="url(#vp5dAr)"/>
+          <rect x="30" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="246" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="462" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="678" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+        </g>
+
+        <text class="vp5dH" x="120" y="82" text-anchor="middle">1 · bracket</text>
+        <text class="vp5dS" x="120" y="100" text-anchor="middle">growth -50% to 100%</text>
+        <text class="vp5dH" x="336" y="82" text-anchor="middle">2 · halve</text>
+        <text class="vp5dS" x="336" y="100" text-anchor="middle">200 times, keep the price</text>
+        <text class="vp5dH" x="552" y="82" text-anchor="middle">3 · check</text>
+        <text class="vp5dS" x="552" y="100" text-anchor="middle">dcf(g) gives the price</text>
+        <text class="vp5dW" x="768" y="82" text-anchor="middle">4 · three prices</text>
+        <text class="vp5dW" x="768" y="100" text-anchor="middle">0.5x, 1x, 2x the value</text>
+        <text class="vp5dB" x="120" y="164" text-anchor="middle">check: price in range?</text>
+        <text class="vp5dS" x="120" y="182" text-anchor="middle">outside, refuse loudly</text>
+        <text class="vp5dB" x="336" y="164" text-anchor="middle">check: width shrinks</text>
+        <text class="vp5dS" x="336" y="182" text-anchor="middle">below any printed digit</text>
+        <text class="vp5dB" x="552" y="164" text-anchor="middle">check: 14.17% gives 190.33</text>
+        <text class="vp5dS" x="552" y="182" text-anchor="middle">forward undoes backward</text>
+        <text class="vp5dB" x="768" y="164" text-anchor="middle">check: 1x gives 5.00%</text>
+        <text class="vp5dS" x="768" y="182" text-anchor="middle">your input comes back</text>
+
+        <text class="vp5dN" x="30" y="226">A search that returns its bracket edge looks like an answer. The guard in step 1 is what makes it refuse instead.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the 1x check is the cheapest test there is: if 95.16 does not give back 5.00 percent, nothing else printed can be trusted</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Step 1 · Bring back <code>dcf()</code>.</strong> Exactly as written in Analyst session 4, guard included. The reverse function calls it; it does not replace it.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · dcf(), unchanged</span>def dcf(base, r, n, g, gt):
+    """Two stages: n years growing at g, then gt forever.
+    Returns (value, stage-one PV, terminal PV), all per share."""
+    if r &lt;= gt:
+        raise ValueError("terminal growth must sit below the discount rate")
+    cash, stage = base, 0.0
+    for year in range(1, n + 1):
+        cash = cash * (1 + g)
+        stage += cash / (1 + r) ** year
+    tv = cash * (1 + gt) / (r - gt)
+    terminal = tv / (1 + r) ** n
+    return stage + terminal, stage, terminal</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 2 · Write <code>reverse()</code>.</strong> Bracket first and refuse if the price is outside it; then halve 200 times, keeping the half where the price still sits.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · reverse()</span>def reverse(base, r, n, gt, price, lo=-0.5, hi=1.0):
+    """The stage-one growth g at which dcf(base, r, n, g, gt) equals price."""
+    v_lo, v_hi = dcf(base, r, n, lo, gt)[0], dcf(base, r, n, hi, gt)[0]
+    if not v_lo &lt;= price &lt;= v_hi:
+        raise ValueError("no growth between lo and hi gives this price")
+    for _ in range(200):
+        mid = (lo + hi) / 2
+        if dcf(base, r, n, mid, gt)[0] &lt; price:
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 3 · Run it on P&amp;G's three test prices.</strong> Half the value, the value, twice the value, at the defaults.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · run, and what it printed</span>BASE = 4.998525   # P&amp;G ten-year mean owner earnings per share; displays as 5.00
+
+value, _, _ = dcf(BASE, r=0.09, n=10, g=0.05, gt=0.025)
+print(f"value at 5% growth {value:.2f}")
+
+for price in (47.58, 95.16, 190.33):
+    g = reverse(BASE, r=0.09, n=10, gt=0.025, price=price)
+    print(f"test price {price:7.2f}   implied growth {g:6.2%} a year for 10 years")
+
+value at 5% growth 95.16
+test price   47.58   implied growth -4.31% a year for 10 years
+test price   95.16   implied growth  5.00% a year for 10 years
+test price  190.33   implied growth 14.17% a year for 10 years</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 4 · Check forward undoes backward.</strong> Feed the implied growth back into <code>dcf()</code> and confirm the price comes out.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the round trip, and what it printed</span>g = reverse(BASE, r=0.09, n=10, gt=0.025, price=190.33)
+value, _, _ = dcf(BASE, r=0.09, n=10, g=g, gt=0.025)
+print(f"implied growth {g:.2%}   dcf at that growth {value:.2f}")
+
+implied growth 14.17%   dcf at that growth 190.33</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 5 · Break it on purpose.</strong> Type a test price of 1.00, far below what even ten years of halving owner earnings would be worth, and confirm the function refuses. Then write one sentence on why returning -50 percent would have been worse than an error.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · the guard, and what it printed</span>try:
+    reverse(BASE, r=0.09, n=10, gt=0.025, price=1.00)
+except ValueError as e:
+    print("no answer:", e)
+
+no answer: no growth between lo and hi gives this price
+
+# your sentence: ______________________________________________</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep the sentence with the growth.</strong> Wherever 14.17 percent travels, it travels as "a test price of 190.33, twice P&amp;G's rung-3 value, implies 14.17 percent a year for 10 years at 9 percent and 2.5 percent terminal, on a base of 5.00 ten-year mean owner earnings (all-capex approximation)". Strip the sentence off and it reads like a growth forecast, which it is not.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before Analyst session 6</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Prove the scale-free claim.</strong> Run <code>reverse()</code> at twice and half the rung-3 value for Caterpillar, Exxon Mobil and J&amp;J, using the unrounded bases from your Analyst session 2 work. You should get 14.17 and -4.31 percent each time; if you do not, check that you passed the exact value, not a rounded one.</li>
+      <li><strong>Move the discount rate.</strong> Hold P&amp;G's test price at 190.33 and run <code>reverse()</code> at 8 and at 10 percent. Print both answers, your numbers are the ones the code prints, and write one line on which way implied growth moved and why.</li>
+      <li><strong>Find P&amp;G's own break-even.</strong> P&amp;G's owner earnings grew 3.1 percent a year, nominal, from its first five years to its last five. Write a loop that tries test prices and finds the one whose implied growth is about 3.1 percent. Write one sentence on what that price would be claiming.</li>
+      <li><strong>Write the plausibility note.</strong> For one filer and one test price of your choosing, write three lines: the implied growth with its inputs, the filer's own history, and the base rates with the warning that they are real sales growth while the history is nominal owner earnings.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Analyst session 5 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">1 · What question does a reverse DCF answer?</p>
+      <button class="qopt" type="button">A · Given a typed price and a fixed discount rate, stage length and terminal growth, what stage-one growth would make the model's value equal that price</button>
+      <button class="qopt" type="button">B · What the company is truly worth, without any assumptions</button>
+      <button class="qopt" type="button">C · Which discount rate the market is using for this company</button>
+      <button class="qopt" type="button">D · How much the price will change over the next ten years</button>
+      <p class="qwhy">A reverse DCF holds three inputs fixed and solves for the fourth. It removes no assumption; it moves the unknown from growth to price and tells you what growth that price needs, which you can then judge.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">2 · On P&amp;G's rung-3 value of 95.16, a test price of 190.33 implies 14.17 percent. What does 14.17 percent mean?</p>
+      <button class="qopt" type="button">A · P&amp;G's owner earnings will grow 14.17 percent a year</button>
+      <button class="qopt" type="button">B · The discount rate the price uses is 14.17 percent</button>
+      <button class="qopt" type="button">C · The price is 14.17 percent above the value</button>
+      <button class="qopt" type="button">D · For the model to be worth 190.33 at 9 percent and 2.5 percent terminal, owner earnings per share would have to compound at 14.17 percent a year for ten years</button>
+      <p class="qwhy">It is a condition, not a forecast, and it carries its inputs: change the discount rate or the terminal growth and the implied growth changes too. The price is twice the value, not 14.17 percent above it.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">3 · Why compare implied growth with base rates and with the filer's own history?</p>
+      <button class="qopt" type="button">A · Because base rates tell you the exact growth P&amp;G will achieve</button>
+      <button class="qopt" type="button">B · Because the two can be compared digit for digit, since both are growth rates</button>
+      <button class="qopt" type="button">C · Because an implied growth rate is only meaningful against how often companies, and this company, have actually grown that fast; the Base Rate Book's median real three-year sales growth is 5.4 percent, and P&amp;G's own nominal owner earnings grew 3.1 percent a year</button>
+      <button class="qopt" type="button">D · Because any implied growth above the base-rate mean proves the price is wrong</button>
+      <p class="qwhy">Base rates and history are reference points, not verdicts. They are also different measures: the base rates are real sales growth, the history is nominal owner earnings per share, so compare direction and distance, not digits. A claim above both is not impossible, but it needs a reason.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Reverse DCF: start from the price and solve for the expectations it implies</span><span class="note">Mauboussin, M. and Rappaport, A., "Expectations Investing" (reported); the mechanic is taught as standard arithmetic</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Base rates: three-year sales growth mean 8.1 and median 5.4 percent, standard deviation 18.7, 23 percent negative, growth declining with size; forecasts 19.2 vs actual 34.6 percent spread</span><span class="note">Mauboussin, M., Callahan, D. and Majd, D., "The Base Rate Book", Credit Suisse, 2016 (read at source, hosted copy)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">P&amp;G rung-3 base 5.00 and value 95.16; 14.17 and -4.31 percent at twice and half on any rung-3 base; the four filers' 9.2, 8.1, 7.3 and 3.1 percent owner earnings growth</span><span class="note">SEC EDGAR XBRL company facts, read from a public mirror after the SEC refused the build machine; computed, with the valuation modelled at stated defaults</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Halden Tiles' implied shrink of about 1.4 percent a year</span><span class="note">Constructed; every Halden figure is invented for teaching</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Discounting as the price of time</span><span class="note">Taught in Economics Foundations session 5; linked, not re-taught</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 5 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Reverse DCF</b><span>Fix r, n and terminal growth; type a price; solve for stage-one growth.</span></div>
+      <div class="cheat-item"><b>Bisection</b><span>Value rises with growth, so halve the bracket and keep the half that holds the price.</span></div>
+      <div class="cheat-item"><b>Half and double</b><span>At the defaults: 0.5x implies -4.31%, 1x gives back 5.00%, 2x implies 14.17%.</span></div>
+      <div class="cheat-item"><b>Scale-free</b><span>Only price over value matters; the base cancels out.</span></div>
+      <div class="cheat-item"><b>Judge it against base rates</b><span>Median real 3-year sales growth 5.4%; P&amp;G's own nominal 3.1%. Different measures: compare direction.</span></div>
+      <div class="cheat-item"><b>It carries its rate</b><span>Change r and the implied growth moves. Quote the inputs with the answer.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You can now read what a typed price assumes, and you have seen that the answer moves when the discount rate does. Analyst session 6 lays every input out at once: the sensitivity grid for P&amp;G, one point either side on the discount rate and two on growth, which turns 95.16 into a range from 70.84 to 132.39, and shows which judgment deserves the most defending.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Analyst session 5 of 10 · learn-value-investing-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p4-a-dcf-by-hand.html">← Prev: A discounted cash flow, by hand</a> &nbsp;·&nbsp; <a href="p6-which-input-moves-the-answer.html">Next: Which input moves the answer →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

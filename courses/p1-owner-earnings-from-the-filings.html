@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 1 of 10. Owner earnings computed from real 10-K filings: the XBRL facts behind them, Buffett's 1986 definition, the all-capex approximation, and what it gets wrong for four large US companies. Educational, not investment advice.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Owner earnings from the filings - learn value investing with phoebe">
+<meta property="og:description" content="Analyst session 1 of 10. Net income plus D&amp;A minus capex, per share, from four companies' real 10-K facts, and the three places the approximation lies. Educational, not investment advice.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/courses/p1-owner-earnings-from-the-filings.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Owner earnings from the filings - learn value investing with phoebe">
+<meta name="twitter:description" content="Analyst session 1 of 10. Owner earnings from real 10-K facts, and where the approximation lies.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 1 · Owner earnings from the filings - learn value investing with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-value-investing-with-phoebe</a> / Analyst session 1 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Value Investing with Phoebe · Analyst session 1 of 10</div>
+    <h1>Owner earnings from <span class="accent">the filings</span></h1>
+    <p class="sub">Every US public company files its annual accounts with the SEC, and since 2009 the numbers inside those filings are tagged so a program can read them. Tonight we read them. Four large companies in four different industries, Caterpillar, Exxon Mobil, Johnson &amp; Johnson and Procter &amp; Gamble, each with fifteen to nineteen fiscal years of tagged facts. From those facts we build Buffett's owner earnings the only way the filings allow: net income, plus depreciation and amortisation, minus all capital spending, per share. Then we spend as long on where that approximation lies as on how to compute it. No share prices anywhere. Educational, not investment advice.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Analyst</span>
+      <span class="chip audience">Analysts, finance and data people who want to read a business from its filings</span>
+      <span class="chip audience">Python, standard library only</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Facts, the formula, where it lies</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: owner earnings for four filers</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">The Owner track teaches the reasoning on a constructed business. The ten Analyst sessions do it on real ones. Each session takes one piece of the reasoning, owner earnings, normalising, returns on capital, discounting, reverse discounting, sensitivity, base rates, durability, the memo, and puts it on the same four companies' filings, so that by the bench in session 10 every number is one you have built yourself. Reading the three statements is not taught here; it lives in <a href="https://phoebefu6.github.io/learn-finance-with-phoebe/">Finance: Reading the Numbers ↗</a>. Here the statements are inputs.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone builds</span>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Educational, not investment advice.</strong> Four company names appear because their filings are public and long. Nothing here says whether to buy, hold or sell any of them, and no market price, ticker or price chart appears on any page. The figures come from SEC XBRL company facts; during this build the SEC's own server refused the build machine, so the same records were read from a public mirror and spot-checked against the SEC's API. The source map records which values were checked.</p>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A thirty-line Python reader for any US filer's annual facts, owner earnings per share for four companies across fifteen to nineteen years, the sentence that explains why Johnson &amp; Johnson's owner earnings sit above its net income while Exxon Mobil's sat far below for five years, and a list of the three places the approximation is wrong before anyone uses it in a valuation.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers XBRL company facts</span>
+      <h2>A filing is a pile of tagged facts</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A 10-K is a long document for people. Underneath, every number in its financial statements carries a tag: which concept it is (net income, capital expenditure), which period it covers, which unit, and which filing reported it. The SEC publishes all of a company's tagged facts as one file per company, called company facts. The same year's net income appears in three successive 10-Ks, because each one shows three years, and if the company restated it, the later filings carry the new number.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three 10-K filings drawn as stacked sheets, filed in 2015, 2016 and 2017, each reporting Caterpillar's net income for fiscal 2014. The 2015 filing says 3,695 million; the later filings say 2,452 million after a restatement. Arrows run into a sieve that keeps 10-K full-year facts only and keeps the latest filing, producing one row: fiscal 2014, net income 2,452 million. Five such rows, one per concept, make an owner-earnings row.">
+        <defs>
+          <filter id="vp1aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="51" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp1aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp1aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp1aH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp1aL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp1aS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp1aB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp1aV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp1aW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp1aN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp1aH" x="30" y="26">ONE YEAR, THREE FILINGS, ONE ROW</text>
+        <text class="vp1aS" x="290" y="26">Caterpillar's fiscal 2014 net income, as the company facts file holds it</text>
+
+        <g filter="url(#vp1aSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="60" width="200" height="56" rx="6" transform="rotate(-1 140 88)" fill="#FFFFFF"/>
+          <rect x="40" y="136" width="200" height="56" rx="6" transform="rotate(0.8 140 164)" fill="#EEF5F0"/>
+          <rect x="40" y="212" width="200" height="56" rx="6" transform="rotate(-0.6 140 240)" fill="#EEF5F0"/>
+          <path d="M248 88 C300 100 320 140 352 158" marker-end="url(#vp1aAr)"/>
+          <path d="M248 164 L350 166" marker-end="url(#vp1aAr)"/>
+          <path d="M248 240 C300 230 320 190 352 176" marker-end="url(#vp1aAr)"/>
+          <!-- the sieve -->
+          <path d="M362 110 L522 110 L482 222 L402 222 Z" fill="url(#vp1aHc)"/>
+          <path d="M442 228 L442 262" marker-end="url(#vp1aAr)"/>
+          <rect x="560" y="140" width="290" height="56" rx="8" transform="rotate(0.5 705 168)" fill="#93701C" stroke="#93701C"/>
+          <path d="M530 166 L552 166" marker-end="url(#vp1aAr)"/>
+        </g>
+
+        <text class="vp1aL" x="54" y="84">10-K filed 2015</text>
+        <text class="vp1aS" x="54" y="102">FY2014 net income 3,695</text>
+        <text class="vp1aL" x="54" y="160">10-K filed 2016</text>
+        <text class="vp1aS" x="54" y="178">FY2014 net income 2,452</text>
+        <text class="vp1aL" x="54" y="236">10-K filed 2017</text>
+        <text class="vp1aS" x="54" y="254">FY2014 net income 2,452</text>
+        <text class="vp1aH" x="442" y="134" text-anchor="middle">THE SIEVE</text>
+        <text class="vp1aS" x="442" y="154" text-anchor="middle">10-K, full year only</text>
+        <text class="vp1aS" x="442" y="170" text-anchor="middle">latest filing wins</text>
+        <text class="vp1aS" x="442" y="186" text-anchor="middle">first concept that</text>
+        <text class="vp1aS" x="442" y="202" text-anchor="middle">has the year</text>
+        <text class="vp1aB" x="442" y="282" text-anchor="middle">a restatement, kept</text>
+        <text class="vp1aW" x="578" y="164">FY2014 · net income</text>
+        <text class="vp1aW" x="578" y="184">2,452 million (as restated)</text>
+        <text class="vp1aS" x="560" y="222">one row per year, per concept:</text>
+        <text class="vp1aS" x="560" y="238">net income, D&amp;A, capex, cash flow, shares</text>
+
+        <text class="vp1aN" x="30" y="314">Millions of dollars. The restated number is the one later filings stand behind; the original is kept in the source map.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the same year can carry two values; a reader has to choose one, and say which</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What a fact is, and the four choices a reader makes<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A fact is a concept name, a value, a unit, a start and end date, the form that reported it and the date it was filed. Turning a pile of facts into one row per fiscal year forces four choices, and every one of them changes numbers. <strong>Which form:</strong> 10-K annual reports only, not quarterly 10-Qs. <strong>Which period:</strong> full years only, between 330 and 380 days, which drops the quarters and year-to-date figures that 10-Ks also carry. <strong>Which filing:</strong> the latest, so restatements win. <strong>Which concept:</strong> companies change tags over time, so a reader keeps a short preference list per field and takes the first one that has the year.</p>
+        <p>One more choice bites quietly. Johnson &amp; Johnson's fiscal year is 52 or 53 weeks, and three of its years ended on 3 January. Labelled by the calendar year of the end date, fiscal 2009 collides with fiscal 2010 and silently overwrites it. A year that ends in the first ten days of January belongs to the year before.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The tags that changed under our feet<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Caterpillar tagged its profit as <code>NetIncomeLoss</code> until fiscal 2010 and as <code>NetIncomeLossAvailableToCommonStockholdersBasic</code> from 2011. Its capital spending moved from <code>PaymentsToAcquireProductiveAssets</code> (to 2017) to <code>PaymentsToAcquirePropertyPlantAndEquipment</code> (from 2018); the two agree exactly in the years both appear. Exxon Mobil stopped tagging diluted shares after 2013 and tags basic shares since, which it reports as the same number, so its usable run starts in 2011. A reader that knows only one tag per field returns four years for Caterpillar and three for Exxon and calls it data.</p>
+        <p>The full concept map, every fallback and every restated value is in the source map. The habit is to print, for each field, which concept fed which years, before trusting any total.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Caterpillar's fiscal 2014, two numbers.</strong> Caterpillar's 10-K filed in 2015 reported fiscal 2014 profit of 3,695 million dollars. Later 10-Ks show 2,452 million for the same year, after the company changed how it accounts for pension costs and restated earlier years. Nothing about 2014's factories or customers changed. A five-year average that started from the first number and one that started from the second differ by about 250 million a year before anyone has made a single judgment.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the owner earnings formula</span>
+      <h2>Net income, plus D&amp;A, minus capex</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Buffett's 1986 letter defines owner earnings as reported earnings, plus depreciation, depletion, amortisation and certain other non-cash charges, less the average annual capital spending the business needs to keep its competitive position and its unit volume. The filings give us the first two terms directly. They do not give us the third: a cash flow statement reports all capital spending, and does not say how much of it was to stand still and how much was to grow.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn bridge for Caterpillar fiscal 2024, millions of dollars. Net income 10,792. Plus depreciation and amortisation 2,153. Minus capital expenditure 1,988. Equals owner earnings 10,957. Divided by 489.4 million diluted shares gives 22.39 dollars per share. A note says the capex used is all capex, not only the spend to stand still.">
+        <defs>
+          <filter id="vp1bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="57" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp1bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp1bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp1bH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp1bL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp1bS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp1bB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp1bV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp1bW { font: 800 15px Inter, sans-serif; fill: #FFFFFF; }
+          .vp1bN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp1bH" x="30" y="26">CATERPILLAR, FISCAL 2024, FROM PROFIT TO OWNER EARNINGS</text>
+        <text class="vp1bS" x="470" y="26">millions of dollars, from 10-K facts</text>
+
+        <g filter="url(#vp1bSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 250 L640 250"/>
+          <!-- scale 0.0145 px per million: 10,792 => 156 px -->
+          <rect x="60" y="94" width="110" height="156" rx="6" transform="rotate(-0.5 115 172)" fill="#EEF5F0"/>
+          <rect x="210" y="63" width="110" height="31" rx="6" transform="rotate(0.6 265 78)" fill="url(#vp1bHc)"/>
+          <rect x="360" y="63" width="110" height="29" rx="6" transform="rotate(-0.4 415 77)" fill="#F8F0DC" stroke="#93701C"/>
+          <rect x="510" y="92" width="110" height="158" rx="6" transform="rotate(0.5 565 171)" fill="#2D5240" stroke="#2D5240"/>
+          <path d="M176 94 L204 94" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <path d="M326 63 L354 63" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <path d="M476 92 L504 92" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <!-- divide by shares -->
+          <path d="M628 170 L688 170" marker-end="url(#vp1bAr)"/>
+          <rect x="700" y="128" width="150" height="84" rx="10" transform="rotate(-0.8 775 170)" fill="#93701C" stroke="#93701C"/>
+        </g>
+
+        <text class="vp1bV" x="115" y="176" text-anchor="middle">10,792</text>
+        <text class="vp1bL" x="115" y="270" text-anchor="middle">net income</text>
+        <text class="vp1bV" x="265" y="56" text-anchor="middle">+2,153</text>
+        <text class="vp1bL" x="265" y="270" text-anchor="middle">plus D&amp;A</text>
+        <text class="vp1bB" x="415" y="56" text-anchor="middle">-1,988</text>
+        <text class="vp1bL" x="415" y="270" text-anchor="middle">minus all capex</text>
+        <text class="vp1bW" x="565" y="176" text-anchor="middle">10,957</text>
+        <text class="vp1bL" x="565" y="270" text-anchor="middle">owner earnings</text>
+        <text class="vp1bS" x="658" y="160" text-anchor="middle">/ 489.4m</text>
+        <text class="vp1bW" x="775" y="166" text-anchor="middle">$22.39</text>
+        <text class="vp1bW" x="775" y="186" text-anchor="middle">per share</text>
+        <text class="vp1bS" x="775" y="234" text-anchor="middle">diluted shares</text>
+
+        <text class="vp1bN" x="30" y="304">All capex is subtracted, growth spending included, because the filing does not separate it. That is the approximation.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the brass minus box is the term Buffett called a guess; the filing gives us an upper bound for it</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why subtracting all capex is the conservative choice<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Total capital spending is the spend to stand still plus the spend to grow. Subtracting all of it removes some money the owners chose to reinvest, so the figure is lower than Buffett's owner earnings for any business that is expanding. For a valuation, erring low is the safer direction, and it has one more virtue: it is computed from the filing, not from a guess. The honest name for what we compute is <strong>owner earnings, all-capex approximation</strong>, and every page and the bench label it so.</p>
+        <p>The opposite error is the one Buffett warned about in the same 1986 letter: adding depreciation back to profit and calling the result cash flow, with no capital spending subtracted at all. That number hides the money a business must keep pouring in. It is the most common shortcut in a pitch deck.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why operating cash flow is not owner earnings either<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Operating cash flow already adds back depreciation, and it also moves with working capital: when a company collects faster or pays suppliers slower, operating cash rises without the business earning more. We store operating cash flow in the sample so you can compare, but the owner-earnings formula here starts from net income, as Buffett's does. Working capital and why cash and profit diverge belong to <a href="https://phoebefu6.github.io/learn-finance-with-phoebe/">Finance: Reading the Numbers ↗</a>.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Exxon Mobil, when capex ran far above depreciation.</strong> Buffett's 1986 letter names the oil industry as the case where required capital spending exceeds depreciation, so reported earnings overstate owner earnings. Exxon's filings show the pattern: in fiscal 2011 net income was 41,060 million dollars, depreciation, depletion and amortisation 15,583 million and capital spending 30,975 million, so net income per share was 8.42 dollars and owner earnings per share 5.27. From 2011 to 2015 its capital spending ran between about 1.5 and 2.2 times its depreciation every year. Some of that was growth, and our approximation cannot tell how much.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers where the approximation lies</span>
+      <h2>Three places the number is wrong</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A number you computed carefully is still wrong in known ways, and the analyst's job is to name them before anyone else uses it. For these four filers there are three, and each moves owner earnings in a direction you can state.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four pairs of hand-drawn bars, last fiscal year, dollars per share: Caterpillar net income 18.81 and owner earnings 17.63; Exxon Mobil 6.70 and 6.15; Johnson and Johnson 11.03 and 12.13; Procter and Gamble 6.62 and 6.11. Johnson and Johnson is the only one where owner earnings exceed net income, because its D&amp;A exceeds its capex. Three tags under the chart name the errors: growth capex subtracted, leasing capex missing for Caterpillar, one-off years left in.">
+        <defs>
+          <filter id="vp1cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="63" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp1cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp1cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp1cH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp1cL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp1cS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp1cB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp1cV { font: 800 13px Inter, sans-serif; fill: #1C3628; }
+          .vp1cN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp1cH" x="30" y="26">LAST FISCAL YEAR, DOLLARS PER SHARE</text>
+        <text class="vp1cS" x="300" y="26">hatched = net income per share · brass = owner earnings per share, all-capex approximation</text>
+
+        <g filter="url(#vp1cSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 230 L840 230"/>
+          <!-- scale 7.5 px per dollar -->
+          <rect x="80" y="89" width="60" height="141" rx="4" fill="url(#vp1cHc)"/>
+          <rect x="150" y="98" width="60" height="132" rx="4" fill="#93701C" stroke="#93701C"/>
+          <rect x="280" y="180" width="60" height="50" rx="4" fill="url(#vp1cHc)"/>
+          <rect x="350" y="184" width="60" height="46" rx="4" fill="#93701C" stroke="#93701C"/>
+          <rect x="480" y="147" width="60" height="83" rx="4" fill="url(#vp1cHc)"/>
+          <rect x="550" y="139" width="60" height="91" rx="4" fill="#93701C" stroke="#93701C"/>
+          <rect x="680" y="180" width="60" height="50" rx="4" fill="url(#vp1cHc)"/>
+          <rect x="750" y="184" width="60" height="46" rx="4" fill="#93701C" stroke="#93701C"/>
+        </g>
+
+        <text class="vp1cV" x="110" y="82" text-anchor="middle">18.81</text>
+        <text class="vp1cV" x="180" y="91" text-anchor="middle">17.63</text>
+        <text class="vp1cV" x="310" y="173" text-anchor="middle">6.70</text>
+        <text class="vp1cV" x="380" y="177" text-anchor="middle">6.15</text>
+        <text class="vp1cV" x="510" y="140" text-anchor="middle">11.03</text>
+        <text class="vp1cV" x="580" y="132" text-anchor="middle">12.13</text>
+        <text class="vp1cV" x="710" y="173" text-anchor="middle">6.62</text>
+        <text class="vp1cV" x="780" y="177" text-anchor="middle">6.11</text>
+        <text class="vp1cL" x="145" y="250" text-anchor="middle">Caterpillar FY25</text>
+        <text class="vp1cL" x="345" y="250" text-anchor="middle">Exxon Mobil FY25</text>
+        <text class="vp1cL" x="545" y="250" text-anchor="middle">J&amp;J FY25</text>
+        <text class="vp1cL" x="745" y="250" text-anchor="middle">P&amp;G FY26</text>
+        <text class="vp1cB" x="545" y="268" text-anchor="middle">D&amp;A above capex</text>
+
+        <text class="vp1cS" x="30" y="296">1 · growth capex subtracted: too low for a growing business · 2 · Caterpillar's capex tag leaves out leased equipment: too high</text>
+        <text class="vp1cS" x="30" y="314">3 · one-off years left in: a single year can be wildly off in either direction, which is Analyst session 2</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - J&amp;J is the one where owner earnings beat profit; the reason is amortisation of acquired intangibles, not a better business</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Growth capex, leased equipment, and one-off years<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Growth capex subtracted.</strong> Every dollar spent to grow is counted as if it were spent to stand still, so a growing company looks worse than it is. Direction: too low.</p>
+        <p><strong>Caterpillar's leased equipment.</strong> The capital spending tag Caterpillar uses covers its own plant and equipment and leaves out equipment its finance arm buys to lease to customers, while the depreciation tag includes depreciation on that leased fleet. So depreciation is added back for assets whose purchase is never subtracted. Direction: too high, for Caterpillar only. A careful analyst finds the leasing spend in the cash flow statement and subtracts it; we leave it, label it, and keep the reader of our numbers informed.</p>
+        <p><strong>One-off years.</strong> Exxon's fiscal 2020 net loss of 22,440 million came with 46,009 million of depreciation, depletion and amortisation that included large write-downs; J&amp;J's fiscal 2023 net income of 35,153 million included a gain from separating its consumer health business. A single year's owner earnings can be off in either direction by more than the business earns in a normal year. Normalising across a cycle is Analyst session 2.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why J&amp;J's owner earnings sit above its net income<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>J&amp;J's depreciation and amortisation, 7,503 million in fiscal 2025, was well above its capital spending of 4,832 million. A large part of that amortisation is the write-down, year by year, of intangible assets it acquired, which is a charge with no cash leaving that year and no capital spending to replace it. Adding it back is what the formula says to do. Whether those acquired intangibles will need to be "re-bought" through future acquisitions to keep the business where it is, is exactly the guess Buffett's term (c) asks for, and the filing cannot make it for you.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>An unusual repeat in J&amp;J's share count.</strong> J&amp;J's diluted weighted-average shares are tagged as 2,429.4 million for both fiscal 2024 and fiscal 2025. The SEC's own company-concept data shows the same figure for both years, so it is what the filing says, and we keep it rather than "correct" it. It is the kind of thing a reader notices only by printing every row before computing anything.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Owner earnings for four filers, from the facts</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Python 3, standard library only. The reader fetches a company's facts from the SEC with a descriptive User-Agent carrying your name and contact, which the SEC requires, and stays well under its limit of ten requests a second. If the SEC refuses your network, as it refused the build machine, the source map names the public mirror these pages used. The printed figures below are the ones the bench recomputes.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as four hand-drawn steps left to right: fetch the company facts file; keep 10-K full-year facts with the latest filing winning; join net income, D&amp;A, capex and shares on fiscal year; divide owner earnings by shares. Under each step, the check to run: count the facts, print which concept fed which years, look for missing years, eyeball every row.">
+        <defs>
+          <filter id="vp1dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="69" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp1dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp1dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp1dH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp1dS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp1dB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp1dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp1dN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp1dH" x="30" y="26">FOUR STEPS, AND THE CHECK AFTER EACH</text>
+
+        <g filter="url(#vp1dSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="180" height="60" rx="8" transform="rotate(-0.6 120 86)" fill="url(#vp1dHc)"/>
+          <rect x="246" y="56" width="180" height="60" rx="8" transform="rotate(0.5 336 86)" fill="#EEF5F0"/>
+          <rect x="462" y="56" width="180" height="60" rx="8" transform="rotate(-0.4 552 86)" fill="#EEF5F0"/>
+          <rect x="678" y="56" width="180" height="60" rx="8" transform="rotate(0.6 768 86)" fill="#93701C" stroke="#93701C"/>
+          <path d="M214 86 L240 86" marker-end="url(#vp1dAr)"/>
+          <path d="M430 86 L456 86" marker-end="url(#vp1dAr)"/>
+          <path d="M646 86 L672 86" marker-end="url(#vp1dAr)"/>
+          <rect x="30" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="246" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="462" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="678" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+        </g>
+
+        <text class="vp1dH" x="120" y="82" text-anchor="middle">1 · fetch</text>
+        <text class="vp1dS" x="120" y="100" text-anchor="middle">company facts, one file</text>
+        <text class="vp1dH" x="336" y="82" text-anchor="middle">2 · sieve</text>
+        <text class="vp1dS" x="336" y="100" text-anchor="middle">10-K, full year, latest</text>
+        <text class="vp1dH" x="552" y="82" text-anchor="middle">3 · join</text>
+        <text class="vp1dS" x="552" y="100" text-anchor="middle">four fields on fiscal year</text>
+        <text class="vp1dW" x="768" y="82" text-anchor="middle">4 · per share</text>
+        <text class="vp1dW" x="768" y="100" text-anchor="middle">(NI + D&amp;A - capex) / sh</text>
+        <text class="vp1dB" x="120" y="164" text-anchor="middle">check: how many facts?</text>
+        <text class="vp1dS" x="120" y="182" text-anchor="middle">zero means a blocked fetch</text>
+        <text class="vp1dB" x="336" y="164" text-anchor="middle">check: concept per year</text>
+        <text class="vp1dS" x="336" y="182" text-anchor="middle">tags change over time</text>
+        <text class="vp1dB" x="552" y="164" text-anchor="middle">check: missing years</text>
+        <text class="vp1dS" x="552" y="182" text-anchor="middle">a gap breaks an average</text>
+        <text class="vp1dB" x="768" y="164" text-anchor="middle">check: every row</text>
+        <text class="vp1dS" x="768" y="182" text-anchor="middle">one-offs jump out</text>
+
+        <text class="vp1dN" x="30" y="226">An empty result is not an empty company. A blocked request returns a page of HTML, and a reader must fail loudly on it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the check under each step is the part that catches the defects in Part 3</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Step 1 · Fetch one company's facts.</strong> Set a User-Agent with your own name and email. The CIK is the SEC's ten-digit company number, zero padded.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · fetch</span>import json, time, urllib.request
+from datetime import date
+
+UA = "your-name your-email@example.com"   # the SEC asks for a name and a contact
+
+def companyfacts(cik):
+    url = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json"
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    time.sleep(0.2)                         # stay well under 10 requests a second
+    return json.load(urllib.request.urlopen(req))</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 2 · Sieve to one value per fiscal year.</strong> 10-K and 10-K/A only, full-year periods only, the latest filing wins, and a 52/53-week year ending in early January belongs to the year before. The first concept in the list that has a year wins.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · the sieve</span>def annual(facts, concepts, unit="USD"):
+    out = {}
+    for concept in concepts:
+        node = facts["facts"]["us-gaap"].get(concept)
+        if not node:
+            continue
+        best = {}
+        for f in node["units"].get(unit, []):
+            if f["form"] not in ("10-K", "10-K/A") or f["fp"] != "FY" or "start" not in f:
+                continue
+            s, e = date.fromisoformat(f["start"]), date.fromisoformat(f["end"])
+            if not 330 &lt;= (e - s).days &lt;= 380:
+                continue
+            fy = e.year - 1 if (e.month == 1 and e.day &lt;= 10) else e.year
+            if fy not in best or f["filed"] &gt; best[fy][0]:
+                best[fy] = (f["filed"], f["val"])
+        for fy, (_, v) in best.items():
+            out.setdefault(fy, v)
+    return out</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 3 · Name the concepts, with fallbacks.</strong> These lists are the ones that cover all four filers' full runs.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · the concept lists</span>CONCEPTS = {
+    "ni":    ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"],
+    "da":    ["DepreciationDepletionAndAmortization", "DepreciationAndAmortization"],
+    "capex": ["PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets"],
+    "sh":    ["WeightedAverageNumberOfDilutedSharesOutstanding",
+              "WeightedAverageNumberOfSharesOutstandingBasic"],
+}</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 4 · Join on fiscal year and divide by shares.</strong> Only years where all four fields exist survive the join.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · owner earnings per share</span>def owner_earnings(cik):
+    f = companyfacts(cik)
+    got = {k: annual(f, c, "shares" if k == "sh" else "USD") for k, c in CONCEPTS.items()}
+    years = sorted(set.intersection(*[set(v) for v in got.values()]))
+    rows = []
+    for y in years:
+        oe = got["ni"][y] + got["da"][y] - got["capex"][y]
+        rows.append((y, got["ni"][y] / got["sh"][y], oe / got["sh"][y]))
+    return rows</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 5 · Run it for the four filers.</strong> The last row for each, as these pages computed it:</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · run, and what it printed</span>for cik, name in [("0000018230", "Caterpillar"), ("0000034088", "Exxon Mobil"),
+                  ("0000200406", "Johnson &amp; Johnson"), ("0000080424", "Procter &amp; Gamble")]:
+    y, ni, oe = owner_earnings(cik)[-1]
+    print(f"{name:18} FY{y}  net income/share {ni:6.2f}  owner earnings/share {oe:6.2f}")
+
+Caterpillar        FY2025  net income/share  18.81  owner earnings/share  17.63
+Exxon Mobil        FY2025  net income/share   6.70  owner earnings/share   6.15
+Johnson &amp; Johnson  FY2025  net income/share  11.03  owner earnings/share  12.13
+Procter &amp; Gamble   FY2026  net income/share   6.62  owner earnings/share   6.11</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 6 · Print every row, and find the one-offs.</strong> Loop over all the rows for one filer and look. You should see Exxon's fiscal 2020 owner earnings per share at 1.47 with net income per share at -5.25, J&amp;J's fiscal 2017 at 1.33 and fiscal 2023 at 14.88, and Caterpillar's fiscal 2016 at 3.18. Write one line per jump saying whether it is the business or an accounting event; Analyst session 2 decides what to do with them.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · look before averaging</span>for y, ni, oe in owner_earnings("0000034088"):
+    print(y, round(ni, 2), round(oe, 2))
+
+# your notes, one line per jump:
+# 2020  ______________________________________________
+# 2022  ______________________________________________</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep the label with the number.</strong> Wherever these figures travel, they travel as "owner earnings, all-capex approximation, from 10-K facts, latest filing", with the known errors listed. A figure that loses its label becomes a fact in somebody else's deck.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before Analyst session 2</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Run the reader for a fifth company</strong> you know, and print which concept fed which years for every field. Note any tag change and any missing year.</li>
+      <li><strong>Compare capex with D&amp;A</strong> for each year of one filer. Mark the years where capex ran above D&amp;A and write one sentence on why.</li>
+      <li><strong>Find one restatement</strong> by printing every filing's value for one year of one concept. Which filing would you trust, and why?</li>
+      <li><strong>Write the label</strong> for your fifth company's owner earnings: the approximation, its direction of error, and any company-specific gap like Caterpillar's leased equipment.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Analyst session 1 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · Caterpillar's fiscal 2014 net income appears as 3,695 million in one 10-K and 2,452 million in later ones. What does a careful reader do?</p>
+      <button class="qopt" type="button">A · Average the two, since both were filed</button>
+      <button class="qopt" type="button">B · Use the first value, because it is what investors saw at the time</button>
+      <button class="qopt" type="button">C · Use the latest filed value, because later filings carry restatements, and record the original so anyone can see the choice</button>
+      <button class="qopt" type="button">D · Drop the year, because conflicting data cannot be used</button>
+      <p class="qwhy">The restated figure is the one the company now stands behind. Using it is a choice with a consequence, so it is recorded with the original. A backtest that wants to know what was knowable at the time would make the other choice, and should say so.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">2 · Owner earnings here are net income plus D&amp;A minus all capital expenditure. In which direction is that wrong for a growing company?</p>
+      <button class="qopt" type="button">A · Too high, because D&amp;A is added back</button>
+      <button class="qopt" type="button">B · Too low, because growth spending is subtracted as if it were the spend to stand still, which is Buffett's term (c)</button>
+      <button class="qopt" type="button">C · It is exact, because the filing reports all three terms</button>
+      <button class="qopt" type="button">D · Too high, because capex is a cash outflow</button>
+      <p class="qwhy">The filing reports total capex, not the maintenance part. Subtracting all of it understates owner earnings for an expanding business. It is the conservative error, and it has to be labelled.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">3 · Johnson &amp; Johnson's fiscal 2025 owner earnings per share (12.13) sit above its net income per share (11.03). Why?</p>
+      <button class="qopt" type="button">A · Its share count fell sharply during the year</button>
+      <button class="qopt" type="button">B · Owner earnings always exceed net income</button>
+      <button class="qopt" type="button">C · A one-off gain was removed from net income</button>
+      <button class="qopt" type="button">D · Its D&amp;A, 7,503 million, was larger than its capex, 4,832 million, largely because acquired intangibles are amortised with no capex to replace them that year</button>
+      <p class="qwhy">The formula adds D&amp;A and subtracts capex; when the first is bigger, owner earnings beat profit. Whether that amortisation is truly free, or will have to be "re-bought" through acquisitions, is the guess the filing cannot make.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Owner earnings definition; (c) must be a guess; the oil industry as the case where capex exceeds D&amp;A; the "cash flow" fallacy</span><span class="note">Buffett, W., Berkshire Hathaway shareholder letter, 1986, appendix (read at source)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Every filer figure: net income, D&amp;A, capex, shares; 18.81 / 17.63, 6.70 / 6.15, 11.03 / 12.13, 6.62 / 6.11; Caterpillar FY2024 bridge; the restatement</span><span class="note">SEC EDGAR XBRL company facts, read from a public mirror after the SEC refused the build machine; computed, with two values per filer spot-checked against the SEC's own API</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The SEC's User-Agent requirement and ten-requests-a-second guideline</span><span class="note">SEC fair-access policy, as printed on the SEC's own refusal page during this build</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Caterpillar's leased equipment, J&amp;J's acquired intangibles</span><span class="note">Named as gaps; the leasing spend is not subtracted and the intangibles are not adjusted</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Reading the three statements, working capital</span><span class="note">Taught in Finance: Reading the Numbers; linked, not re-taught</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 1 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>A fact has six parts</b><span>Concept, value, unit, start and end, form, filed date.</span></div>
+      <div class="cheat-item"><b>The sieve</b><span>10-K, full year, latest filing wins, first concept that has the year.</span></div>
+      <div class="cheat-item"><b>Owner earnings, all-capex</b><span>(Net income + D&amp;A - all capex) / diluted shares. Too low for a grower.</span></div>
+      <div class="cheat-item"><b>Print the concept per year</b><span>Tags change. One tag per field returns three years and calls it data.</span></div>
+      <div class="cheat-item"><b>Three known errors</b><span>Growth capex subtracted, missing capex lines, one-off years.</span></div>
+      <div class="cheat-item"><b>Fail loudly</b><span>A blocked fetch is HTML, not an empty company.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You now have owner earnings per share for four companies across fifteen to nineteen years, and you have seen the years that jump. Analyst session 2 decides what to do with them: averages over five and ten years, telling a cycle from a one-off, and the first look at the ladder the bench runs, where the five-year average beats last year's earnings on two of three hold-outs and nothing beats the boom that followed 2020.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Analyst session 1 of 10 · learn-value-investing-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← Course home</a> &nbsp;·&nbsp; <a href="p2-normalising-through-a-cycle.html">Next: Normalising through a cycle →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

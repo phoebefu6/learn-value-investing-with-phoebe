@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 8 of 10. A moat as a valuation input: how many years returns stay above the cost of capital, what the Base Rate Book shows about returns regressing, and what 5, 10 or 15 growth years do to P&amp;G's modelled value.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="How long excess returns last - learn value investing with phoebe">
+<meta property="og:description" content="Analyst session 8 of 10. A moat is a number of years. Returns regress slowly, and a longer advantage period raises value less than people expect.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/courses/p8-how-long-excess-returns-last.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How long excess returns last - learn value investing with phoebe">
+<meta name="twitter:description" content="Analyst session 8 of 10. A moat as a number of years, and what it is worth in a DCF.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 8 · How long excess returns last - learn value investing with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-value-investing-with-phoebe</a> / Analyst session 8 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Value Investing with Phoebe · Analyst session 8 of 10</div>
+    <h1>How long excess returns <span class="accent">last</span></h1>
+    <p class="sub">Everyone who has sat through a stock pitch has heard the word moat. Tonight it stops being a word and becomes a number: how many years a business keeps earning more on its capital than that capital costs. We look at what the Base Rate Book found when it followed the best and worst earners for ten years, then we put the moat where it actually lives in a two-stage DCF, the growth years, and watch what 5, 10 and 15 of them do to Procter &amp; Gamble's modelled value. The answer is smaller than most people guess, and the reason is the most useful thing on the page.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Analyst</span>
+      <span class="chip audience">Analysts, finance and data people who hear "durable advantage" in every pitch</span>
+      <span class="chip audience">Python, standard library only</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Years, regression, the model</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: advantage period as an input</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Analyst session 7 showed that fast growth rarely lasts. Tonight asks the companion question: how long do high returns last? Why a business has a moat, network effects, switching costs, scale, is economics, and it lives in <a href="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a6-games-and-moats.html">Economics: games and moats ↗</a>. We do not re-teach it. Here a moat is one input to a valuation, measured in years, and the job is to choose that input honestly and to know how much it moves the answer.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone builds</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A definition of a moat you can type into a model, the Base Rate Book's finding that the gap between the best and worst returns halves over ten years rather than vanishing, a loop that values P&amp;G at 87.76, 95.16 and 101.31 for 5, 10 and 15 growth years, the reason the last five years add only about 6 dollars, and a one-page worksheet that argues for a long or short advantage period with evidence instead of adjectives.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the competitive advantage period</span>
+      <h2>A moat is a number of years</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A business creates value only while it earns more on its capital than the capital costs: return on invested capital minus the cost of capital, the excess return from Analyst session 3. Competition, imitation and plain bad luck push that gap toward zero. The competitive advantage period is how long the gap stays open. A wide moat is a gap that closes slowly; no moat is a gap that closes in a few years. That is the whole idea, and it is something a model can hold.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 372" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A constructed sketch with no filer's data. The vertical axis is excess return, ROIC minus the cost of capital; the baseline is zero, where returns equal the cost of capital. Two curves start at the same excess return today. The wide-moat curve, drawn in brass, fades slowly and is still above zero far to the right. The no-moat curve drops close to zero within a short span. Two brackets under the axis mark the competitive advantage period: short for no moat, long for the wide moat. The shaded area under the wide-moat curve is the value the excess return creates.">
+        <defs>
+          <filter id="vp8aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="81" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp8aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp8aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp8aH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp8aL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp8aS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp8aB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp8aA { font: 700 11px Inter, sans-serif; fill: #2D5240; }
+          .vp8aN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp8aH" x="30" y="26">A MOAT IS HOW LONG THE GAP STAYS OPEN</text>
+        <text class="vp8aS" x="330" y="26">constructed curves, labelled; no filer's data</text>
+
+        <g filter="url(#vp8aSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- value created by the wide moat: area under its curve -->
+          <path d="M80 86 C300 96 520 176 760 244 L760 262 L80 262 Z" fill="#EEF5F0" stroke="none"/>
+          <!-- axes -->
+          <path d="M80 270 L80 62" marker-end="url(#vp8aAr)"/>
+          <path d="M80 262 L800 262" marker-end="url(#vp8aAr)"/>
+          <!-- no moat: fades fast -->
+          <path d="M80 86 C140 196 200 246 340 258 L760 259"/>
+          <!-- wide moat: fades slowly -->
+          <path d="M80 86 C300 96 520 176 760 244" stroke="#93701C" stroke-width="3"/>
+          <circle cx="80" cy="86" r="4" fill="#17251D"/>
+          <!-- advantage period brackets -->
+          <path d="M80 294 L80 302 L300 302 L300 294"/>
+          <path d="M80 320 L80 328 L700 328 L700 320" stroke="#93701C"/>
+          <!-- doodle anchor: an hourglass -->
+          <path d="M806 12 L838 12 L822 30 L838 48 L806 48 L822 30 Z"/>
+          <path d="M814 44 L830 44" stroke-width="1.4"/>
+        </g>
+
+        <text class="vp8aA" x="92" y="52">excess return (ROIC minus cost of capital)</text>
+        <text class="vp8aS" x="94" y="76">same start</text>
+        <text class="vp8aB" x="470" y="124">WIDE MOAT</text>
+        <text class="vp8aS" x="470" y="139">excess return fades slowly</text>
+        <text class="vp8aL" x="196" y="190">no moat</text>
+        <text class="vp8aS" x="196" y="204">fades within a few years</text>
+        <text class="vp8aA" x="86" y="282">years from today</text>
+        <text class="vp8aS" x="780" y="282" text-anchor="end">0: returns equal the cost of capital</text>
+        <text class="vp8aS" x="310" y="306">no moat: short advantage period</text>
+        <text class="vp8aB" x="710" y="332">wide moat</text>
+
+        <text class="vp8aN" x="30" y="356">Shaded: the value the wide moat's excess return creates. Both curves are invented to show the shape.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - two businesses can start with the same return; the moat is the difference in how long it lasts</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Where the moat lives in a two-stage DCF<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The two-stage DCF from Analyst session 4 has three dials that are really one claim about durability. <strong>The growth years</strong>, n: how long the business can reinvest at returns above its cost of capital. <strong>The growth rate in those years</strong>, g: how much it can reinvest at those returns. <strong>The fade</strong>: how fast growth drops to the terminal rate afterwards. In our function the fade is a cliff, from 5 percent to 2.5 percent in one step, which is a simplification you should say out loud when you show the number.</p>
+        <p>So "this business has a wide moat" translates into the model as "n is long, and the fade is slow". "No moat" translates as "n is short, and anything it earns above the rate is gone soon". A pitch that says wide moat and then uses the same ten years as every other company has not put its claim into its number.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why growth without excess return adds nothing<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Growth costs money: to grow, a business reinvests. If the reinvestment earns exactly the cost of capital, every dollar put in is worth a dollar, and growth adds nothing. Analyst session 3's constructed Brightwell Pumps showed it: at a 9 percent cost of capital and 3 percent growth, its value was 160.0 with a 15 percent return on capital, 133.3 at 9 percent (the same as no growth at all) and 100.0 at 6 percent, where growth destroyed value. See <a href="p3-return-on-invested-capital.html">Analyst session 3: Return on invested capital</a>.</p>
+        <p>That is why the growth years and the moat are the same dial. Long growth years in a model only add value if the business earns above its cost of capital during them. Damodaran's rule that reinvestment equals growth divided by return on capital makes the link explicit. Our <code>dcf()</code> does not charge for reinvestment separately: it grows owner earnings at g, so it quietly assumes the reinvestment earns well. Every long n is a claim that the moat holds for those years.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Half of listed companies are gone within ten years.</strong> The Base Rate Book, which follows the top 1,000 global companies by market value since 1950, dead ones included, reports that about one-half of all public companies cease to exist within ten years of listing. Some are bought, some fail, some merge away. A model with ten growth years for every business is assuming a durability that the base rate says half of companies never get to test.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the Base Rate Book on returns</span>
+      <h2>Returns regress, slowly</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The Base Rate Book (Mauboussin, Callahan and Majd, Credit Suisse, 2016) sorted companies into five groups each year by cash flow return on investment, CFROI, measured against the median company, then followed each group for ten years. At the start the top group sat 18 percentage points above the bottom group. Ten years later the gap was 9 points. Returns regressed toward the mean, but only part of the way: the best earners stayed better, by half as much.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 384" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five hand-drawn lines, one per CFROI quintile measured against the median, run from year 0 to year 10 and converge toward the dashed median line. At year 0 the top-to-bottom spread is 18 percentage points; at year 10 it is 9 points. Only the two spreads come from the Base Rate Book; the paths between them are sketched. Small arrows on the outer lines point toward the median.">
+        <defs>
+          <filter id="vp8bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="83" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp8bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp8bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp8bH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp8bL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp8bS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp8bB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp8bV { font: 800 18px Inter, sans-serif; fill: #1C3628; }
+          .vp8bA { font: 700 11px Inter, sans-serif; fill: #2D5240; }
+          .vp8bN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp8bH" x="30" y="26">THE GAP HALVES IN TEN YEARS; IT DOES NOT CLOSE</text>
+        <text class="vp8bS" x="400" y="26">CFROI minus the median, five quintiles, top 1,000 global companies</text>
+
+        <g filter="url(#vp8bSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- scale: 10 px per percentage point -->
+          <path d="M170 200 L660 200" stroke="#4F5F55" stroke-dasharray="6 5" stroke-width="1.6"/>
+          <path d="M170 110 C300 130 480 150 660 155"/>
+          <path d="M170 155 C300 165 480 174 660 177"/>
+          <path d="M170 245 C300 236 480 226 660 222"/>
+          <path d="M170 290 C300 270 480 250 660 245"/>
+          <!-- pull toward the median -->
+          <path d="M300 104 L300 122" stroke-width="1.4" marker-end="url(#vp8bAr)"/>
+          <path d="M300 296 L300 278" stroke-width="1.4" marker-end="url(#vp8bAr)"/>
+          <!-- the spreads -->
+          <path d="M150 112 L150 288" stroke="#93701C" stroke-width="2.6"/>
+          <path d="M142 110 L158 110 M142 290 L158 290" stroke="#93701C" stroke-width="2.6"/>
+          <path d="M800 157 L800 243" stroke="#93701C" stroke-width="2.6"/>
+          <path d="M792 155 L808 155 M792 245 L808 245" stroke="#93701C" stroke-width="2.6"/>
+          <!-- time axis -->
+          <path d="M170 320 L680 320" marker-end="url(#vp8bAr)"/>
+          <path d="M170 314 L170 326 M660 314 L660 326"/>
+        </g>
+
+        <text class="vp8bV" x="138" y="204" text-anchor="end">18</text>
+        <text class="vp8bS" x="138" y="221" text-anchor="end">points</text>
+        <text class="vp8bV" x="814" y="206">9</text>
+        <text class="vp8bS" x="814" y="223">points</text>
+        <text class="vp8bL" x="672" y="159">top quintile</text>
+        <text class="vp8bS" x="672" y="204">median</text>
+        <text class="vp8bL" x="672" y="249">bottom quintile</text>
+        <text class="vp8bB" x="310" y="96">pulled toward the median</text>
+        <text class="vp8bA" x="170" y="342" text-anchor="middle">year 0</text>
+        <text class="vp8bA" x="660" y="342" text-anchor="middle">year 10</text>
+
+        <text class="vp8bN" x="30" y="368">Only the two spreads, 18 and 9 points, are from the Base Rate Book; the paths between them are sketched.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - modest regression toward the mean: the best stay better, by half as much</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What 18 to 9 means for your growth years<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two readings are wrong. "High returns are always competed away" is wrong: after ten years the top group still earned well above the bottom group. "A great business stays great" is wrong too: half the advantage went in a decade, on average. The base rate sits between them, and it is the starting point for any n you choose. An analyst who picks fifteen years of above-average returns should be able to say why this business beats a base rate in which half the gap closes in ten.</p>
+        <p>The finding is about groups, not any one company. Some top-quintile companies held their position; some fell to the middle or below. The base rate does not tell you which a particular business will be. It tells you how much evidence you need before you assume it is one of the durable ones.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Luck and skill mix in any one year's return<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The Base Rate Book makes a point that surprises people: regression toward the mean does not need competition as its cause. Any one year's return is part lasting advantage and part luck, a good harvest, a competitor's stumble, a currency swing. Sort companies by this year's return and the top group is full of companies that had both. Next year the advantage tends to stay and the luck does not repeat, so the group drifts toward the middle even if no rival lifted a finger.</p>
+        <p>That changes how you read a single great year. The more luck there is in a measure, the faster it regresses, and the less one good year should lengthen your n. The same book found earnings growth rates "not very persistent", which is the same mechanism showing up in a noisier number. A run of returns over many years, through a bad patch, is better evidence of a moat than any single year at the top.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The Base Rate Book's quintile table.</strong> Mauboussin, Callahan and Majd measured CFROI against the universe median, not in absolute terms, so a whole-market boom or slump does not move the spread. Across their sample, the top-to-bottom spread shrank from 18 to 9 percentage points over ten years. They call it modest regression toward the mean, and it is the closest thing to a published base rate for how long excess returns last.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the growth-years swing</span>
+      <h2>Put the moat in the model</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Now the number. Take P&amp;G's rung-3 base from Analyst session 4, ten-year mean owner earnings of 5.00 a share (all-capex approximation), with 5 percent growth, a 9 percent discount rate and 2.5 percent after. Change only the growth years. Five years gives <strong>87.76</strong>, the default ten gives <strong>95.16</strong>, fifteen gives <strong>101.31</strong>. Tripling the advantage period from five years to fifteen raises the modelled value by about 13.55 dollars a share (a difference between two modelled values), and the second five years add less than the first.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 364" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three hand-drawn bars, modelled value per share for Procter and Gamble's rung-3 base of 5.00, at 5 percent growth, a 9 percent rate and 2.5 percent terminal growth. 5 growth years: 87.76. 10 growth years: 95.16, the default. 15 growth years: 101.31. Brass caps show the increments: plus 7.41 for years 6 to 10, plus 6.15 for years 11 to 15.">
+        <defs>
+          <filter id="vp8cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="87" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp8cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp8cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp8cH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp8cL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp8cS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp8cB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp8cV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp8cN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp8cH" x="30" y="26">MORE YEARS OF GROWTH, LESS EACH TIME</text>
+        <text class="vp8cS" x="330" y="26">P&amp;G rung 3, base 5.00, g 5%, r 9%, 2.5% after; value per share, modelled</text>
+
+        <g filter="url(#vp8cSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M120 280 L780 280"/>
+          <!-- scale 2 px per dollar -->
+          <rect x="160" y="104" width="120" height="176" rx="5" transform="rotate(-0.4 220 192)" fill="url(#vp8cHc)"/>
+          <rect x="380" y="104" width="120" height="176" rx="5" transform="rotate(0.4 440 192)" fill="url(#vp8cHc)"/>
+          <rect x="380" y="90" width="120" height="14" rx="3" transform="rotate(0.4 440 97)" fill="#93701C" stroke="#93701C"/>
+          <rect x="600" y="90" width="120" height="190" rx="5" transform="rotate(-0.4 660 185)" fill="url(#vp8cHc)"/>
+          <rect x="600" y="77" width="120" height="13" rx="3" transform="rotate(-0.4 660 83)" fill="#93701C" stroke="#93701C"/>
+          <path d="M286 104 L374 104" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <path d="M506 90 L594 90" stroke-dasharray="4 4" stroke-width="1.4"/>
+          <!-- doodle anchor: a calendar page -->
+          <rect x="812" y="10" width="32" height="34" rx="3" transform="rotate(2 828 27)" fill="#FFFFFF"/>
+          <path d="M812 20 L844 20 M820 6 L820 14 M836 6 L836 14" stroke-width="1.4"/>
+        </g>
+
+        <text class="vp8cV" x="220" y="94" text-anchor="middle">87.76</text>
+        <text class="vp8cV" x="440" y="80" text-anchor="middle">95.16</text>
+        <text class="vp8cV" x="660" y="67" text-anchor="middle">101.31</text>
+        <text class="vp8cB" x="508" y="122">+7.41</text>
+        <text class="vp8cS" x="508" y="137">years 6 to 10</text>
+        <text class="vp8cB" x="728" y="108">+6.15</text>
+        <text class="vp8cS" x="728" y="123">years 11 to 15</text>
+        <text class="vp8cL" x="220" y="300" text-anchor="middle">5 growth years</text>
+        <text class="vp8cL" x="440" y="300" text-anchor="middle">10 (the default)</text>
+        <text class="vp8cL" x="660" y="300" text-anchor="middle">15 growth years</text>
+
+        <text class="vp8cN" x="30" y="328">Modelled on computed owner earnings. The increments are differences between modelled values.</text>
+        <text class="vp8cN" x="30" y="346">None of these bars measures P&amp;G's moat; they show what the model does if you assume one.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the brass caps are what each extra five years of advantage is worth today, and they shrink</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why fifteen years adds only about 6 dollars here<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Three things shrink the reward for a longer advantage period. <strong>The gap between growth and the rate is small.</strong> Growing at 5 percent and discounting at 9 percent, each year's extra cash is worth less today than the year before, so years 11 to 15 arrive heavily discounted. <strong>The terminal already assumes growth.</strong> After the growth years the model still grows at 2.5 percent forever; a longer n only swaps 2.5 percent for 5 percent in a few distant years. <strong>Distance compounds.</strong> A dollar in year 15 at 9 percent is worth far less today than a dollar in year 5.</p>
+        <p>That is why people overestimate what a moat is worth in a model at these inputs. Change the inputs and the answer changes: a business that could grow much faster than its discount rate would gain far more from extra years, which is exactly when a long n most needs evidence. At 5 percent and 9 percent, the honest summary is: doubling the advantage period from five years to ten adds 7.41, adding five more adds 6.15. The moat matters, but it is not the input that moves this valuation most; Analyst session 6 showed the discount rate and the growth rate swing it further.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The qualitative version: "favorable long-term prospects"<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Buffett's 1977 letter, read at source, lists four things Berkshire wants in a business it buys shares in, judged the way it would judge buying the whole company: one it can understand, with "favorable long-term prospects", run by honest and competent people, available at a very attractive price. The second criterion is the qualitative form of tonight's input. It does not say how many years. It says the analyst must have a reason to believe the economics will still be good a long way out.</p>
+        <p>Translate it into the model and it becomes a question you answer in writing before you set n: what would have to be true for this business to keep earning above its cost of capital for ten more years, and what evidence do I have that it is? Nothing on this page measures any filer's actual moat. The P&amp;G figures show what the model does with an assumption; the assumption is still yours, and the build-along makes you write it down.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Procter &amp; Gamble, three advantage periods.</strong> The base comes from P&amp;G's 10-K facts through fiscal 2026: ten-year mean owner earnings of 4.998525 a share, displayed as 5.00. At the defaults the model gives 95.16. Shorten the advantage period to five years and it falls to 87.76; lengthen it to fifteen and it rises to 101.31. The whole argument about whether P&amp;G's brands give it five years or fifteen is worth, in this model, about 13.55 dollars a share, a narrower range than moving the discount rate by one point either way, which spans 81.95 to 113.24.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Advantage period as an input</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Python 3, standard library only. We reuse the <code>dcf()</code> function from Analyst session 4 unchanged, loop the growth years, and then do the part no code can do: write down why a particular filer deserves a long or a short advantage period. The printed output below is what the code printed when run.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 292" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as a hand-drawn flow. Three evidence boxes on the left: evidence for a long period, evidence for a short period, and the base rate that the top-to-bottom spread falls from 18 to 9 points in 10 years. Arrows run into a brass box: choose n, 5, 10 or 15 growth years. An arrow runs from it into the dcf function, which returns 87.76, 95.16 or 101.31 for P&amp;G.">
+        <defs>
+          <filter id="vp8dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="89" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp8dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp8dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp8dH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp8dL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp8dS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp8dV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp8dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp8dN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp8dH" x="30" y="26">THE EVIDENCE PICKS N; THE CODE DOES THE ARITHMETIC</text>
+
+        <g filter="url(#vp8dSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="260" height="52" rx="7" transform="rotate(-0.6 160 76)" fill="#EEF5F0"/>
+          <rect x="30" y="116" width="260" height="52" rx="7" transform="rotate(0.5 160 142)" fill="#EEF5F0"/>
+          <rect x="30" y="182" width="260" height="52" rx="7" transform="rotate(-0.4 160 208)" fill="url(#vp8dHc)"/>
+          <path d="M296 76 C320 80 336 110 352 128" marker-end="url(#vp8dAr)"/>
+          <path d="M296 142 L352 144" marker-end="url(#vp8dAr)"/>
+          <path d="M296 208 C320 204 336 176 352 160" marker-end="url(#vp8dAr)"/>
+          <rect x="362" y="108" width="200" height="72" rx="10" transform="rotate(0.6 462 144)" fill="#93701C" stroke="#93701C"/>
+          <path d="M568 144 L602 144" marker-end="url(#vp8dAr)"/>
+          <rect x="610" y="108" width="240" height="72" rx="10" transform="rotate(-0.5 730 144)" fill="#FFFFFF"/>
+        </g>
+
+        <text class="vp8dL" x="44" y="72">Evidence for a long period</text>
+        <text class="vp8dS" x="44" y="90">what keeps returns above the rate</text>
+        <text class="vp8dL" x="44" y="138">Evidence for a short period</text>
+        <text class="vp8dS" x="44" y="156">what would erode them, how fast</text>
+        <rect x="40" y="190" width="236" height="36" rx="4" fill="#FFFFFF"/>
+        <text class="vp8dL" x="48" y="204">The base rate</text>
+        <text class="vp8dS" x="48" y="220">spread 18 to 9 points in 10 years</text>
+        <text class="vp8dW" x="462" y="138" text-anchor="middle">choose n</text>
+        <text class="vp8dW" x="462" y="158" text-anchor="middle">5, 10 or 15 growth years</text>
+        <text class="vp8dS" x="730" y="134" text-anchor="middle">dcf(BASE, 0.09, n, 0.05, 0.025)</text>
+        <text class="vp8dV" x="730" y="160" text-anchor="middle">87.76 / 95.16 / 101.31</text>
+
+        <text class="vp8dN" x="30" y="268">P&amp;G rung 3. Nothing on this page measures any filer's moat; the left column is yours to fill in.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the brass box is the judgment; everything to its right is arithmetic you can check</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Step 1 · Bring back <code>dcf()</code>.</strong> The same function as Analyst session 4, with the same guard. Use the exact base, not the displayed 5.00, or the values will not match.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · dcf(), unchanged</span>def dcf(base, r, n, g, gt):
+    if r &lt;= gt:
+        raise ValueError("terminal growth must sit below the discount rate")
+    cash, stage = base, 0.0
+    for year in range(1, n + 1):
+        cash = cash * (1 + g)
+        stage += cash / (1 + r) ** year
+    tv = cash * (1 + gt) / (r - gt)
+    terminal = tv / (1 + r) ** n
+    return stage + terminal, stage, terminal
+
+BASE = 4.998525   # P&amp;G ten-year mean owner earnings per share; displays as 5.00</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 2 · Loop the advantage period.</strong> Hold the discount rate, the growth rate and the terminal fixed, change only n, and print what each extra five years adds.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · three advantage periods, and what it printed</span>prev = None
+for n in (5, 10, 15):
+    value, _, _ = dcf(BASE, r=0.09, n=n, g=0.05, gt=0.025)
+    extra = "" if prev is None else f"   +{value - prev:.2f} for five more years"
+    print(f"{n:&gt;2} growth years   value {value:6.2f}{extra}")
+    prev = value
+
+ 5 growth years   value  87.76
+10 growth years   value  95.16   +7.41 for five more years
+15 growth years   value 101.31   +6.15 for five more years</div>
+        <p>The values match Part 3. The increments, 7.41 and 6.15, are modelled: differences between two modelled values on the same computed base.</p>
+      </div>
+      <div class="step">
+        <p><strong>Step 3 · Put the choice next to the number.</strong> Whatever n you choose, print it inside the sentence, so nobody reads the value without the assumption that made it.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · the sentence</span>n = 10   # change this only after Step 4
+value, _, _ = dcf(BASE, r=0.09, n=n, g=0.05, gt=0.025)
+print(f"P&amp;G rung 3, base 5.00 (all-capex owner earnings), {n} years at 5% "
+      f"then 2.5%, at 9%: {value:.2f}. n is my advantage period; see my evidence.")</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 4 · Write the evidence for one filer.</strong> Pick Caterpillar, Exxon Mobil, Johnson &amp; Johnson or Procter &amp; Gamble. Fill in the worksheet in words. No new numbers: if you want one, you have not found it in the filings yet, so write what you would need instead. Then come back to Step 3 and set n.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the advantage-period worksheet</span># filer: ______________________________
+#
+# evidence for a LONG advantage period
+#   (what keeps its returns above the cost of capital, and since when?)
+#   1. ____________________________________________
+#   2. ____________________________________________
+#
+# evidence for a SHORT advantage period
+#   (what could erode those returns, and how fast?)
+#   1. ____________________________________________
+#   2. ____________________________________________
+#
+# the base rate: top-to-bottom CFROI spread fell from 18 to 9 points in 10 years.
+#   does my evidence beat that, match it, or fall short of it? ______________
+#
+# n I choose (5, 10 or 15) and the one sentence why: ______________________
+# what I would have to see to shorten it: _________________________________</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep n honest by keeping it visible.</strong> The advantage period is the input most often set to the default and never mentioned. Wherever your value travels, the sentence travels with it, and the worksheet sits behind the sentence. If someone asks "why ten years?", the answer is a page of evidence, not "that is what the template had".</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before Analyst session 9</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Finish the worksheet</strong> for a second filer, chosen to be as different from the first as you can. Note where the two worksheets disagree about n and why.</li>
+      <li><strong>Re-run Step 2 on another base</strong> from your Analyst session 2 work. Write one line on whether the extra five years add more or less than for P&amp;G, and which input explains it. Your numbers will differ.</li>
+      <li><strong>Change the growth rate in the loop</strong> and watch the increments. Write one sentence on when a longer advantage period starts to matter a lot, and why that is exactly when the claim needs the most evidence.</li>
+      <li><strong>Find the qualitative version</strong> in your own words: rewrite Buffett's "favorable long-term prospects" criterion as three questions you would ask management, without naming any number.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Analyst session 8 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · In a two-stage DCF, what is the competitive advantage period?</p>
+      <button class="qopt" type="button">A · The number of years until the company's share count stops growing</button>
+      <button class="qopt" type="button">B · How long the business keeps earning returns above its cost of capital, which shows up as the growth years and how fast growth fades</button>
+      <button class="qopt" type="button">C · The terminal growth rate, because it lasts forever</button>
+      <button class="qopt" type="button">D · The years over which owner earnings are averaged to build the base</button>
+      <p class="qwhy">Growth only adds value while reinvestment earns more than it costs. The advantage period is how long that lasts, and in the model it lives in n and the fade, not in the base or the terminal rate.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">2 · The Base Rate Book sorted companies into CFROI quintiles relative to the median. What happened to the top-to-bottom spread over ten years?</p>
+      <button class="qopt" type="button">A · It closed completely, because competition removes all excess returns</button>
+      <button class="qopt" type="button">B · It stayed at 18 points, because good businesses stay good</button>
+      <button class="qopt" type="button">C · It shrank from 18 to 9 percentage points: modest regression toward the mean, which does not need competition as its cause</button>
+      <button class="qopt" type="button">D · It widened, because the best companies compound their lead</button>
+      <p class="qwhy">Half the gap went in a decade, on average. The best stayed better, by half as much. Luck in any one year's return is enough to produce regression even with no rival at all.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">3 · On P&amp;G's rung-3 base at 5 percent growth and a 9 percent rate, going from 10 to 15 growth years raises the value from 95.16 to 101.31, about 6 dollars. Why so little?</p>
+      <button class="qopt" type="button">A · The function has a bug that caps the growth years at ten</button>
+      <button class="qopt" type="button">B · P&amp;G has no moat, so the model ignores the extra years</button>
+      <button class="qopt" type="button">C · Owner earnings stop growing after year ten in every model</button>
+      <button class="qopt" type="button">D · Years 11 to 15 arrive far in the future and are discounted at 9 percent, growth of 5 percent does not outrun that, and the terminal already grows at 2.5 percent, so the extra years only swap 2.5 for 5 percent in distant years</button>
+      <p class="qwhy">With growth below the discount rate, each later year is worth less today, and the terminal was already giving the business growth. The model says nothing about P&amp;G's actual moat; it shows what the assumption is worth.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">CFROI quintiles relative to the median; top-to-bottom spread 18 to 9 points over 10 years; regression without competition as its cause; about one-half of companies gone within ten years of listing; earnings growth not very persistent</span><span class="note">Mauboussin, M., Callahan, D. and Majd, D., "The Base Rate Book", Credit Suisse, 2016 (read at source, hosted copy)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The four criteria, including "favorable long-term prospects", as the qualitative form of the advantage period</span><span class="note">Buffett, W., Berkshire Hathaway shareholder letter, 1977 (read at source)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">P&amp;G rung-3 base 4.998525 (5.00); values 87.76, 95.16 and 101.31 for 5, 10 and 15 growth years; 81.95 to 113.24 across the discount rate; increments 7.41 and 6.15 modelled</span><span class="note">SEC EDGAR XBRL company facts, read from a public mirror; computed, with the values modelled at the stated assumptions</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Reinvestment equals growth divided by return on capital</span><span class="note">Damodaran, A., valuation class slides, terminal value session, NYU Stern, 2023 (read at source); named, taught in Analyst session 3</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Moats as economics: network effects, switching costs, scale</span><span class="note">Taught in Economics: games and moats; linked, not re-taught</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 8 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>A moat is a number of years</b><span>How long returns stay above the cost of capital.</span></div>
+      <div class="cheat-item"><b>Where it lives</b><span>The growth years n and the fade. Not the base, not the terminal.</span></div>
+      <div class="cheat-item"><b>The base rate</b><span>CFROI spread, top to bottom: 18 points to 9 in ten years.</span></div>
+      <div class="cheat-item"><b>Regression needs no rival</b><span>Luck in one year's return does not repeat.</span></div>
+      <div class="cheat-item"><b>What n is worth here</b><span>P&amp;G: 87.76, 95.16, 101.31 for 5, 10, 15 years. Each five adds less.</span></div>
+      <div class="cheat-item"><b>Evidence before n</b><span>Write why it is long or short. Nothing here measures a moat.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You now have a value with its growth path, its discount rate, its terminal and its advantage period all written in one sentence, and a worksheet behind the advantage period. Analyst session 9 turns all of it into a memo: the case in a page, and, before anything else, the specific things that would prove it wrong, written down while you are still calm enough to mean them.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Analyst session 8 of 10 · learn-value-investing-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p7-how-often-growth-lasts.html">← Prev: How often fast growth lasts</a> &nbsp;·&nbsp; <a href="p9-the-memo.html">Next: A memo that says what would prove it wrong →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

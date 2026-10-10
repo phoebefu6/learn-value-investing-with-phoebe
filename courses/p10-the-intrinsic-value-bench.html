@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 10 of 10. The intrinsic value bench: four companies' real 10-K figures, a forecast ladder checked against what the filings later showed, an anti-lever that misses by two orders of magnitude, a break button, and a margin of safety against a price you type. Educational, not investment advice.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The intrinsic value bench - learn value investing with phoebe">
+<meta property="og:description" content="Analyst session 10 of 10. Every number recomputed in your browser from real filings; the anti-lever misses by 19,614.8 percent. Educational, not investment advice.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/courses/p10-the-intrinsic-value-bench.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The intrinsic value bench - learn value investing with phoebe">
+<meta name="twitter:description" content="Analyst session 10 of 10. A ladder checked against the filings, an anti-lever, a break button, a price you type.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 10 · The intrinsic value bench - learn value investing with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-value-investing-with-phoebe</a> / Analyst session 10 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Value Investing with Phoebe · Analyst session 10 of 10</div>
+    <h1>The intrinsic value <span class="accent">bench</span></h1>
+    <p class="sub">Nine sessions have built one machine. Tonight you run it. The bench reads four companies' real annual figures, stands in a past year, forecasts the years that followed with five different rules, and checks every forecast against what the filings later showed. Then it values each company today on the rule you pick, prints the value as a range, and measures a margin of safety against a price you type. There is an anti-lever, the rule a hopeful analyst reaches for, and it misses by two orders of magnitude. There is a break button that sets terminal growth equal to the discount rate, where the arithmetic has no answer and the bench says so. Educational, not investment advice.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Bench night</span>
+      <span class="chip audience">Analysts, and anyone who has to defend a valuation in a room</span>
+      <span class="chip audience">Browser only, no code needed</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-14 · Reading the ladder</span>
+      <span class="a3" style="flex:6">14-40 · The bench, then the sentence</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">A valuation you cannot break is one you do not understand. Everything on the bench is computed in your browser from the same four companies' 10-K facts that Analyst session 1 read: net income, depreciation and amortisation, capital spending and shares, fifteen to nineteen fiscal years each. Nothing is stored output. Move a control and the engine recomputes; pick the anti-lever and watch the miss; press the break button and watch the value disappear.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Bench = every number computed in your browser</span>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Educational, not investment advice.</strong> The bench never shows a market price. The only price on it is one you type, and the value it prints depends on four inputs you choose. A value per share from this bench is an exercise in reasoning, not a recommendation about any company.</p>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A ladder you have checked against real outcomes, with the finding stated as the data gave it; the anti-lever you can now name when somebody proposes it; the reason a terminal growth rate at or above the discount rate has no value; and one sentence for a meeting that carries a range, the growth a price implies, and what would prove you wrong.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the five rungs and what the filings later showed</span>
+      <h2>Reading the ladder</h2>
+      <span class="tag concept">8 min live</span>
+    </div>
+    <p class="lede">Stand in fiscal 2020 (2021 for Procter &amp; Gamble, whose year ends in June), with only the years before. Forecast average owner earnings per share for the next five years with each rule, then compare with what the filings showed. The miss is the forecast minus the outcome, as a share of the outcome, averaged across the four companies without signs.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn ladder with five rungs, mean absolute miss across four companies, five-year hold-out. Rung 1 last year's earnings, 70.4 percent. Rung 2 five-year owner earnings, 47.4 percent, the lowest. Rung 3 ten-year owner earnings, 50.2 percent. Rung 4 ten-year with a growth fade, 47.7 percent. The anti-lever, extrapolate the best year's growth, 19,614.8 percent, drawn in red off the top. A side note says every honest rung undershot because owner earnings rose after 2020.">
+        <defs>
+          <filter id="vp10aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="97" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp10aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp10aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp10aH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp10aL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp10aS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp10aB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp10aR { font: 800 12px Inter, sans-serif; fill: #991B1B; }
+          .vp10aV { font: 800 17px Inter, sans-serif; fill: #1C3628; }
+          .vp10aW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp10aX { font: 800 17px Inter, sans-serif; fill: #FFFFFF; }
+        </style>
+
+        <text class="vp10aH" x="30" y="26">FIVE RULES, ONE HELD-OUT FUTURE</text>
+        <text class="vp10aS" x="276" y="26">mean miss across four companies, last five fiscal years held out · the bench recomputes these</text>
+
+        <g filter="url(#vp10aSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M120 330 L120 50" stroke-width="3"/>
+          <path d="M490 330 L490 50" stroke-width="3"/>
+          <rect x="120" y="290" width="370" height="28" rx="6" transform="rotate(-0.4 305 304)" fill="url(#vp10aHc)"/>
+          <rect x="120" y="232" width="370" height="28" rx="6" transform="rotate(0.3 305 246)" fill="#93701C" stroke="#93701C"/>
+          <rect x="120" y="174" width="370" height="28" rx="6" transform="rotate(-0.3 305 188)" fill="#EEF5F0"/>
+          <rect x="120" y="116" width="370" height="28" rx="6" transform="rotate(0.4 305 130)" fill="#EEF5F0"/>
+          <rect x="120" y="58" width="370" height="28" rx="6" transform="rotate(-0.2 305 72)" fill="#FEF2F2" stroke="#991B1B"/>
+          <!-- a magnifier doodle -->
+          <circle cx="66" cy="200" r="15"/>
+          <path d="M77 211 L94 228" stroke-width="3"/>
+          <rect x="540" y="58" width="310" height="260" rx="10" transform="rotate(0.3 695 188)" fill="#FFFFFF" stroke="#C8D6CC"/>
+        </g>
+
+        <text class="vp10aL" x="134" y="309">1 · last year's earnings</text>
+        <text class="vp10aV" x="476" y="311" text-anchor="end">70.4%</text>
+        <text class="vp10aW" x="134" y="251">2 · five-year owner earnings</text>
+        <text class="vp10aX" x="476" y="253" text-anchor="end">47.4%</text>
+        <text class="vp10aL" x="134" y="193">3 · ten-year owner earnings</text>
+        <text class="vp10aV" x="476" y="195" text-anchor="end">50.2%</text>
+        <text class="vp10aL" x="134" y="135">4 · ten-year, growth fading</text>
+        <text class="vp10aV" x="476" y="137" text-anchor="end">47.7%</text>
+        <text class="vp10aR" x="134" y="77">best year's growth, compounded</text>
+        <text class="vp10aR" x="476" y="77" text-anchor="end">19,614.8%</text>
+
+        <text class="vp10aH" x="558" y="84">WHAT THE DATA SHOWED</text>
+        <text class="vp10aS" x="558" y="108">Normalising beat last year's earnings,</text>
+        <text class="vp10aS" x="558" y="124">mostly because 2020 was a bad year</text>
+        <text class="vp10aS" x="558" y="140">to start from: Exxon lost money.</text>
+        <text class="vp10aS" x="558" y="166">Every honest rung undershot. Owner</text>
+        <text class="vp10aS" x="558" y="182">earnings for all four rose after 2020,</text>
+        <text class="vp10aS" x="558" y="198">and no average of the past saw it.</text>
+        <text class="vp10aS" x="558" y="224">Hold out four years instead of five</text>
+        <text class="vp10aS" x="558" y="240">and last year's earnings win. The</text>
+        <text class="vp10aS" x="558" y="256">ranking depends on where you stand.</text>
+        <text class="vp10aR" x="558" y="286">The best single year is a rebound,</text>
+        <text class="vp10aR" x="558" y="302">and a rebound is not a trend.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the brass rung won this hold-out by a hair; the red one lost by a factor of four hundred</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What each rung assumes, and why the anti-lever explodes<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Rung 1</strong> takes last year's net income per share and holds it flat: no normalising, no capex. <strong>Rung 2</strong> holds the five-year average of owner earnings flat. <strong>Rung 3</strong> holds the ten-year average flat, usually a whole cycle. <strong>Rung 4</strong> starts from rung 3 and grows at half the business's own past growth, fading to 2.5 percent over five years: the conservative growth fade from Analyst session 7.</p>
+        <p><strong>The anti-lever</strong> starts from last year's owner earnings and compounds the single best year-on-year growth of the previous ten. On these filings the best year is always a rebound from a trough: Johnson &amp; Johnson's 2018 over its 2017 (+409.7 percent), Procter &amp; Gamble's 2020 over 2019 (+271.7 percent), Caterpillar's 2018 over 2017 (+179.4 percent), Exxon Mobil's 2016 over 2015 (+82.3 percent). Compounding a rebound for five years produces forecasts tens or hundreds of times the outcome. Nobody types "+409.7 percent" into a model on purpose; they type "the growth we saw last year" after a good year, and it is the same mistake at a smaller scale.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the honest finding is "it depends on where you stand"<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Hold out three years and the five-year rung wins again (28.4 percent mean miss, against 39.7 for last year's earnings). Hold out four and last year's earnings win (26.8 percent, against 42.1 for the five-year rung), because the starting year becomes 2021, a strong one. The ten-year rung is never best on these four companies: its average drags in the 2015 to 2017 slump. Four companies and three hold-outs is a small sample, and it is a sample from a period when large-company earnings rose. The defensible lesson is narrower than "normalise and you win": starting from one year makes you hostage to that year, and averaging protects you from a bad start without telling you anything about the future.</p>
+        <p>That is the same lesson Analyst session 7 draws from the Base Rate Book: forecasts drawn from the past are too narrow, and the honest response is a wider range, not a cleverer average.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="section" id="bench">
+    <div class="section-kicker">
+      <span class="klabel">Build-along · the bench</span>
+      <h2>Value four companies, and try to break it</h2>
+      <span class="tag demo">★ 20 min · the main event</span>
+    </div>
+    <p class="lede">Work it in order. In panel A, pick each rung for each company and read the forecast against the filings, then press the anti-lever and read the miss. Change the hold-out from five years to four and watch the winner change. In panel B, keep rung 3 and read the value and its range at the default inputs: 9 percent discount rate, 10 growth years, 5 percent growth, 2.5 percent terminal growth. Press the break button. In panel C, type a test price of your own and read the margin of safety and the growth that price implies. Say out loud what changed each time.</p>
+
+    <div id="vi-bench"></div>
+
+    <div class="callout tip">
+      <p><strong>Read the tags.</strong> Readouts marked "computed" come straight from the filings: owner earnings, outcomes, misses. Readouts marked "modelled" are arithmetic under inputs you chose: values, ranges, margins, implied growth. A modelled number is only as good as the four sliders under it.</p>
+    </div>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two hand-drawn panels. Left: a two-stage valuation as ten shrinking bars for the growth years followed by a long tail for every year after, labelled terminal value, 57 percent of the total at the default inputs. Right: the break, where terminal growth equals the discount rate; the tail bars stop shrinking and run off the edge, labelled no value, the sum does not converge.">
+        <defs>
+          <filter id="vp10bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="103" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp10bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp10bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp10bH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp10bL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp10bS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp10bB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp10bR { font: 800 11px Inter, sans-serif; fill: #991B1B; }
+          .vp10bN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp10bH" x="30" y="26">WHY THE TAIL CARRIES MOST OF THE VALUE, AND WHEN IT HAS NONE</text>
+
+        <g filter="url(#vp10bSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 220 L420 220"/>
+          <rect x="50" y="146" width="16" height="74" rx="2" fill="#2D5240" stroke="#2D5240"/>
+          <rect x="72" y="149" width="16" height="71" rx="2" fill="#2D5240" stroke="#2D5240"/>
+          <rect x="94" y="152" width="16" height="68" rx="2" fill="#2D5240" stroke="#2D5240"/>
+          <rect x="116" y="155" width="16" height="65" rx="2" fill="#2D5240" stroke="#2D5240"/>
+          <rect x="138" y="157" width="16" height="63" rx="2" fill="#2D5240" stroke="#2D5240"/>
+          <rect x="160" y="160" width="16" height="60" rx="2" fill="#2D5240" stroke="#2D5240"/>
+          <rect x="182" y="162" width="16" height="58" rx="2" fill="#2D5240" stroke="#2D5240"/>
+          <rect x="204" y="164" width="16" height="56" rx="2" fill="#2D5240" stroke="#2D5240"/>
+          <rect x="226" y="166" width="16" height="54" rx="2" fill="#2D5240" stroke="#2D5240"/>
+          <rect x="248" y="168" width="16" height="52" rx="2" fill="#2D5240" stroke="#2D5240"/>
+          <path d="M272 170 C320 186 360 204 412 214" stroke="#93701C" stroke-width="3"/>
+          <path d="M272 220 L272 170" stroke="#93701C"/>
+          <!-- right panel -->
+          <path d="M470 220 L850 220"/>
+          <rect x="480" y="146" width="16" height="74" rx="2" fill="#FEF2F2" stroke="#991B1B"/>
+          <rect x="502" y="146" width="16" height="74" rx="2" fill="#FEF2F2" stroke="#991B1B"/>
+          <rect x="524" y="146" width="16" height="74" rx="2" fill="#FEF2F2" stroke="#991B1B"/>
+          <rect x="546" y="146" width="16" height="74" rx="2" fill="#FEF2F2" stroke="#991B1B"/>
+          <rect x="568" y="146" width="16" height="74" rx="2" fill="#FEF2F2" stroke="#991B1B"/>
+          <rect x="590" y="146" width="16" height="74" rx="2" fill="#FEF2F2" stroke="#991B1B"/>
+          <path d="M616 146 L760 146" stroke="#991B1B" stroke-dasharray="6 5"/>
+          <path d="M770 146 L840 146" stroke="#991B1B" marker-end="url(#vp10bAr)"/>
+        </g>
+
+        <text class="vp10bL" x="50" y="70">a value: growth years, then a tail</text>
+        <text class="vp10bS" x="50" y="88">each later year worth less today</text>
+        <text class="vp10bS" x="50" y="240">years 1 to 10: 43%</text>
+        <text class="vp10bB" x="290" y="150">the tail: 57%</text>
+        <text class="vp10bS" x="290" y="240">every year after</text>
+        <text class="vp10bR" x="480" y="70">the break: terminal growth = discount rate</text>
+        <text class="vp10bS" x="480" y="88">each year worth exactly as much as the last</text>
+        <text class="vp10bR" x="620" y="132">no value: the sum never stops</text>
+        <text class="vp10bS" x="480" y="240">the bench prints the reason, not a number</text>
+
+        <text class="vp10bN" x="30" y="282">At 9 percent, 10 years of 5 percent growth, then 2.5 percent: 57.0 percent of any base's value comes from beyond year 10.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - most of a value lives in the years nobody can forecast, and at the break there is no value at all</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What the break button proves<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Press it. Terminal growth jumps to equal the discount rate, and panel B stops printing a value. The tail of a two-stage model is a growing perpetuity, worth next year's cash divided by the gap between the discount rate and the growth rate. As the gap closes the value climbs without limit, and at zero gap the formula divides by zero. Above it, the formula would return a negative number, which a careless spreadsheet happily displays. The bench refuses both and says why.</p>
+        <p>The lesson goes beyond arithmetic. Damodaran's rule for the stable period is that growth there cannot exceed the growth of the economy, and the riskfree rate is a simple proxy for the economy's nominal growth. A terminal growth rate near the discount rate is a claim that the business outgrows the economy forever. Slide terminal growth to 4.5 and 6.5 percent before pressing the button and watch the value run away first: the model was already telling you something was wrong.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the anti-lever's values run to millions a share<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Pick the anti-lever, then look at panel B. The growth slider is replaced by the best year's growth, and Caterpillar's value at the defaults is about 3,756,447.17 dollars a share, with over 90 percent of it in the tail. It is not a bug. It is ten years of +179.4 percent compounding, followed by a perpetuity on the result. The bench shows it so that the next time a model's growth input is "last year's", you can ask which last year.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the range and the price you type</span>
+      <h2>From one value to the sentence</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">On rung 3 at the default inputs the bench values Procter &amp; Gamble at about 95.16 dollars a share, with a range of 70.84 to 132.39 when the discount rate moves one point either way and growth two points either way. The range is the honest output. The price you type turns it into a question: what would the business have to do to be worth this?</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn number line for Procter and Gamble on rung 3 at default inputs. A hatched band from 70.84 to 132.39 dollars is the range, with the central value 95.16 marked. Two test prices are drawn as brass tags: half the value, 47.58, which implies minus 4.31 percent growth a year for ten years, and twice the value, 190.33, which implies plus 14.17 percent a year. A note says the doubling price asks for nearly three times the growth the central value assumes.">
+        <defs>
+          <filter id="vp10cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="109" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp10cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp10cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp10cH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp10cL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp10cS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp10cB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp10cV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp10cA { font: 700 11px Inter, sans-serif; fill: #2D5240; letter-spacing: .05em; }
+          .vp10cN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp10cH" x="30" y="26">PROCTER &amp; GAMBLE, RUNG 3, DEFAULT INPUTS</text>
+        <text class="vp10cS" x="360" y="26">test prices you type are not market prices; these two are half and double the value</text>
+
+        <g filter="url(#vp10cSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- axis 0..200 dollars over x 60..820: 3.8 px per dollar -->
+          <path d="M60 170 L830 170" stroke="#2D5240" marker-end="url(#vp10cAr)"/>
+          <rect x="329" y="140" width="234" height="30" rx="6" transform="rotate(-0.3 446 155)" fill="url(#vp10cHc)"/>
+          <path d="M422 128 L422 182" stroke-width="3"/>
+          <path d="M241 182 L241 214"/>
+          <path d="M783 182 L783 214"/>
+          <path d="M221 214 L262 214 L272 228 L262 242 L221 242 Z" fill="#F8F0DC" stroke="#93701C"/>
+          <path d="M763 214 L804 214 L814 228 L804 242 L763 242 Z" fill="#93701C" stroke="#93701C"/>
+        </g>
+
+        <text class="vp10cA" x="60" y="190">$0</text>
+        <text class="vp10cA" x="800" y="160">$200</text>
+        <text class="vp10cS" x="329" y="132" text-anchor="middle">70.84</text>
+        <text class="vp10cS" x="563" y="132" text-anchor="middle">132.39</text>
+        <text class="vp10cV" x="422" y="118" text-anchor="middle">95.16</text>
+        <text class="vp10cL" x="446" y="98" text-anchor="middle">the range: rate +/- 1 point, growth +/- 2</text>
+        <text class="vp10cB" x="241" y="262" text-anchor="middle">test price 47.58</text>
+        <text class="vp10cS" x="241" y="278" text-anchor="middle">implies -4.31% a year</text>
+        <text class="vp10cB" x="700" y="262" text-anchor="middle">test price 190.33</text>
+        <text class="vp10cS" x="700" y="278" text-anchor="middle">implies +14.17% a year for 10 years</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the reverse is scale-free: any rung-3 base doubles to 14.17 percent and halves to -4.31 at these inputs</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The margin of safety against the low end, not the middle<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Panel C prints two margins. The first is against the central value. The second, against the low end of the range, is the one Owner session 3 asks for: the case you must survive. A price can carry a comfortable margin against the middle and none against the low end, and the bench colours the verdict accordingly.</p>
+        <p>The third readout, the growth the price implies, is the reverse discounted cash flow from Analyst session 5. Instead of asking what the business is worth, it asks what growth would make your typed price fair, with the discount rate, the growth years and terminal growth held where you set them. Doubling the price asks for 14.17 percent a year for ten years against the 5 percent the central value assumed. Analyst session 7's base rates say how often large companies have managed that.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why every rung 3 base gives the same implied growth<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Value is proportional to the starting owner earnings when the other inputs are fixed. Doubling the price relative to the value therefore asks for the same growth whichever company you pick: 14.17 percent at these inputs, and -4.31 percent for half. That is why the reverse question is useful across businesses of different sizes, and why it is only as good as the starting point it multiplies.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Exxon Mobil, three starting points.</strong> Last year's net income per share was 6.70 dollars, the five-year owner earnings average 8.87, the ten-year 6.16. At the default inputs those give values of 127.56, 168.83 and 117.34 dollars a share. The five-year average sits highest because it includes 2022's 14.60, the best year in the run. Which starting point is right is not a calculation; it is a judgment about which years were normal, and Analyst session 2 is where it is argued.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the sentence for the meeting</span>
+      <h2>One sentence that can be proved wrong</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A valuation reaches a meeting as one sentence. The sentence that survives carries a range, the starting point and why, the growth a price implies, and what would prove it wrong. It does not carry a value to the cent, and it does not carry a recommendation.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn index card with the sentence for the meeting split into four labelled parts: the range, the starting point and why, what a test price implies, and what would prove it wrong. Each part has an arrow to the bench panel that produced it: A for the starting point, B for the range, C for the implied growth, and the memo from Analyst session 9 for the kill criterion.">
+        <defs>
+          <filter id="vp10dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="113" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp10dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp10dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp10dH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp10dL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp10dS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp10dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp10dN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp10dH" x="30" y="26">THE SENTENCE, AND WHERE EACH PART CAME FROM</text>
+
+        <g filter="url(#vp10dSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="560" height="190" rx="10" transform="rotate(-0.4 310 145)" fill="#FFFFFF"/>
+          <rect x="48" y="66" width="250" height="74" rx="6" fill="#EEF5F0"/>
+          <rect x="322" y="66" width="250" height="74" rx="6" fill="#EEF5F0"/>
+          <rect x="48" y="152" width="250" height="74" rx="6" fill="#EEF5F0"/>
+          <rect x="322" y="152" width="250" height="74" rx="6" fill="#93701C" stroke="#93701C"/>
+          <path d="M600 100 L680 76" marker-end="url(#vp10dAr)"/>
+          <path d="M600 130 L680 126" marker-end="url(#vp10dAr)"/>
+          <path d="M600 170 L680 176" marker-end="url(#vp10dAr)"/>
+          <path d="M600 204 L680 226" marker-end="url(#vp10dAr)"/>
+        </g>
+
+        <text class="vp10dH" x="62" y="88">1 · the starting point</text>
+        <text class="vp10dS" x="62" y="108">ten-year owner earnings, $5.00,</text>
+        <text class="vp10dS" x="62" y="124">because one year is a hostage</text>
+        <text class="vp10dH" x="336" y="88">2 · the range</text>
+        <text class="vp10dS" x="336" y="108">$70.84 to $132.39 at 9 percent,</text>
+        <text class="vp10dS" x="336" y="124">5 percent growth for ten years</text>
+        <text class="vp10dH" x="62" y="174">3 · what a price implies</text>
+        <text class="vp10dS" x="62" y="194">a test price at double the value</text>
+        <text class="vp10dS" x="62" y="210">needs 14.17 percent a year</text>
+        <text class="vp10dW" x="336" y="174">4 · what proves it wrong</text>
+        <text class="vp10dW" x="336" y="194">owner earnings below the</text>
+        <text class="vp10dW" x="336" y="210">ten-year average for 3 years</text>
+
+        <text class="vp10dL" x="692" y="80">panel A</text>
+        <text class="vp10dL" x="692" y="130">panel B</text>
+        <text class="vp10dL" x="692" y="180">panel C</text>
+        <text class="vp10dL" x="692" y="230">the memo, A9</text>
+
+        <text class="vp10dN" x="30" y="262">Procter &amp; Gamble on rung 3 as the worked case. The fourth box is a judgment you write, not a bench output.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three of the four parts come off the bench; the brass one is yours, and it is the one that makes the sentence testable</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Write it for one company, out loud<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Pick one company on the bench. Say: "Starting from ten-year owner earnings of <em>x</em>, because <em>reason</em>, the business is worth between <em>low</em> and <em>high</em> at <em>inputs</em>. A price of <em>p</em> would need <em>g</em> percent growth for ten years. I would change my mind if <em>kill criterion</em>." Every blank except the reason and the kill criterion comes off the bench. The reason and the kill criterion are what the memo in Analyst session 9 is for.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the bench cannot tell you<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>It cannot tell you which years were normal, how much of capex was growth, whether a moat will hold, what discount rate fits the risk, or whether cheap-looking companies as a group beat dear ones. That last question is genuinely disputed: Fama and French found the value premium much lower after 1991 than before but could not statistically distinguish the two periods (reported), and others argue the shortfall came from value stocks simply getting cheaper (reported). The bench is a reasoning tool for one business at a time. It makes no claim about any strategy.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>After the bench</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Run every rung for every company</strong> at the five-year hold-out and write down which rung missed least for each one. Is the overall winner the winner for each company?</li>
+      <li><strong>Find the input that moves value most</strong> for one company: move each slider one step from the default and record the value. Rank the four.</li>
+      <li><strong>Type three test prices</strong> for one company, below the low end, inside the range and above the high end, and write the margin and implied growth for each.</li>
+      <li><strong>Write the sentence</strong> for one company with all four parts, including a kill criterion you would actually check next year.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Analyst session 10 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · With the last five fiscal years held out, the five-year owner-earnings rung missed by 47.4 percent on average and last year's earnings by 70.4 percent. What is the honest reading?</p>
+      <button class="qopt" type="button">A · Five-year averages forecast earnings well</button>
+      <button class="qopt" type="button">B · Last year's earnings are always the worst starting point</button>
+      <button class="qopt" type="button">C · Averaging protected against a bad starting year, 2020, but every honest rung undershot the rise that followed, and with four years held out last year's earnings won instead</button>
+      <button class="qopt" type="button">D · The bench proves normalising beats the market</button>
+      <p class="qwhy">The ranking depends on where you stand, and all honest rungs were far too low because owner earnings for all four companies rose after 2020. The narrow lesson is that one year makes you hostage to that year.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · You set terminal growth equal to the discount rate. Why does the bench print no value?</p>
+      <button class="qopt" type="button">A · The tail is a growing perpetuity worth next year's cash divided by the discount rate minus growth; at zero gap it never converges, and above it the formula turns meaningless</button>
+      <button class="qopt" type="button">B · The bench has a bug at that setting</button>
+      <button class="qopt" type="button">C · Terminal growth must be zero by rule</button>
+      <button class="qopt" type="button">D · The value is too large to display</button>
+      <p class="qwhy">Each later year would be worth as much today as the one before, forever. Damodaran's cap, stable growth no faster than the economy, keeps a model well away from that edge.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">3 · On rung 3 at the default inputs, a test price equal to twice the central value implies 14.17 percent growth a year for ten years. What does that tell you?</p>
+      <button class="qopt" type="button">A · That the company will grow at 14.17 percent</button>
+      <button class="qopt" type="button">B · That the price is wrong</button>
+      <button class="qopt" type="button">C · That the central value is wrong</button>
+      <button class="qopt" type="button">D · What the business would have to achieve for that price to be fair, at your other inputs; base rates then say how often large companies have sustained such growth</button>
+      <p class="qwhy">A reverse discounted cash flow turns a price into an expectation you can test. It forecasts nothing; it tells you what you would be betting on.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Every bench number: the ladder at three hold-outs, the per-company misses, values, ranges, implied growth</span><span class="note">Computed in the browser from SEC EDGAR XBRL company facts (read from a public mirror, spot-checked against the SEC's API); a Python reference agrees with the browser engine on 562 values</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Owner earnings, and its approximation here</span><span class="note">Buffett, W., Berkshire Hathaway shareholder letter, 1986, appendix (read at source); all-capex approximation labelled</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Stable growth cannot exceed the growth of the economy</span><span class="note">Damodaran, A., valuation class slides, terminal value session, NYU Stern, 2023 (read at source)</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Reverse discounted cash flow</span><span class="note">Mauboussin, M. and Rappaport, A., "Expectations Investing" (reported); the arithmetic is standard</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Value versus growth as a strategy</span><span class="note">Fama and French 2020 (reported) and Arnott et al. 2021 (reported); taught as a disagreement, not claimed</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 10 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Check rules against outcomes</b><span>Stand in the past, forecast, compare with what the filings showed.</span></div>
+      <div class="cheat-item"><b>Where you stand decides the winner</b><span>Five-year won at 3 and 5 years held out; last year's won at 4.</span></div>
+      <div class="cheat-item"><b>The best year is a rebound</b><span>Compounding it missed by 19,614.8 percent on average.</span></div>
+      <div class="cheat-item"><b>Most value is in the tail</b><span>57.0 percent beyond year 10 at the defaults. At g = r, none at all.</span></div>
+      <div class="cheat-item"><b>Margin against the low end</b><span>The case you must survive, not the middle.</span></div>
+      <div class="cheat-item"><b>The four-part sentence</b><span>Starting point and why, range, implied growth, what proves it wrong.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>This is the last Analyst session. If you came straight here, the Owner track builds the habits underneath the bench without any code, starting with <a href="a1-you-are-buying-a-business.html">You are buying a business</a>. If you have done both tracks, run the bench on a company you know by adding its filings to your own copy of the reader from Analyst session 1.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Analyst session 10 of 10 · learn-value-investing-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p9-the-memo.html">← Prev: A memo that says what would prove it wrong</a> &nbsp;·&nbsp; <a href="../index.html">Course home</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/vi-sample.js?v=2"></script>
+<script src="../assets/vi-live.js?v=2"></script>
+<script src="../assets/vi-bench.js?v=3"></script>
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

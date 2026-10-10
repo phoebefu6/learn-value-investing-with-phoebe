@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 6 of 10. Sensitivity on a real valuation: move one input at a time and draw the tornado, then build the 3 x 3 grid of discount rate and growth for P&amp;G's ten-year owner earnings, read its range as the answer, and learn which input deserves the hardest argument.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Which input moves the answer - learn value investing with phoebe">
+<meta property="og:description" content="Analyst session 6 of 10. A tornado chart, a 3 x 3 sensitivity grid from 70.84 to 132.39, and the input to argue hardest, built in Python on P&amp;G's filings.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/courses/p6-which-input-moves-the-answer.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Which input moves the answer - learn value investing with phoebe">
+<meta name="twitter:description" content="Analyst session 6 of 10. One input at a time, then the grid, then the input to argue hardest.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 6 · Which input moves the answer - learn value investing with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-value-investing-with-phoebe</a> / Analyst session 6 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Value Investing with Phoebe · Analyst session 6 of 10</div>
+    <h1>Which input <span class="accent">moves the answer</span></h1>
+    <p class="sub">In Analyst session 4 you built a discounted cash flow for Procter &amp; Gamble and it printed 95.16 a share. That number rests on four inputs you chose: a 9 percent discount rate, 5 percent growth, ten years of it, and 2.5 percent after that. Tonight we push on each one. First one at a time, which draws a tornado. Then two at once, which draws a grid whose range, 70.84 to 132.39, is the honest output. Then the practical question every valuation meeting skips: with limited time, which input do you argue about hardest? No market prices, no tickers; the value is compared with nothing but itself.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Analyst</span>
+      <span class="chip audience">Analysts, finance and data people who have built a DCF and want to know how much to trust it</span>
+      <span class="chip audience">Python, standard library only</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Tornado, grid, the input to argue</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the grid in Python</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">You arrive with a working <code>dcf()</code> function from Analyst session 4 and, from Analyst session 5, the habit of running it backwards from a test price. Both treat the inputs as given. A professional valuation never does: before anyone looks at the value, they look at how far it moves when each input is pushed by an amount a reasonable colleague might argue for. The base tonight is P&amp;G's ten-year mean owner earnings, 5.00 a share (all-capex approximation, from 10-K facts), carried at its full precision of 4.998525 in the code. Every value on this page is modelled: arithmetic on that computed base under the inputs stated beside it.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone builds</span>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The value is not a target.</strong> 95.16, and every number in the grid, is what a two-stage model returns for one company's filed owner earnings under stated inputs. None of it says what anything should trade at, and nothing on this page says whether to buy, hold or sell.</p>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A tornado chart that ranks P&amp;G's four inputs by how far each moves the value, a 3 x 3 grid of discount rate and growth you can reproduce to the cent, the sentence that reports a valuation as a range rather than a point, and a short list of which input to argue first and what evidence to bring to that argument.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers one-at-a-time sensitivity</span>
+      <h2>One input at a time</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Hold everything at the default (discount rate 9 percent, 10 years of 5 percent growth, 2.5 percent terminal growth) and move a single input to a low and a high setting. Discount rate 8 and 10 percent; growth 3 and 7 percent; growth years 5 and 15; terminal growth 1.5 and 3.5 percent. Each pair of runs gives a low value and a high value. Stack the four pairs with the widest at the top and the picture looks like a tornado, which is what analysts call it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn tornado chart for P&amp;G, rung 3, around a default value of 95.16 a share. Widest at the top: discount rate 10 percent gives 81.95 and 8 percent gives 113.24. Then growth 3 percent 81.84, 7 percent 110.71. Then terminal growth 1.5 percent 87.47, 3.5 percent 105.65. Narrowest: growth years 5 gives 87.76, 15 gives 101.31.">
+        <defs>
+          <filter id="vp6aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp6aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp6aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp6aH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp6aL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp6aS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp6aB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp6aV { font: 800 14px Inter, sans-serif; fill: #1C3628; }
+          .vp6aA { font: 700 11px Inter, sans-serif; fill: #2D5240; }
+          .vp6aN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp6aH" x="30" y="24">ONE INPUT AT A TIME, P&amp;G RUNG 3</text>
+        <text class="vp6aS" x="290" y="24">left of the line: the setting that lowers value · right: the setting that raises it</text>
+        <text class="vp6aB" x="440" y="50" text-anchor="middle">default 95.16</text>
+
+        <g filter="url(#vp6aSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- scale 12 px per dollar, x 440 = 95.16 -->
+          <rect x="281" y="66" width="159" height="30" rx="4" transform="rotate(-0.4 360 81)" fill="#93701C" stroke="#93701C"/>
+          <rect x="440" y="66" width="217" height="30" rx="4" transform="rotate(0.4 548 81)" fill="#93701C" stroke="#93701C"/>
+          <rect x="280" y="116" width="160" height="30" rx="4" transform="rotate(0.3 360 131)" fill="url(#vp6aHc)"/>
+          <rect x="440" y="116" width="187" height="30" rx="4" transform="rotate(-0.3 533 131)" fill="#EEF5F0"/>
+          <rect x="348" y="166" width="92" height="30" rx="4" transform="rotate(-0.5 394 181)" fill="url(#vp6aHc)"/>
+          <rect x="440" y="166" width="126" height="30" rx="4" transform="rotate(0.5 503 181)" fill="#EEF5F0"/>
+          <rect x="351" y="216" width="89" height="30" rx="4" transform="rotate(0.4 395 231)" fill="url(#vp6aHc)"/>
+          <rect x="440" y="216" width="74" height="30" rx="4" transform="rotate(-0.4 477 231)" fill="#EEF5F0"/>
+          <path d="M440 58 L440 256" stroke-dasharray="5 5" stroke-width="1.6"/>
+          <!-- axis -->
+          <path d="M250 264 L670 264" stroke-width="1.6"/>
+          <path d="M258 260 L258 268 M378 260 L378 268 M498 260 L498 268 M618 260 L618 268" stroke-width="1.4"/>
+          <!-- doodle anchor: the pointer to the widest bar -->
+          <path d="M792 128 C780 104 760 90 728 84" marker-end="url(#vp6aAr)"/>
+        </g>
+
+        <text class="vp6aL" x="30" y="78">discount rate</text>
+        <text class="vp6aS" x="30" y="93">10% left · 8% right</text>
+        <text class="vp6aL" x="30" y="128">growth, years 1 to 10</text>
+        <text class="vp6aS" x="30" y="143">3% left · 7% right</text>
+        <text class="vp6aL" x="30" y="178">terminal growth</text>
+        <text class="vp6aS" x="30" y="193">1.5% left · 3.5% right</text>
+        <text class="vp6aL" x="30" y="228">growth years</text>
+        <text class="vp6aS" x="30" y="243">5 left · 15 right</text>
+
+        <text class="vp6aV" x="273" y="86" text-anchor="end">81.95</text>
+        <text class="vp6aV" x="665" y="86">113.24</text>
+        <text class="vp6aV" x="272" y="136" text-anchor="end">81.84</text>
+        <text class="vp6aV" x="635" y="136">110.71</text>
+        <text class="vp6aV" x="340" y="186" text-anchor="end">87.47</text>
+        <text class="vp6aV" x="574" y="186">105.65</text>
+        <text class="vp6aV" x="343" y="236" text-anchor="end">87.76</text>
+        <text class="vp6aV" x="522" y="236">101.31</text>
+
+        <text class="vp6aB" x="742" y="146">argue this first</text>
+
+        <text class="vp6aS" x="258" y="282" text-anchor="middle">80</text>
+        <text class="vp6aS" x="378" y="282" text-anchor="middle">90</text>
+        <text class="vp6aS" x="498" y="282" text-anchor="middle">100</text>
+        <text class="vp6aS" x="618" y="282" text-anchor="middle">110</text>
+        <text class="vp6aA" x="440" y="300" text-anchor="middle">value per share, dollars, modelled on P&amp;G's 5.00 ten-year owner earnings</text>
+
+        <text class="vp6aN" x="30" y="324">Each bar moves one input and holds the other three at the default. Brass is the widest swing at these inputs.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the discount rate swings the value furthest, and the cut to 8 percent adds more than the rise to 10 percent takes away</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading a tornado in four questions<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Which bar is widest?</strong> The discount rate: 81.95 to 113.24. Growth over the first ten years is a close second, 81.84 to 110.71. Terminal growth (87.47 to 105.65) and the number of growth years (87.76 to 101.31) move the value less at these settings.</p>
+        <p><strong>Is each bar lopsided?</strong> Yes. Three of the four reach further on the high side; only growth years leans the other way. Dropping the discount rate a point lifts the value more than raising it a point cuts it, because discounting compounds: every year's cash, and the terminal value most of all, is divided by a smaller number. Lopsided bars warn you that "plus or minus one point" is not plus or minus the same amount of value.</p>
+        <p><strong>Were the pushes fair?</strong> A tornado ranks inputs only as honestly as the low and high settings you chose. One point on the discount rate and two points on growth are the ranges the bench uses; if you think growth is far less certain than that, widen its push and the bars may swap order. Write the settings next to the chart, always.</p>
+        <p><strong>What does the bar not show?</strong> What happens when two inputs move together. That is Part 2.</p>
+        <p>Why a higher discount rate means a lower value at all, the price of waiting, is taught in <a href="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a5-money-inflation-and-interest.html">Economics Foundations session 5 ↗</a>; here we only measure how much it moves.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>One-at-a-time hides interactions<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Each tornado bar is computed with the other three inputs pinned at the default. Real disagreements rarely come one input at a time: a colleague who thinks P&amp;G deserves a lower discount rate often also thinks it will grow faster, because both views come from the same belief that the business is safer and stronger than you assume. Pinned bars cannot show what that combined view does.</p>
+        <p>The effects also do not simply add. Growth matters more when the discount rate is low, because the extra cash from faster growth is shrunk less on its way back to today. You will see it directly in the grid: at 8 percent, moving growth from 3 to 7 percent adds more value than the same move at 10 percent. A tornado is the right first look and the wrong last one.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>P&amp;G's own record against the 5 percent default.</strong> The default assumes owner earnings grow 5 percent a year for ten years. P&amp;G's filings show its owner earnings per share moving from a mean of 3.84 in the first five years of its run to 5.90 in the last five, about 3.1 percent a year over 14 years, in nominal dollars. That is close to the low end of the growth bar, not the middle. It does not prove the default wrong; it tells you which way the burden of proof runs before anyone argues for 7 percent.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the sensitivity grid</span>
+      <h2>The grid</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Take the two widest bars, the discount rate and growth, and move them together: three rates (8, 9 and 10 percent) against three growth rates (3, 5 and 7 percent), terminal growth and growth years held at 2.5 percent and ten. Nine runs, one table. The centre cell is 95.16, the number from Analyst session 4. The corners are what happens when both inputs sit at an edge at once, and the spread from the lowest corner to the highest is the range the bench reports.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn 3 by 3 heat grid of value per share for P&amp;G rung 3, terminal growth 2.5 percent, 10 growth years. Rows are discount rate, columns are growth. At 8 percent: 96.86, 113.24, 132.39. At 9 percent: 81.84, 95.16, 110.71. At 10 percent: 70.84, 81.95, 94.88. The four corner cells are outlined in brass. The range is 70.84 to 132.39.">
+        <defs>
+          <filter id="vp6bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp6bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp6bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp6bH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp6bL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp6bS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp6bB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp6bV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp6bW { font: 800 16px Inter, sans-serif; fill: #FFFFFF; }
+          .vp6bA { font: 700 11px Inter, sans-serif; fill: #2D5240; }
+          .vp6bN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp6bH" x="30" y="22">DISCOUNT RATE x GROWTH, P&amp;G RUNG 3</text>
+        <text class="vp6bS" x="330" y="22">value per share; terminal 2.5%, 10 growth years</text>
+        <text class="vp6bA" x="445" y="46" text-anchor="middle">growth, years 1 to 10</text>
+        <text class="vp6bL" x="315" y="62" text-anchor="middle">g 3%</text>
+        <text class="vp6bL" x="445" y="62" text-anchor="middle">g 5%</text>
+        <text class="vp6bL" x="575" y="62" text-anchor="middle">g 7%</text>
+        <text class="vp6bA" x="30" y="156">discount rate</text>
+        <text class="vp6bS" x="30" y="172">(rows)</text>
+        <text class="vp6bL" x="238" y="105" text-anchor="end">r 8%</text>
+        <text class="vp6bL" x="238" y="165" text-anchor="end">r 9%</text>
+        <text class="vp6bL" x="238" y="225" text-anchor="end">r 10%</text>
+
+        <g filter="url(#vp6bSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="250" y="70" width="130" height="60" transform="rotate(-0.3 315 100)" fill="#CFE0D5" stroke="#93701C" stroke-width="3.5"/>
+          <rect x="380" y="70" width="130" height="60" transform="rotate(0.3 445 100)" fill="#3E6B55"/>
+          <rect x="510" y="70" width="130" height="60" transform="rotate(-0.3 575 100)" fill="#1C3628" stroke="#93701C" stroke-width="3.5"/>
+          <rect x="250" y="130" width="130" height="60" transform="rotate(0.3 315 160)" fill="#EEF5F0"/>
+          <rect x="380" y="130" width="130" height="60" transform="rotate(-0.3 445 160)" fill="#CFE0D5"/>
+          <rect x="510" y="130" width="130" height="60" transform="rotate(0.3 575 160)" fill="#3E6B55"/>
+          <rect x="250" y="190" width="130" height="60" transform="rotate(-0.3 315 220)" fill="#FFFFFF" stroke="#93701C" stroke-width="3.5"/>
+          <rect x="380" y="190" width="130" height="60" transform="rotate(0.3 445 220)" fill="#EEF5F0"/>
+          <rect x="510" y="190" width="130" height="60" transform="rotate(-0.3 575 220)" fill="#CFE0D5" stroke="#93701C" stroke-width="3.5"/>
+          <!-- the range box -->
+          <rect x="680" y="84" width="180" height="84" rx="8" transform="rotate(0.6 770 126)" fill="#F8F0DC" stroke="#93701C"/>
+          <path d="M646 96 L672 110" marker-end="url(#vp6bAr)"/>
+        </g>
+
+        <text class="vp6bV" x="315" y="106" text-anchor="middle">96.86</text>
+        <text class="vp6bW" x="445" y="106" text-anchor="middle">113.24</text>
+        <text class="vp6bW" x="575" y="106" text-anchor="middle">132.39</text>
+        <text class="vp6bV" x="315" y="166" text-anchor="middle">81.84</text>
+        <text class="vp6bV" x="445" y="162" text-anchor="middle">95.16</text>
+        <text class="vp6bS" x="445" y="179" text-anchor="middle">default</text>
+        <text class="vp6bW" x="575" y="166" text-anchor="middle">110.71</text>
+        <text class="vp6bV" x="315" y="226" text-anchor="middle">70.84</text>
+        <text class="vp6bV" x="445" y="226" text-anchor="middle">81.95</text>
+        <text class="vp6bV" x="575" y="226" text-anchor="middle">94.88</text>
+
+        <text class="vp6bH" x="770" y="110" text-anchor="middle">THE RANGE</text>
+        <text class="vp6bV" x="770" y="134" text-anchor="middle">70.84 to 132.39</text>
+        <text class="vp6bS" x="770" y="154" text-anchor="middle">nine cases, one business</text>
+        <text class="vp6bS" x="684" y="196">top corner: r 8%, g 7%</text>
+        <text class="vp6bS" x="684" y="214">low corner: r 10%, g 3%</text>
+        <text class="vp6bB" x="684" y="236">darker = higher value</text>
+
+        <text class="vp6bS" x="250" y="274">brass outline = a corner: both inputs at an edge at the same time</text>
+
+        <text class="vp6bN" x="30" y="308">Read down a column: the discount rate. Read across a row: growth. Read the corners: the range you report.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the centre cell is the number from Analyst session 4; the corners are the answer you should actually report</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The range is the output<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A single DCF value invites the question "is that right?", which has no answer. A grid invites a better one: "which row and column do you believe, and why?" The output to carry out of the room is the sentence, not the cell: <strong>P&amp;G, 5.00 ten-year mean owner earnings (all-capex approximation), 10 years then 2.5 percent: 70.84 to 132.39 a share across discount rates of 8 to 10 percent and growth of 3 to 7 percent; 95.16 at 9 and 5.</strong></p>
+        <p>Read the grid three ways. <strong>Down a column</strong>, at 5 percent growth, the discount rate alone moves the value from 113.24 to 81.95, the same swing as the tornado's top bar. <strong>Across a row</strong>, at 9 percent, growth moves it from 81.84 to 110.71. <strong>Row against row</strong>, the interaction from the self-study card shows: at 8 percent the growth row spans 96.86 to 132.39, at 10 percent only 70.84 to 94.88. Growth is worth more when the discount rate is low.</p>
+        <p>Notice also that two cells nearly tie with the centre: 96.86 (8 percent, 3 percent growth) and 94.88 (10 percent, 7 percent). A lower rate and slower growth can land almost exactly where a higher rate and faster growth do. Two analysts can agree on the value and disagree about everything underneath it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the corners are not equally likely<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A grid draws nine cells the same size, which quietly suggests nine equally likely outcomes. They are not. The top corner, 132.39, needs the cheapest money and the fastest growth at the same time. For P&amp;G, whose owner earnings grew about 3.1 percent a year across its filed run, 7 percent for a decade is already a stretch before the discount rate is touched. The low corner, 70.84, needs the dearest money and the slowest growth together, and slow growth is roughly what the record shows.</p>
+        <p>Inputs are also linked by the business itself. Damodaran's relationship from Analyst session 3, growth equals reinvestment rate times return on capital, says faster growth has to be paid for with reinvestment, which lowers the owner earnings left over. The grid holds the base fixed at 5.00 in every cell, so its fast-growth column gets the growth for free. Treat the corners as boundaries for argument, not as scenarios with a probability attached. Analyst session 7 brings the base rates that tell you how often fast growth actually lasts.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Four filers, one shape.</strong> Run the same grid on each company's ten-year owner earnings and the ranges are Caterpillar 186.67 to 348.88 around 250.78, Exxon Mobil 87.34 to 163.24 around 117.34, Johnson &amp; Johnson 112.26 to 209.80 around 150.81, and P&amp;G 70.84 to 132.39 around 95.16. Each range is the same multiple of its own centre, because the model scales with the base: the grid's width comes entirely from the inputs, not from the company. Sensitivity tells you how much your assumptions matter; it says nothing about whether the base itself is right, which was Analyst sessions 1 and 2.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers where to spend the argument</span>
+      <h2>The input to argue hardest</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">An investment discussion has a fixed amount of attention. Spend it in proportion to how far each input moves the answer, and on the evidence that can actually narrow that input. At P&amp;G's defaults, the discount rate and growth over the first ten years move the value most. Terminal growth matters less at plus or minus one point, but it carries a hidden weight: 57.0 percent of the 95.16 comes from beyond year 10, so it is the input most likely to be pushed somewhere it cannot go.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn argument budget for P&amp;G rung 3: one bar split into four segments sized by each input's swing. Discount rate, 81.95 to 113.24, the widest, in brass. Growth in years 1 to 10, 81.84 to 110.71. Terminal growth, 87.47 to 105.65. Growth years, 87.76 to 101.31. Under each, the evidence to bring: your required return said out loud; P&amp;G's own 3.1 percent a year; a cap at the economy's growth; how long the edge lasts.">
+        <defs>
+          <filter id="vp6cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="73" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp6cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp6cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp6cH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp6cL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp6cS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp6cB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp6cV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp6cW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp6cN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp6cH" x="30" y="26">THE ARGUMENT BUDGET</text>
+        <text class="vp6cS" x="200" y="26">one meeting's attention, split by how far each input swings P&amp;G's value</text>
+
+        <g filter="url(#vp6cSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- widths proportional to swing: 760 px in all -->
+          <rect x="60" y="50" width="259" height="40" rx="4" transform="rotate(-0.4 190 70)" fill="#93701C" stroke="#93701C"/>
+          <rect x="319" y="50" width="239" height="40" rx="4" transform="rotate(0.3 438 70)" fill="#3E6B55"/>
+          <rect x="558" y="50" width="150" height="40" rx="4" transform="rotate(-0.3 633 70)" fill="#CFE0D5"/>
+          <rect x="708" y="50" width="112" height="40" rx="4" transform="rotate(0.4 764 70)" fill="#EEF5F0"/>
+          <path d="M190 96 L134 128"/>
+          <path d="M438 96 L338 128"/>
+          <path d="M633 96 L544 128"/>
+          <path d="M764 96 L748 128"/>
+          <rect x="40" y="132" width="190" height="96" rx="8" transform="rotate(-1.2 135 180)" fill="#F8F0DC" stroke="#93701C"/>
+          <rect x="244" y="132" width="190" height="96" rx="8" transform="rotate(0.8 339 180)" fill="#FFFFFF"/>
+          <rect x="448" y="132" width="190" height="96" rx="8" transform="rotate(-0.6 543 180)" fill="#FFFFFF"/>
+          <rect x="652" y="132" width="190" height="96" rx="8" transform="rotate(1 747 180)" fill="#FFFFFF"/>
+        </g>
+
+        <text class="vp6cW" x="190" y="75" text-anchor="middle">discount rate</text>
+        <text class="vp6cW" x="438" y="75" text-anchor="middle">growth, years 1 to 10</text>
+        <text class="vp6cL" x="633" y="75" text-anchor="middle">terminal growth</text>
+        <text class="vp6cL" x="764" y="75" text-anchor="middle">years</text>
+
+        <text class="vp6cH" x="54" y="156">1 · discount rate</text>
+        <text class="vp6cB" x="54" y="176">81.95 to 113.24</text>
+        <text class="vp6cS" x="54" y="196">say your required return</text>
+        <text class="vp6cS" x="54" y="212">out loud, and why</text>
+        <text class="vp6cH" x="258" y="156">2 · growth, years 1-10</text>
+        <text class="vp6cV" x="258" y="177">81.84 to 110.71</text>
+        <text class="vp6cS" x="258" y="196">P&amp;G's own run: about</text>
+        <text class="vp6cS" x="258" y="212">3.1% a year, nominal</text>
+        <text class="vp6cH" x="462" y="156">3 · terminal growth</text>
+        <text class="vp6cV" x="462" y="177">87.47 to 105.65</text>
+        <text class="vp6cS" x="462" y="196">cap: no faster than the</text>
+        <text class="vp6cS" x="462" y="212">economy, forever</text>
+        <text class="vp6cH" x="666" y="156">4 · growth years</text>
+        <text class="vp6cV" x="666" y="177">87.76 to 101.31</text>
+        <text class="vp6cS" x="666" y="196">how long the edge lasts:</text>
+        <text class="vp6cS" x="666" y="212">Analyst session 8</text>
+
+        <text class="vp6cB" x="30" y="252">57.0 percent of 95.16 sits beyond year 10, so the terminal input is small in swing and large in weight.</text>
+        <text class="vp6cN" x="30" y="274">Segment widths are proportional to each input's swing at the default. Time in the meeting follows the width.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - spend the argument where the bar is widest, and bring evidence that can narrow it, not adjectives</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Two widest bars, two different kinds of argument<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The discount rate is a choice, not a fact.</strong> It is the return you require for tying money up in this business rather than somewhere safer. No filing contains it. The argument is therefore about you, not the company: what return do you need, and is P&amp;G riskier or safer than the alternatives you would otherwise hold? The cost-of-capital machinery that formalises this is outside these sessions; the honest move is to state your rate, state why, and show the grid either side.</p>
+        <p><strong>Growth is a claim about the business, so it can meet evidence.</strong> P&amp;G's filed owner earnings grew about 3.1 percent a year over 14 years, nominal. Arguing for 7 percent means arguing that the next decade will look nothing like the last one, and naming why. That argument can be checked against the filings and, in Analyst session 7, against base rates for how often fast growth lasts.</p>
+        <p><strong>Terminal growth has a hard ceiling.</strong> Damodaran's terminal value slides set the rule: the stable growth rate cannot exceed the growth rate of the economy, though it can be lower, and the riskfree rate is a simple proxy for nominal economic growth. A terminal rate above that says the company eventually becomes larger than the economy. Check your 3.5 percent push against that ceiling before you treat 105.65 as a fair high case.</p>
+        <p><strong>Growth years are a claim about durability.</strong> Five years or fifteen is a question of how long the business keeps an edge, which is a moat treated as a valuation input. That is Analyst session 8; the economics of moats themselves live in <a href="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a6-games-and-moats.html">Economics Foundations session 6 ↗</a>.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>False precision<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The grid prints values to the cent, and the code needed the base to six decimals to reproduce them. That precision belongs to the arithmetic, not to the answer. A cell reading 95.16 is no more knowable than one reading 95; what is knowable is that a point on the discount rate moves it by tens of dollars. Reporting a valuation to the cent when its inputs are uncertain by whole percentage points is the error the grid exists to expose.</p>
+        <p>Carry full precision through the calculation, because rounding the base to 5.00 prints 95.19 instead of 95.16 and breaks reproducibility. Then round hard when you speak: "roughly 70 to 130, about 95 at the middle inputs" is the sentence that matches what you actually know.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Buffett on the guess inside owner earnings.</strong> In the appendix to his 1986 letter, Buffett notes that owner earnings do not give the deceptively precise figures GAAP provides, because the capital spending a business needs to stand still must be a guess. He accepts that trade openly: "I would rather be vaguely right than precisely wrong." A sensitivity grid is the same stance applied to a whole valuation: it gives up the comfort of one precise number for a range that is more likely to contain the truth.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Build the grid</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Python 3, standard library only, no data fetch: the base is P&amp;G's ten-year mean owner earnings per share at full precision, 4.998525, displayed as 5.00. You reuse the <code>dcf()</code> function from Analyst session 4 unchanged, add a three-line helper that changes only the inputs you name, and loop. The outputs printed below are what this code printed when run, and they match the grid and the tornado above to the cent.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as four hand-drawn steps left to right: reuse dcf() on the exact base 4.998525; a helper that changes only the named inputs; loop r and g into a 3 by 3 grid; move each input alone and sort widest first. Under each step, the check: default 95.16, terminal share 57.0 percent, corners 70.84 and 132.39, discount rate on top.">
+        <defs>
+          <filter id="vp6dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="79" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp6dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp6dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp6dH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp6dS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp6dB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp6dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp6dN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp6dH" x="30" y="26">FOUR STEPS, AND THE CHECK AFTER EACH</text>
+
+        <g filter="url(#vp6dSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="180" height="60" rx="8" transform="rotate(-0.6 120 86)" fill="url(#vp6dHc)"/>
+          <rect x="246" y="56" width="180" height="60" rx="8" transform="rotate(0.5 336 86)" fill="#EEF5F0"/>
+          <rect x="462" y="56" width="180" height="60" rx="8" transform="rotate(-0.4 552 86)" fill="#93701C" stroke="#93701C"/>
+          <rect x="678" y="56" width="180" height="60" rx="8" transform="rotate(0.6 768 86)" fill="#EEF5F0"/>
+          <path d="M214 86 L240 86" marker-end="url(#vp6dAr)"/>
+          <path d="M430 86 L456 86" marker-end="url(#vp6dAr)"/>
+          <path d="M646 86 L672 86" marker-end="url(#vp6dAr)"/>
+          <rect x="30" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="246" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="462" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="678" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+        </g>
+
+        <text class="vp6dH" x="120" y="82" text-anchor="middle">1 · reuse dcf()</text>
+        <text class="vp6dS" x="120" y="100" text-anchor="middle">exact base 4.998525</text>
+        <text class="vp6dH" x="336" y="82" text-anchor="middle">2 · value(**change)</text>
+        <text class="vp6dS" x="336" y="100" text-anchor="middle">change only what you name</text>
+        <text class="vp6dW" x="552" y="82" text-anchor="middle">3 · the grid</text>
+        <text class="vp6dW" x="552" y="100" text-anchor="middle">3 rates x 3 growth rates</text>
+        <text class="vp6dH" x="768" y="82" text-anchor="middle">4 · the tornado</text>
+        <text class="vp6dS" x="768" y="100" text-anchor="middle">one input, sorted widest</text>
+        <text class="vp6dB" x="120" y="164" text-anchor="middle">check: 95.16, 57.0%</text>
+        <text class="vp6dS" x="120" y="182" text-anchor="middle">95.19 means a rounded base</text>
+        <text class="vp6dB" x="336" y="164" text-anchor="middle">check: value() = 95.16</text>
+        <text class="vp6dS" x="336" y="182" text-anchor="middle">no change, no movement</text>
+        <text class="vp6dB" x="552" y="164" text-anchor="middle">check: 70.84 to 132.39</text>
+        <text class="vp6dS" x="552" y="182" text-anchor="middle">centre cell is 95.16</text>
+        <text class="vp6dB" x="768" y="164" text-anchor="middle">check: rate on top</text>
+        <text class="vp6dS" x="768" y="182" text-anchor="middle">81.95 to 113.24</text>
+
+        <text class="vp6dN" x="30" y="226">If the centre cell is not 95.16, stop: the grid around a wrong centre is a wrong grid, however tidy it looks.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the centre-cell check is what ties tonight's grid back to the value you built in Analyst session 4</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Step 1 · Reuse the function, on the exact base.</strong> Paste <code>dcf()</code> from Analyst session 4 exactly as you wrote it, guard first. Set the base unrounded and the defaults in one dictionary, then confirm the default value and terminal share before going further.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · dcf() and the defaults, and what it printed</span>def dcf(base, r, n, g, gt):
+    """Two stages: n years growing at g, then gt forever.
+    Returns (value, stage-one PV, terminal PV), all per share."""
+    if r &lt;= gt:
+        raise ValueError("terminal growth must sit below the discount rate")
+    cash, stage = base, 0.0
+    for year in range(1, n + 1):
+        cash = cash * (1 + g)
+        stage += cash / (1 + r) ** year
+    tv = cash * (1 + gt) / (r - gt)
+    terminal = tv / (1 + r) ** n
+    return stage + terminal, stage, terminal
+
+BASE = 4.998525   # P&amp;G ten-year mean owner earnings per share; displays as 5.00
+DEFAULT = {"r": 0.09, "n": 10, "g": 0.05, "gt": 0.025}
+
+v, stage, terminal = dcf(BASE, **DEFAULT)
+print(f"default {v:.2f}   terminal share {terminal / v:.1%}")
+
+default 95.16   terminal share 57.0%</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 2 · A helper that changes only what you name.</strong> Merging the changes over the defaults means every run states its own difference from the baseline, and nothing else can drift. Call it with no arguments and it must return the default.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · value(**change)</span>def value(**change):
+    """Value at the defaults, with any inputs you name changed."""
+    return dcf(BASE, **{**DEFAULT, **change})[0]
+
+# value()            -&gt; the default, 95.16
+# value(r=0.08)      -&gt; only the discount rate moves
+# value(r=0.08, g=0.07) -&gt; two inputs move together: a grid corner</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 3 · Loop the discount rate and growth into the grid.</strong> Rows are the discount rate, columns are growth. Compare every cell with Part 2 before moving on.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · the 3 x 3 grid, and what it printed</span>print("           g 3%     g 5%     g 7%")
+cells = []
+for r in (0.08, 0.09, 0.10):
+    row = [value(r=r, g=g) for g in (0.03, 0.05, 0.07)]
+    cells += row
+    print(f"r {r:&gt;4.0%}  " + "  ".join(f"{x:7.2f}" for x in row))
+
+           g 3%     g 5%     g 7%
+r   8%    96.86   113.24   132.39
+r   9%    81.84    95.16   110.71
+r  10%    70.84    81.95    94.88</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 4 · Print the range.</strong> The lowest and highest cells are the two numbers that go in your sentence.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the range, and what it printed</span>print(f"range {min(cells):.2f} to {max(cells):.2f}")
+
+range 70.84 to 132.39</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 5 · The four one-at-a-time swings, widest first.</strong> Each pair is (the setting that lowers value, the setting that raises it). Sorting by the gap draws the tornado as text.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · the tornado as text, and what it printed</span>swings = {
+    "discount rate 10% / 8%": (value(r=0.10), value(r=0.08)),
+    "growth 3% / 7%":         (value(g=0.03), value(g=0.07)),
+    "growth years 5 / 15":    (value(n=5), value(n=15)),
+    "terminal 1.5% / 3.5%":   (value(gt=0.015), value(gt=0.035)),
+}
+for name, (lo, hi) in sorted(swings.items(), key=lambda kv: kv[1][0] - kv[1][1]):
+    print(f"{name:24} {lo:7.2f} to {hi:7.2f}")
+
+discount rate 10% / 8%     81.95 to  113.24
+growth 3% / 7%             81.84 to  110.71
+terminal 1.5% / 3.5%       87.47 to  105.65
+growth years 5 / 15        87.76 to  101.31</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 6 · Write the sentence, then argue one input.</strong> No code. Fill in the range sentence from your own output, then pick the input you would argue hardest and name the evidence you would bring. If you change any push, rerun Steps 3 to 5; your numbers will differ from the ones above, and that difference is the point.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · the sentence</span>P&amp;G, base ____ (ten-year mean owner earnings, all-capex approximation),
+____ growth years, terminal ____ :
+value ____ to ____ a share across r ____ to ____ and g ____ to ____ ;
+____ at the middle inputs.
+
+Input I would argue hardest: ______________________
+Evidence that could narrow it: ____________________</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Ship the grid, not the cell.</strong> Wherever this valuation travels, the grid and its inputs travel with it. A single cell lifted out of the table, with its row and column dropped, turns into a precise-looking number in somebody else's deck, which is exactly the false precision the grid was built to prevent.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before Analyst session 7</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Run the grid for a second filer</strong> using its rung 3 base from the source data. Confirm its centre cell matches the value in the bench, then check that its range is the same multiple of its centre as P&amp;G's, and write one sentence on why.</li>
+      <li><strong>Build a terminal growth by growth-years grid</strong> for P&amp;G at a 9 percent discount rate. Your numbers will differ from the discount rate by growth grid; note which corner moves most and whether the tornado's ranking of those two inputs survives.</li>
+      <li><strong>Choose your own pushes.</strong> Decide how uncertain you honestly are about each of the four inputs, set the low and high settings to match, and redraw the tornado. Did the order change? Write the settings beside the chart.</li>
+      <li><strong>Argue one input in writing.</strong> In five sentences, defend a growth rate for P&amp;G's next ten years using only what its filings show. Keep it; Analyst session 7 will test it against base rates.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Analyst session 6 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · A tornado chart for P&amp;G puts the discount rate on top, 81.95 to 113.24. What does that bar tell you?</p>
+      <button class="qopt" type="button">A · That the discount rate is the most likely input to be wrong</button>
+      <button class="qopt" type="button">B · The full range of values P&amp;G could be worth</button>
+      <button class="qopt" type="button">C · How far the value moves when the discount rate alone goes from 10 to 8 percent with the other inputs held at the default</button>
+      <button class="qopt" type="button">D · That growth does not matter once the discount rate is set</button>
+      <p class="qwhy">A tornado bar is a one-at-a-time swing under the pushes you chose. It ranks inputs by how much they move the value, not by how uncertain they are, and it says nothing about two inputs moving together, which is what the grid adds.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">2 · The 3 x 3 grid runs from 70.84 to 132.39, with 95.16 in the centre. What is the right way to report it?</p>
+      <button class="qopt" type="button">A · Report 95.16, since it sits in the middle and the corners are extremes</button>
+      <button class="qopt" type="button">B · Report the range with its inputs: 70.84 to 132.39 across 8 to 10 percent and 3 to 7 percent growth, 95.16 at 9 and 5</button>
+      <button class="qopt" type="button">C · Report the average of the nine cells as the value</button>
+      <button class="qopt" type="button">D · Report 132.39 as the target and 70.84 as the floor</button>
+      <p class="qwhy">The range, with the inputs that produced it, is the honest output. The centre is one combination of choices, the cells are not equally likely, so an average of them means little, and nothing in the grid is a target.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · You have ten minutes in a meeting to challenge a P&amp;G valuation built on these defaults. Where should most of that time go?</p>
+      <button class="qopt" type="button">A · The discount rate and the first-ten-year growth rate, the two widest bars, with growth argued against P&amp;G's own record and the terminal rate checked against the economy's growth</button>
+      <button class="qopt" type="button">B · The number of growth years, because it is the easiest input to change</button>
+      <button class="qopt" type="button">C · The second decimal place of the base, since the code needs 4.998525</button>
+      <button class="qopt" type="button">D · Nothing; a model that reproduces to the cent does not need challenging</button>
+      <p class="qwhy">Attention follows the swing. The discount rate and growth move the value most at these inputs; growth can meet evidence (about 3.1 percent a year in the filings), and terminal growth, carrying 57.0 percent of the value, must stay under Damodaran's cap. Precision in the code is not accuracy in the answer.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The terminal growth cap: stable growth cannot exceed the economy's growth; the riskfree rate as a proxy for nominal growth; growth tied to reinvestment and return on capital</span><span class="note">Damodaran, A., valuation class slides, terminal value session, NYU Stern, 2023 (read at source)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Owner earnings as a deliberate estimate; the capex term must be a guess; "vaguely right" rather than precisely wrong</span><span class="note">Buffett, W., Berkshire Hathaway shareholder letter, 1986, appendix (read at source)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">P&amp;G ten-year owner earnings 5.00 (4.998525); the grid 70.84 to 132.39; the four swings; terminal share 57.0 percent; the four filers' ranges; P&amp;G's 3.84 to 5.90, about 3.1 percent a year</span><span class="note">SEC EDGAR XBRL company facts, read from a public mirror after the SEC refused the build machine; computed, with values modelled under the inputs stated on the page</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Why a higher discount rate means a lower value; moats as economics</span><span class="note">Taught in Economics Foundations sessions 5 and 6; linked, not re-taught</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Deriving a discount rate (cost of capital, betas)</span><span class="note">Named only; the rate is treated as a stated choice and shown as a range</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 6 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Tornado</b><span>Move one input at a time, hold the rest, sort widest first. Write the pushes beside it.</span></div>
+      <div class="cheat-item"><b>Bars are lopsided</b><span>A point off the discount rate adds more than a point on takes away.</span></div>
+      <div class="cheat-item"><b>The grid</b><span>Two inputs together. P&amp;G: 70.84 to 132.39, 95.16 in the centre.</span></div>
+      <div class="cheat-item"><b>Report the range</b><span>Range plus the inputs that made it. Never a lone cell.</span></div>
+      <div class="cheat-item"><b>Argue where it swings</b><span>Discount rate and growth first; terminal growth under the economy's growth.</span></div>
+      <div class="cheat-item"><b>Precise is not accurate</b><span>Full precision in the code, hard rounding in the sentence.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You now know that growth is one of the two inputs that move P&amp;G's value most, and that the grid's fast-growth column is the one most worth doubting. Analyst session 7 brings the evidence: the Base Rate Book's record of how often companies actually sustain fast sales and earnings growth, why analysts' forecasts run too narrow, and how growth fades, so the next time someone argues for the 7 percent column you can ask how often that has happened.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Analyst session 6 of 10 · learn-value-investing-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p5-what-the-price-assumes.html">← Prev: What the price already assumes</a> &nbsp;·&nbsp; <a href="p7-how-often-growth-lasts.html">Next: How often fast growth lasts →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

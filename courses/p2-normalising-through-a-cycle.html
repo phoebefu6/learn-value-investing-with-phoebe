@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 2 of 10. Normalising owner earnings through a cycle: five- and ten-year averages for four real 10-K filers, telling a cyclical swing from an accounting event, and what a hold-out ladder showed about where you start.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Normalising through a cycle - learn value investing with phoebe">
+<meta property="og:description" content="Analyst session 2 of 10. One year is a hostage: five- and ten-year owner earnings for four real filers, cycle versus event, and a ladder where every honest rung undershot.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/courses/p2-normalising-through-a-cycle.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Normalising through a cycle - learn value investing with phoebe">
+<meta name="twitter:description" content="Analyst session 2 of 10. Five- and ten-year owner earnings, cycle versus event, and what the ladder showed.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 2 · Normalising through a cycle - learn value investing with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-value-investing-with-phoebe</a> / Analyst session 2 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Value Investing with Phoebe · Analyst session 2 of 10</div>
+    <h1>Normalising through <span class="accent">a cycle</span></h1>
+    <p class="sub">Last session ended with a list of years that jump. Exxon Mobil's owner earnings per share went from 1.47 dollars in fiscal 2020 to 14.60 two years later; Johnson &amp; Johnson's fell to 1.33 in one year and bounced straight back. Any valuation that starts from a single year is held hostage by whichever year it picked. Tonight we average across five and ten years for the same four filers, learn to tell a business swinging through its cycle from an accounting event that happened once, and take a first look at what a hold-out test showed about which starting point misses least. No share prices anywhere.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Analyst</span>
+      <span class="chip audience">Analysts, finance and data people who want a defensible starting number</span>
+      <span class="chip audience">Python, standard library only, continuing Analyst session 1's reader</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Averages, cycle or event, the ladder</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: normalise four filers</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">In Analyst session 1 you built owner earnings per share, all-capex approximation, for Caterpillar, Exxon Mobil, Johnson &amp; Johnson and Procter &amp; Gamble, fifteen to nineteen fiscal years each. Every valuation in sessions 4 to 6 needs one starting number per company, and the choice of that number moves the answer more than most people expect. Normalising means choosing it on purpose: over a window long enough to hold a whole cycle, with every unusual year named rather than hidden.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone builds</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Five- and ten-year owner earnings per share for four filers, computed from your own reader; a one-line rule that flags the years worth a second look; a sorting habit for those years, cycle or event; and the honest sentence about what the ladder showed, which is narrower and more useful than "averages work".</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers five- and ten-year averages</span>
+      <h2>One year is a hostage</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Exxon Mobil's owner earnings per share were 1.84 dollars in fiscal 2015, 1.47 in fiscal 2020, 14.60 in fiscal 2022 and 6.15 in fiscal 2025. In fiscal 2020 its net income per share was minus 5.25. Pick any one of those years as "what the business earns" and you have picked a different company. An average over several years is the plainest way to stop one year from deciding everything.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 356" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand-drawn bars of Exxon Mobil's owner earnings per share, fiscal 2011 to 2025, in dollars: 5.27, 5.73, 3.64, 3.94, 1.84, 3.35, 5.69, 4.69, 2.10, 1.47, 7.39, 14.60, 8.57, 7.64, 6.15. Fiscal 2022 is drawn in brass. A solid line at 8.87 spans fiscal 2021 to 2025, the five-year mean at fiscal 2025. A dashed line at 6.16 spans fiscal 2016 to 2025, the ten-year mean. The five-year mean sits above the ten-year mean because the window contains 2022.">
+        <defs>
+          <filter id="vp2aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp2aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp2aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp2aH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp2aL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp2aS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp2aB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp2aA { font: 700 11px Inter, sans-serif; fill: #2D5240; }
+          .vp2aN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp2aH" x="30" y="26">EXXON MOBIL, OWNER EARNINGS PER SHARE, FY2011 TO FY2025</text>
+        <text class="vp2aS" x="30" y="46">dollars, all-capex approximation · each line is a mean at FY2025, drawn over the years it averages</text>
+
+        <g filter="url(#vp2aSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M50 280 L830 280"/>
+          <!-- scale 13 px per dollar -->
+          <rect x="70" y="211.5" width="36" height="68.5" rx="3" fill="url(#vp2aHc)"/>
+          <rect x="120" y="205.5" width="36" height="74.5" rx="3" fill="url(#vp2aHc)"/>
+          <rect x="170" y="232.7" width="36" height="47.3" rx="3" fill="url(#vp2aHc)"/>
+          <rect x="220" y="228.8" width="36" height="51.2" rx="3" fill="url(#vp2aHc)"/>
+          <rect x="270" y="256.1" width="36" height="23.9" rx="3" fill="url(#vp2aHc)"/>
+          <rect x="320" y="236.4" width="36" height="43.6" rx="3" fill="url(#vp2aHc)"/>
+          <rect x="370" y="206" width="36" height="74" rx="3" fill="url(#vp2aHc)"/>
+          <rect x="420" y="219" width="36" height="61" rx="3" fill="url(#vp2aHc)"/>
+          <rect x="470" y="252.7" width="36" height="27.3" rx="3" fill="url(#vp2aHc)"/>
+          <rect x="520" y="260.9" width="36" height="19.1" rx="3" fill="url(#vp2aHc)"/>
+          <rect x="570" y="183.9" width="36" height="96.1" rx="3" fill="url(#vp2aHc)"/>
+          <rect x="620" y="90.2" width="36" height="189.8" rx="3" fill="#93701C" stroke="#93701C"/>
+          <rect x="670" y="168.6" width="36" height="111.4" rx="3" fill="url(#vp2aHc)"/>
+          <rect x="720" y="180.7" width="36" height="99.3" rx="3" fill="url(#vp2aHc)"/>
+          <rect x="770" y="200" width="36" height="80" rx="3" fill="url(#vp2aHc)"/>
+          <!-- ten-year mean 6.16, FY2016-FY2025 -->
+          <path d="M316 200 L812 200" stroke="#3E6B55" stroke-width="2.2" stroke-dasharray="7 5"/>
+          <!-- five-year mean 8.87, FY2021-FY2025 -->
+          <path d="M566 164.7 L812 164.7" stroke="#1C3628" stroke-width="2.8"/>
+          <!-- pointer to the boom year -->
+          <path d="M680 88 C672 92 666 96 661 100" stroke-width="1.6" marker-end="url(#vp2aAr)"/>
+        </g>
+
+        <text class="vp2aB" x="676" y="80">2022: inside the 5-yr mean</text>
+        <text class="vp2aL" x="560" y="169" text-anchor="end">5-yr mean 8.87</text>
+        <text class="vp2aA" x="310" y="204" text-anchor="end">10-yr mean 6.16</text>
+
+        <text class="vp2aS" x="88" y="298" text-anchor="middle">2011</text>
+        <text class="vp2aS" x="138" y="298" text-anchor="middle">2012</text>
+        <text class="vp2aS" x="188" y="298" text-anchor="middle">2013</text>
+        <text class="vp2aS" x="238" y="298" text-anchor="middle">2014</text>
+        <text class="vp2aS" x="288" y="298" text-anchor="middle">2015</text>
+        <text class="vp2aS" x="338" y="298" text-anchor="middle">2016</text>
+        <text class="vp2aS" x="388" y="298" text-anchor="middle">2017</text>
+        <text class="vp2aS" x="438" y="298" text-anchor="middle">2018</text>
+        <text class="vp2aS" x="488" y="298" text-anchor="middle">2019</text>
+        <text class="vp2aS" x="538" y="298" text-anchor="middle">2020</text>
+        <text class="vp2aS" x="588" y="298" text-anchor="middle">2021</text>
+        <text class="vp2aS" x="638" y="298" text-anchor="middle">2022</text>
+        <text class="vp2aS" x="688" y="298" text-anchor="middle">2023</text>
+        <text class="vp2aS" x="738" y="298" text-anchor="middle">2024</text>
+        <text class="vp2aS" x="788" y="298" text-anchor="middle">2025</text>
+
+        <text class="vp2aS" x="88" y="316" text-anchor="middle">5.27</text>
+        <text class="vp2aS" x="138" y="316" text-anchor="middle">5.73</text>
+        <text class="vp2aS" x="188" y="316" text-anchor="middle">3.64</text>
+        <text class="vp2aS" x="238" y="316" text-anchor="middle">3.94</text>
+        <text class="vp2aB" x="288" y="316" text-anchor="middle">1.84</text>
+        <text class="vp2aS" x="338" y="316" text-anchor="middle">3.35</text>
+        <text class="vp2aS" x="388" y="316" text-anchor="middle">5.69</text>
+        <text class="vp2aS" x="438" y="316" text-anchor="middle">4.69</text>
+        <text class="vp2aS" x="488" y="316" text-anchor="middle">2.10</text>
+        <text class="vp2aB" x="538" y="316" text-anchor="middle">1.47</text>
+        <text class="vp2aS" x="588" y="316" text-anchor="middle">7.39</text>
+        <text class="vp2aB" x="638" y="316" text-anchor="middle">14.60</text>
+        <text class="vp2aS" x="688" y="316" text-anchor="middle">8.57</text>
+        <text class="vp2aS" x="738" y="316" text-anchor="middle">7.64</text>
+        <text class="vp2aB" x="788" y="316" text-anchor="middle">6.15</text>
+
+        <text class="vp2aN" x="30" y="340">FY2020 net income per share was -5.25; owner earnings stayed positive because the write-downs sit inside D&amp;A.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the five-year mean sits above the ten-year mean because the boom year is inside its window</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why a cyclical business needs a whole cycle<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A cyclical business earns a lot in some years and very little in others because of things outside any single year's management: the price of what it sells, its customers' spending, the stage of an industry's investment cycle. What an owner gets over time is the average across those swings, not any one point on them. So the window you average over has to be long enough to contain at least one good stretch and one bad one. A window that holds only the good years overstates the business; one that holds only the bad years understates it.</p>
+        <p>Buffett's 1986 letter defends this kind of judgment over false precision: "I would rather be vaguely right than precisely wrong." A ten-year average is vague. A single year's figure, printed to the cent, is precise and, for Exxon, has ranged from 1.47 to 14.60 dollars in three years.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>A five-year average can include the boom<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Standing at fiscal 2025, Exxon's five-year mean owner earnings per share is 8.87 dollars and its ten-year mean is 6.16. The five-year window, fiscal 2021 to 2025, contains fiscal 2022 at 14.60 and no trough at all. The ten-year window, fiscal 2016 to 2025, also holds 2019 at 2.10 and 2020 at 1.47. Neither number is "right". The five-year number says what the last five years averaged; the ten-year number is closer to a whole cycle, and it is the more conservative of the two here.</p>
+        <p>The same check applies to every filer: before trusting a window, look at what is inside it. A window is only as good as the cycle it happens to contain, and you know which cycle that is only by printing the rows.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Exxon Mobil's capital spending ran ahead of its depreciation.</strong> Analyst session 1 showed Exxon's capex between about 1.5 and 2.2 times its depreciation every year from 2011 to 2015, the pattern Buffett's 1986 letter names for the oil industry. Over the last ten fiscal years the ratio was 0.82. A five-year window that sits in a heavy-spending stretch and one that sits in a lighter one can describe the same business very differently, before any judgment about growth.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers cyclical swings versus one-off events</span>
+      <h2>Cycle or one-off</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Not every jump is the cycle. Some years are the business swinging; some are an accounting event that happened once and will not repeat. They call for different treatment, so the first job with each unusual year is to sort it. Two tests do most of the work: does the next year snap back to trend, and does the 10-K note name a gain, a charge or a write-down?</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn sorting table with three bins. Cycle: Caterpillar fiscal 2016 at 3.18 dollars, a trough followed by 4.56 and then 12.74; Exxon Mobil fiscal 2022 at 14.60, a swing of 7.39, 14.60, 8.57. Event, drawn in brass: Johnson and Johnson fiscal 2017 at 1.33, between 6.12 and 6.80; Johnson and Johnson fiscal 2023 at 14.88, including the consumer health separation gain. Straddling both bins: Exxon Mobil fiscal 2020 at 1.47, a trough plus write-downs inside D&amp;A. Unsorted: Procter and Gamble fiscal 2019 at 1.33, which the numbers alone cannot classify.">
+        <defs>
+          <filter id="vp2bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="77" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp2bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp2bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp2bH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp2bL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp2bS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp2bB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp2bN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp2bH" x="30" y="26">SIX JUMPS, SORTED BY WHAT CAUSED THEM</text>
+        <text class="vp2bS" x="30" y="44">owner earnings per share, dollars · a cycle swings over years; an event is one year with a named cause</text>
+
+        <g filter="url(#vp2bSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="64" width="270" height="148" rx="10" transform="rotate(-0.4 165 138)" fill="#EEF5F0"/>
+          <rect x="310" y="64" width="270" height="148" rx="10" transform="rotate(0.3 445 138)" fill="#F8F0DC" stroke="#93701C"/>
+          <rect x="600" y="64" width="250" height="226" rx="10" transform="rotate(-0.3 725 177)" fill="#FFFFFF" stroke-dasharray="7 5"/>
+          <rect x="45" y="100" width="240" height="44" rx="6" transform="rotate(-1.5 165 122)" fill="#FFFFFF"/>
+          <rect x="45" y="156" width="240" height="44" rx="6" transform="rotate(1.2 165 178)" fill="#FFFFFF"/>
+          <rect x="325" y="100" width="240" height="44" rx="6" transform="rotate(1.4 445 122)" fill="#FFFFFF" stroke="#93701C"/>
+          <rect x="325" y="156" width="240" height="44" rx="6" transform="rotate(-1.1 445 178)" fill="#FFFFFF" stroke="#93701C"/>
+          <rect x="170" y="222" width="280" height="44" rx="6" transform="rotate(-0.8 310 244)" fill="#FFFFFF" stroke-width="2.4"/>
+          <rect x="615" y="100" width="220" height="44" rx="6" transform="rotate(2 725 122)" fill="#FFFFFF"/>
+          <!-- doodle: a question hook beside the unsorted card -->
+          <path d="M812 160 C812 150 828 150 828 160 C828 168 820 168 820 176"/>
+        </g>
+
+        <text class="vp2bH" x="45" y="86">CYCLE · the business swung</text>
+        <text class="vp2bH" x="325" y="86">EVENT · named in the note</text>
+        <text class="vp2bH" x="615" y="86">UNSORTED · read the note</text>
+
+        <text class="vp2bL" x="57" y="119">Caterpillar FY2016 · 3.18</text>
+        <text class="vp2bS" x="57" y="136">trough: 4.56, then 12.74 next</text>
+        <text class="vp2bL" x="57" y="175">Exxon Mobil FY2022 · 14.60</text>
+        <text class="vp2bS" x="57" y="192">a swing: 7.39, 14.60, 8.57</text>
+
+        <text class="vp2bL" x="337" y="119">J&amp;J FY2017 · 1.33</text>
+        <text class="vp2bS" x="337" y="136">6.12, then 1.33, then 6.80</text>
+        <text class="vp2bL" x="337" y="175">J&amp;J FY2023 · 14.88</text>
+        <text class="vp2bS" x="337" y="192">consumer health separation gain</text>
+
+        <text class="vp2bL" x="310" y="241" text-anchor="middle">Exxon Mobil FY2020 · 1.47</text>
+        <text class="vp2bS" x="310" y="258" text-anchor="middle">trough, plus write-downs inside D&amp;A</text>
+
+        <text class="vp2bL" x="627" y="119">P&amp;G FY2019 · 1.33</text>
+        <text class="vp2bS" x="627" y="136">numbers alone cannot say</text>
+        <text class="vp2bH" x="615" y="172">two tests</text>
+        <text class="vp2bS" x="615" y="192">1 · next year snaps back</text>
+        <text class="vp2bS" x="615" y="210">2 · the 10-K note names a gain,</text>
+        <text class="vp2bS" x="615" y="226">a charge or a write-down</text>
+        <text class="vp2bB" x="615" y="254">until then: keep it, say so</text>
+
+        <text class="vp2bN" x="30" y="314">Exxon FY2020 sits on the line: a cyclical trough and write-downs inside D&amp;A, in the same year.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - sort every jump before averaging; one year can be a trough and an event at once</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What to do with an event year<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Keep it, note it, show the average with and without it, and never drop it silently.</strong> Dropping a year changes the number and hides the choice; leaving it in without a word hides it too. Showing both lets the reader of your figure see how much rides on the judgment.</p>
+        <p>Sometimes very little does. Johnson &amp; Johnson's ten-year mean, fiscal 2016 to 2025, is 7.92 dollars per share with every year in; without fiscal 2017 and 2023 it is 7.87 over eight years, because one event pulled down and the other pushed up. Procter &amp; Gamble's ten-year mean is 5.00 with fiscal 2019 and 5.41 without it, which is a bigger change, and the 10-K note decides whether the higher number is the fairer one. Both pairs are computed from the same engine the bench uses.</p>
+        <p>Exxon's fiscal 2020 shows why the sorting matters. Its D&amp;A that year, 46,009 million dollars, included large write-downs, and owner earnings add D&amp;A back, so owner earnings per share stayed at 1.47 while net income per share was minus 5.25. Part of that year is the cycle, which a normalised number should keep; part is a write-down, which the formula has already partly undone.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Restatements change history<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A normalised number is built from the past, and the past is not fixed. Caterpillar's fiscal 2014 net income was 3,695 million dollars in the 10-K filed in 2015 and 2,452 million in later ones; fiscal 2015 moved from 2,102 to 2,512 million. Both changes came from the company restating earlier years. A ten-year average computed in 2015 and one computed today use different histories for the same years.</p>
+        <p>The reader from Analyst session 1 takes the latest filed value, so restatements win. That is a choice, and it belongs in the label: "ten-year mean owner earnings per share, all-capex approximation, latest filed values". A backtest that wants to know what was knowable at the time would need the original numbers instead.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Johnson &amp; Johnson's two events.</strong> J&amp;J's net income was 1,300 million dollars in fiscal 2017 and 35,153 million in fiscal 2023, the second including a gain from separating its consumer health business. Owner earnings per share were 1.33 and 14.88 dollars in those years, against 6.12 the year before 2017 and 6.80 the year after. Neither year describes what the remaining business earns in a normal year, and an average that holds only one of them is pulled in one direction.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the hold-out ladder</span>
+      <h2>Where you start decides what you see</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Is a normalised number actually a better starting point than last year's? You can test that on the past. Stand at some year, forecast the years after it from what was known then, and measure the miss. The bench in Analyst session 10 does exactly this with four honest rungs: last year's net income per share, the five-year mean of owner earnings, the ten-year mean, and the ten-year mean growing at a fading rate. Here is the preview.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 322" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn table of mean absolute miss across four filers. Hold out 3 years: last year 39.7 percent, five-year 28.4 percent in brass, ten-year 41.8 percent, fade 36.5 percent. Hold out 4 years: last year 26.8 percent in brass, five-year 42.1 percent, ten-year 47.9 percent, fade 44.7 percent. Hold out 5 years, the default: last year 70.4 percent, five-year 47.4 percent in brass, ten-year 50.2 percent, fade 47.7 percent. A bracket under the ten-year column says never the best. Every honest rung undershot.">
+        <defs>
+          <filter id="vp2cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="83" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp2cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp2cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp2cH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp2cL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp2cS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp2cB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp2cV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp2cW { font: 800 16px Inter, sans-serif; fill: #FFFFFF; }
+          .vp2cN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp2cH" x="30" y="26">MEAN MISS BY RUNG, THREE HOLD-OUTS, FOUR FILERS</text>
+        <text class="vp2cS" x="30" y="44">brass = the rung that missed least in that row · lower is better</text>
+
+        <g filter="url(#vp2cSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="200" y="86" width="150" height="40" rx="6" transform="rotate(-0.4 275 106)" fill="#FFFFFF"/>
+          <rect x="360" y="86" width="150" height="40" rx="6" transform="rotate(0.5 435 106)" fill="#93701C" stroke="#93701C"/>
+          <rect x="520" y="86" width="150" height="40" rx="6" transform="rotate(-0.3 595 106)" fill="#FFFFFF"/>
+          <rect x="680" y="86" width="150" height="40" rx="6" transform="rotate(0.4 755 106)" fill="#FFFFFF"/>
+          <rect x="200" y="134" width="150" height="40" rx="6" transform="rotate(0.5 275 154)" fill="#93701C" stroke="#93701C"/>
+          <rect x="360" y="134" width="150" height="40" rx="6" transform="rotate(-0.4 435 154)" fill="#FFFFFF"/>
+          <rect x="520" y="134" width="150" height="40" rx="6" transform="rotate(0.3 595 154)" fill="#FFFFFF"/>
+          <rect x="680" y="134" width="150" height="40" rx="6" transform="rotate(-0.5 755 154)" fill="#FFFFFF"/>
+          <rect x="200" y="182" width="150" height="40" rx="6" transform="rotate(-0.3 275 202)" fill="#FFFFFF"/>
+          <rect x="360" y="182" width="150" height="40" rx="6" transform="rotate(0.4 435 202)" fill="#93701C" stroke="#93701C"/>
+          <rect x="520" y="182" width="150" height="40" rx="6" transform="rotate(-0.5 595 202)" fill="#FFFFFF"/>
+          <rect x="680" y="182" width="150" height="40" rx="6" transform="rotate(0.3 755 202)" fill="#FFFFFF"/>
+          <!-- doodle: bracket under the ten-year column -->
+          <path d="M528 234 Q595 248 662 234"/>
+        </g>
+
+        <text class="vp2cH" x="40" y="72">hold-out</text>
+        <text class="vp2cH" x="275" y="72" text-anchor="middle">1 · last year</text>
+        <text class="vp2cH" x="435" y="72" text-anchor="middle">2 · five-year</text>
+        <text class="vp2cH" x="595" y="72" text-anchor="middle">3 · ten-year</text>
+        <text class="vp2cH" x="755" y="72" text-anchor="middle">4 · fade</text>
+
+        <text class="vp2cL" x="40" y="111">3 years</text>
+        <text class="vp2cV" x="275" y="112" text-anchor="middle">39.7%</text>
+        <text class="vp2cW" x="435" y="112" text-anchor="middle">28.4%</text>
+        <text class="vp2cV" x="595" y="112" text-anchor="middle">41.8%</text>
+        <text class="vp2cV" x="755" y="112" text-anchor="middle">36.5%</text>
+
+        <text class="vp2cL" x="40" y="159">4 years</text>
+        <text class="vp2cW" x="275" y="160" text-anchor="middle">26.8%</text>
+        <text class="vp2cV" x="435" y="160" text-anchor="middle">42.1%</text>
+        <text class="vp2cV" x="595" y="160" text-anchor="middle">47.9%</text>
+        <text class="vp2cV" x="755" y="160" text-anchor="middle">44.7%</text>
+
+        <text class="vp2cL" x="40" y="207">5 years · default</text>
+        <text class="vp2cV" x="275" y="208" text-anchor="middle">70.4%</text>
+        <text class="vp2cW" x="435" y="208" text-anchor="middle">47.4%</text>
+        <text class="vp2cV" x="595" y="208" text-anchor="middle">50.2%</text>
+        <text class="vp2cV" x="755" y="208" text-anchor="middle">47.7%</text>
+
+        <text class="vp2cB" x="595" y="264" text-anchor="middle">never the best</text>
+
+        <text class="vp2cN" x="30" y="290">Mean absolute miss across four filers. Every honest rung undershot: owner earnings rose sharply after 2020.</text>
+        <text class="vp2cS" x="30" y="308">The anti-lever, which compounds the best past year, missed by thousands of percent. Analyst session 10 runs it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the five-year mean missed least in two rows of three; nothing in the table saw the rise coming</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The honest claim<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Hold out the last five fiscal years and the five-year mean missed by 47.4 percent on average against 70.4 percent for last year's net income. Hold out three and it wins again, 28.4 percent. Hold out four and last year's earnings win, 26.8 percent against 42.1, because that test starts from fiscal 2021, a strong year. The ten-year mean never had the smallest miss in any row.</p>
+        <p>So the honest sentence is narrow: <strong>on four filers and three hold-outs, a five-year normalised base missed less than last year's earnings in two of three tests, and every honest rung undershot.</strong> That is evidence about these companies over this stretch. It is not a law that averages beat single years, and the result changed when the starting year changed, which is the whole point of Part 3's title.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why averages cannot see a boom coming<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every honest rung is built from the past. If the years after your starting point are much better than the years before it, every average undershoots, and the longer the average, the more old, lower years it carries. At the five-year hold-out each rung's bias equals minus its mean miss: all four rungs guessed low for all four filers, because owner earnings for all four rose sharply after 2020.</p>
+        <p>Normalising protects you from mistaking one year for the business. It does not tell you where the business is going. That is a separate judgment, about growth and how long it lasts, and it is the work of Analyst sessions 7 and 8. The full ladder, including the anti-lever and its rebound-driven misses, runs in <a href="p10-the-intrinsic-value-bench.html">Analyst session 10, the intrinsic value bench</a>.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Standing at Exxon Mobil's fiscal 2020.</strong> At the five-year hold-out the test stands at fiscal 2020 and forecasts the mean of fiscal 2021 to 2025, which turned out to be 8.87 dollars per share. Last year's net income per share was minus 5.25, a miss of 159.3 percent. The five-year mean of owner earnings was 3.46, a miss of 61.0 percent; the ten-year mean, 3.77, missed by 57.5. The averages were far better than the single year and still badly low.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Normalise four filers</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Python 3, standard library only, continuing the reader from Analyst session 1. You need its <code>owner_earnings(cik)</code> function, which returns rows of fiscal year, net income per share and owner earnings per share. The printed figures below are the ones the bench computes from the same filings; if your reader's sieve differs, your numbers will differ, and the difference is worth finding.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as four hand-drawn steps left to right: rows from Analyst session 1's owner earnings reader; slice the last five and last ten rows; take the mean of each window; flag any year more than 50 percent away from the ten-year median. Under each step, the check to run: confirm the last fiscal year, print the window years, compare five with ten, read each flag as a question.">
+        <defs>
+          <filter id="vp2dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="89" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp2dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp2dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp2dH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp2dS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp2dB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp2dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp2dN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp2dH" x="30" y="26">ROWS TO AVERAGES, AND THE CHECK AFTER EACH STEP</text>
+
+        <g filter="url(#vp2dSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="180" height="60" rx="8" transform="rotate(-0.6 120 86)" fill="url(#vp2dHc)"/>
+          <rect x="246" y="56" width="180" height="60" rx="8" transform="rotate(0.5 336 86)" fill="#EEF5F0"/>
+          <rect x="462" y="56" width="180" height="60" rx="8" transform="rotate(-0.4 552 86)" fill="#EEF5F0"/>
+          <rect x="678" y="56" width="180" height="60" rx="8" transform="rotate(0.6 768 86)" fill="#93701C" stroke="#93701C"/>
+          <path d="M214 86 L240 86" marker-end="url(#vp2dAr)"/>
+          <path d="M430 86 L456 86" marker-end="url(#vp2dAr)"/>
+          <path d="M646 86 L672 86" marker-end="url(#vp2dAr)"/>
+          <rect x="30" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="246" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="462" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="678" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+        </g>
+
+        <text class="vp2dH" x="120" y="82" text-anchor="middle">1 · rows</text>
+        <text class="vp2dS" x="120" y="100" text-anchor="middle">session 1's owner_earnings()</text>
+        <text class="vp2dH" x="336" y="82" text-anchor="middle">2 · slice</text>
+        <text class="vp2dS" x="336" y="100" text-anchor="middle">last 5 rows, last 10 rows</text>
+        <text class="vp2dH" x="552" y="82" text-anchor="middle">3 · mean</text>
+        <text class="vp2dS" x="552" y="100" text-anchor="middle">one per window</text>
+        <text class="vp2dW" x="768" y="82" text-anchor="middle">4 · flag</text>
+        <text class="vp2dW" x="768" y="100" text-anchor="middle">50% from 10-yr median</text>
+        <text class="vp2dB" x="120" y="164" text-anchor="middle">check: the last year</text>
+        <text class="vp2dS" x="120" y="182" text-anchor="middle">P&amp;G ends at FY2026</text>
+        <text class="vp2dB" x="336" y="164" text-anchor="middle">check: window years</text>
+        <text class="vp2dS" x="336" y="182" text-anchor="middle">a missing year shortens it</text>
+        <text class="vp2dB" x="552" y="164" text-anchor="middle">check: five vs ten</text>
+        <text class="vp2dS" x="552" y="182" text-anchor="middle">which is higher, and why?</text>
+        <text class="vp2dB" x="768" y="164" text-anchor="middle">check: read each flag</text>
+        <text class="vp2dS" x="768" y="182" text-anchor="middle">a question, not a verdict</text>
+
+        <text class="vp2dN" x="30" y="226">The rule flags boom years and a normal year too. It points you at the 10-K note; it cannot sort for you.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the flag in brass is the step that needs a human; the code only says where to look</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Step 1 · Load the rows for all four filers.</strong> One call per company to the reader you built in Analyst session 1, kept in a dictionary so every later step reuses them without fetching again.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · rows from session 1's reader</span>from statistics import mean, median
+
+FILERS = [("0000018230", "Caterpillar"), ("0000034088", "Exxon Mobil"),
+          ("0000200406", "Johnson &amp; Johnson"), ("0000080424", "Procter &amp; Gamble")]
+
+ROWS = {name: owner_earnings(cik) for cik, name in FILERS}   # [(fy, ni_ps, oe_ps), ...]</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 2 · Check the windows before averaging.</strong> Print which fiscal years each window covers. P&amp;G's year ends in June, so its last year is fiscal 2026 while the others end at fiscal 2025.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · which years are inside</span>for name, rows in ROWS.items():
+    years = [r[0] for r in rows]
+    print(f"{name:18} five-year FY{years[-5]}-FY{years[-1]}  ten-year FY{years[-10]}-FY{years[-1]}")
+
+Caterpillar        five-year FY2021-FY2025  ten-year FY2016-FY2025
+Exxon Mobil        five-year FY2021-FY2025  ten-year FY2016-FY2025
+Johnson &amp; Johnson  five-year FY2021-FY2025  ten-year FY2016-FY2025
+Procter &amp; Gamble   five-year FY2022-FY2026  ten-year FY2017-FY2026</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 3 · Five- and ten-year means at the last fiscal year.</strong> These two numbers are rung 2 and rung 3 of the bench, the bases Analyst sessions 4 to 6 value.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · normalise, and what it printed</span>def normalise(rows):
+    oe = [r[2] for r in rows]
+    return rows[-1][0], mean(oe[-5:]), mean(oe[-10:])
+
+for name, rows in ROWS.items():
+    y, m5, m10 = normalise(rows)
+    print(f"{name:18} FY{y}  five-year {m5:6.2f}  ten-year {m10:6.2f}")
+
+Caterpillar        FY2025  five-year  17.94  ten-year  13.17
+Exxon Mobil        FY2025  five-year   8.87  ten-year   6.16
+Johnson &amp; Johnson  FY2025  five-year  10.21  ten-year   7.92
+Procter &amp; Gamble   FY2026  five-year   5.90  ten-year   5.00</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 4 · Flag the years worth a second look.</strong> A simple rule: within the ten-year window, flag any year whose owner earnings per share sit more than 50 percent away from the window's median. The median is used because, unlike the mean, one wild year cannot drag it.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the flag rule, and what it printed</span>def flag_events(rows, window=10, band=0.5):
+    recent = rows[-window:]
+    med = median([oe for _, _, oe in recent])
+    return med, [(y, oe) for y, _, oe in recent if abs(oe - med) &gt; band * abs(med)]
+
+for name, rows in ROWS.items():
+    med, flags = flag_events(rows)
+    print(f"{name:18} median {med:5.2f}  flagged: " + ", ".join(f"FY{y} {oe:.2f}" for y, oe in flags))
+
+Caterpillar        median 13.77  flagged: FY2016 3.18, FY2017 4.56, FY2023 21.19, FY2024 22.39
+Exxon Mobil        median  5.92  flagged: FY2019 2.10, FY2020 1.47, FY2022 14.60
+Johnson &amp; Johnson  median  6.98  flagged: FY2017 1.33, FY2023 14.88, FY2025 12.13
+Procter &amp; Gamble   median  5.57  flagged: FY2019 1.33</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 5 · Sort each flag by hand.</strong> The rule flagged Caterpillar's fiscal 2023 and 2024 and J&amp;J's fiscal 2025: those are years of a business that grew, not events. It did not flag Exxon's fiscal 2015 at 1.84, because 2015 is outside the ten-year window. Write one line per flag: cycle, event, or not yet known.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · your sorting notes</span># one line per flag: cycle / event / not yet known, and the evidence
+# Caterpillar FY2016  ______________________________________________
+# Exxon Mobil FY2020  ______________________________________________
+# J&amp;J FY2023          ______________________________________________
+# P&amp;G FY2019          ______________________________________________</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 6 · Show the average with and without your event years.</strong> Never drop a year silently; print both and let the reader see what rides on the choice.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · with and without, and what it printed</span>def with_without(rows, events, window=10):
+    recent = rows[-window:]
+    kept = [oe for y, _, oe in recent if y not in events]
+    return mean(oe for _, _, oe in recent), mean(kept), len(kept)
+
+for name, events in [("Johnson &amp; Johnson", {2017, 2023}), ("Procter &amp; Gamble", {2019})]:
+    w, wo, n = with_without(ROWS[name], events)
+    print(f"{name:18} ten-year with {w:5.2f}  without {wo:5.2f} ({n} years)")
+
+Johnson &amp; Johnson  ten-year with  7.92  without  7.87 (8 years)
+Procter &amp; Gamble   ten-year with  5.00  without  5.41 (9 years)</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep the label with the number.</strong> A normalised figure travels as "ten-year mean owner earnings per share, all-capex approximation, latest filed values, event years kept (or: excluding FY2017 and FY2023)". The window, the treatment of events and the restatement choice are all part of the number.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before Analyst session 3</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Normalise your fifth company</strong> from Analyst session 1's homework: print its five- and ten-year means and the years inside each window. Which window holds a whole cycle, if either does?</li>
+      <li><strong>Run the flag rule on it</strong> and sort every flag as cycle, event or not yet known. For each event, find the line in the 10-K note that names it.</li>
+      <li><strong>Change the band</strong> from 50 percent to 30 and to 70 for one of the four filers. Write one sentence on what the rule catches and misses at each setting.</li>
+      <li><strong>Write the label</strong> for your normalised figure: window, event treatment, restatement choice, and the with-and-without pair if you excluded anything.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Analyst session 2 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Why normalise owner earnings before valuing a cyclical business like Exxon Mobil?</p>
+      <button class="qopt" type="button">A · Because averages always forecast the future better than single years</button>
+      <button class="qopt" type="button">B · Because one year can sit anywhere in the cycle, from 1.47 to 14.60 dollars a share within three years, and an average over a whole cycle stops that one year from deciding the value</button>
+      <button class="qopt" type="button">C · Because the filings report only averages, not single years</button>
+      <button class="qopt" type="button">D · Because normalising removes the need to look at individual years</button>
+      <p class="qwhy">A single year is a point on a swing. Averaging over a window that holds a whole cycle describes what an owner gets over time. It does not promise a better forecast, and it makes looking at the rows more important, not less.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · J&amp;J's owner earnings per share were 6.12 in fiscal 2016, 1.33 in fiscal 2017 and 6.80 in fiscal 2018. What is the right first treatment of 2017?</p>
+      <button class="qopt" type="button">A · Treat it as a likely event: it snaps straight back, so find the cause in the 10-K note, keep the year, and show the average with and without it</button>
+      <button class="qopt" type="button">B · Delete it, since it is obviously wrong</button>
+      <button class="qopt" type="button">C · Treat it as the start of a downturn and lower every forecast</button>
+      <button class="qopt" type="button">D · Replace it with the average of the years either side</button>
+      <p class="qwhy">A one-year collapse that recovers the next year is the signature of an event, not a cycle. The 10-K note names the cause. Keeping the year and printing both averages leaves the judgment visible; for J&amp;J's ten-year mean it moves the number only from 7.92 to 7.87.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">3 · What did the hold-out ladder preview show?</p>
+      <button class="qopt" type="button">A · The ten-year mean was the best starting point in every test</button>
+      <button class="qopt" type="button">B · Last year's earnings won every test, so normalising is pointless</button>
+      <button class="qopt" type="button">C · The five-year mean missed least at the 3- and 5-year hold-outs, last year's earnings won at 4 years, the ten-year mean never won, and every honest rung undershot</button>
+      <button class="qopt" type="button">D · The five-year mean forecast the post-2020 rise accurately</button>
+      <p class="qwhy">The result depends on where the test starts: from fiscal 2021, a strong year, last year's earnings won. Every honest rung guessed low because all four filers' owner earnings rose sharply after 2020. The claim is about these filers and these tests, not a law.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Every filer figure: owner earnings per share by year, five- and ten-year means (17.94 / 13.17, 8.87 / 6.16, 10.21 / 7.92, 5.90 / 5.00), medians, flagged years, with-and-without means, Exxon FY2020 D&amp;A, J&amp;J FY2017 and FY2023 net income, Caterpillar's restatements</span><span class="note">SEC EDGAR XBRL company facts, read from a public mirror after the SEC refused the build machine; computed with the bench's own engine</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The hold-out ladder: mean miss by rung at three hold-outs, the undershoot, Exxon standing at fiscal 2020</span><span class="note">Computed from the same filings; two independent implementations agreed on every value</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">"Vaguely right than precisely wrong"; the oil industry as the case where capex exceeds D&amp;A</span><span class="note">Buffett, W., Berkshire Hathaway shareholder letter, 1986, appendix (read at source)</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The causes of P&amp;G's fiscal 2019 and J&amp;J's fiscal 2017 drops</span><span class="note">Not read from the 10-K notes in this build; left for the learner to find, and taught as not yet known</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Reading the three statements, cash versus profit</span><span class="note">Taught in Finance: Reading the Numbers; linked, not re-taught</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 2 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>One year is a hostage</b><span>Exxon went 1.47 to 14.60 a share in three years. Average across a cycle.</span></div>
+      <div class="cheat-item"><b>Look inside the window</b><span>A five-year window can hold the boom and no trough. Print the years.</span></div>
+      <div class="cheat-item"><b>Cycle or event</b><span>Does next year snap back? Does the 10-K note name it? Then sort.</span></div>
+      <div class="cheat-item"><b>Never drop silently</b><span>Keep it, note it, show the mean with and without.</span></div>
+      <div class="cheat-item"><b>A flag is a question</b><span>The 50 percent rule also flags growth years. A human sorts.</span></div>
+      <div class="cheat-item"><b>The honest claim</b><span>Five-year mean missed least in two of three tests; every rung undershot.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You now have a normalised starting number for each filer, labelled with its window and its event treatment. Analyst session 3 asks what the business does with the money it keeps: return on invested capital against the cost of capital, and why growth is worth something only when the return on reinvestment beats that cost.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Analyst session 2 of 10 · learn-value-investing-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p1-owner-earnings-from-the-filings.html">← Prev: Owner earnings from the filings</a> &nbsp;·&nbsp; <a href="p3-return-on-invested-capital.html">Next: Return on invested capital →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>

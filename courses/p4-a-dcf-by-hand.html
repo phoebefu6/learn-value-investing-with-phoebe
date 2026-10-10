@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Analyst session 4 of 10. A two-stage discounted cash flow built by hand on Procter &amp; Gamble's ten-year owner earnings from its 10-K facts: each year discounted, the discount rate as a judgment, and the terminal value that carries 57 percent of the answer.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="A discounted cash flow, by hand - learn value investing with phoebe">
+<meta property="og:description" content="Analyst session 4 of 10. Ten years at 5 percent, then 2.5 percent forever, discounted at 9 percent: 95.16 a share, and 54.24 of it from beyond year 10.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/courses/p4-a-dcf-by-hand.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="A discounted cash flow, by hand - learn value investing with phoebe">
+<meta name="twitter:description" content="Analyst session 4 of 10. A two-stage DCF, year by year, and why most of the value sits beyond year 10.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-value-investing-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Analyst session 4 · A discounted cash flow, by hand - learn value investing with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-value-investing-with-phoebe</a> / Analyst session 4 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Value Investing with Phoebe · Analyst session 4 of 10</div>
+    <h1>A discounted cash flow, <span class="accent">by hand</span></h1>
+    <p class="sub">A valuation model is three choices and a lot of arithmetic. Tonight we do the arithmetic by hand, one year at a time, on one real base: Procter &amp; Gamble's ten-year mean owner earnings, 5.00 a share, computed from its 10-K facts in Analyst session 2. Ten years growing at 5 percent, then 2.5 percent forever, everything shrunk to today at 9 percent. The answer is 95.16 a share, and by the end you will know which of those three choices built most of it. The value is a model output, not a price, and nothing here compares it to one.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Analyst</span>
+      <span class="chip audience">Analysts, finance and data people who want to see every step of a valuation</span>
+      <span class="chip audience">Python, standard library only</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Two stages, the rate, the terminal</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the DCF function</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Analyst sessions 1 to 3 gave you a base: owner earnings per share from the filings, normalised across a cycle, with a view on how much the business must reinvest to grow. A discounted cash flow turns that base into one number by answering a single question: what is a stream of future cash worth in money today? Why a dollar next year is worth less than a dollar now is the price of time, taught in <a href="https://phoebefu6.github.io/learn-economics-with-phoebe/courses/a5-money-inflation-and-interest.html">Economics: money, inflation and interest ↗</a>. Here we use it, year by year, and watch where the value comes from.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = everyone builds</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A twelve-line Python <code>dcf()</code> that returns the value, the part from years 1 to 10 and the part from beyond year 10; the P&amp;G table you can check by hand on a calculator, 5.25 shrinking to 4.82 in year 1 and 8.14 shrinking to 3.44 in year 10; three values for three discount rates, 113.24, 95.16 and 81.95; and the habit of printing the terminal share, 57.0 percent here, next to every value you ever quote.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the two-stage model</span>
+      <h2>Two stages</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Nobody can forecast a business year by year forever, so a two-stage model splits the future in two. Stage one is a run of years you are willing to sketch explicitly: here ten years of owner earnings growing at 5 percent from a base of 5.00. Stage two is everything after, summarised as cash growing at a slow, steady 2.5 percent for ever. Every year's cash is then divided down to today at the discount rate, 9 percent, and the pieces are added.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ten hand-drawn bars of P&amp;G owner earnings per share, growing at 5 percent from 5.25 in year 1 to 8.14 in year 10. Inside each, a brass bar shows what that year is worth today at 9 percent, shrinking from 4.82 in year 1 to 3.44 in year 10. The ten brass bars add to 40.93. At the right, a separate block drawn at its own scale: the terminal value of 128.39 at year 10, worth 54.24 today.">
+        <defs>
+          <filter id="vp4aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp4aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp4aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp4aH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp4aL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp4aS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp4aB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp4aV { font: 800 11px Inter, sans-serif; fill: #1C3628; }
+          .vp4aW { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .vp4aN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp4aH" x="30" y="26">TEN YEARS OF CASH, AND WHAT EACH IS WORTH TODAY</text>
+        <text class="vp4aS" x="400" y="26">P&amp;G base 5.00 a share · 5% growth · 9% discount rate</text>
+
+        <g filter="url(#vp4aSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 260 L670 260"/>
+          <!-- scale 20 px per dollar; outer = owner earnings, inner brass = present value -->
+          <rect x="50" y="155" width="50" height="105" rx="4" transform="rotate(-0.6 75 207)" fill="#EEF5F0"/>
+          <rect x="112" y="150" width="50" height="110" rx="4" transform="rotate(0.5 137 205)" fill="#EEF5F0"/>
+          <rect x="174" y="144" width="50" height="116" rx="4" transform="rotate(-0.4 199 202)" fill="#EEF5F0"/>
+          <rect x="236" y="138" width="50" height="122" rx="4" transform="rotate(0.6 261 199)" fill="#EEF5F0"/>
+          <rect x="298" y="132" width="50" height="128" rx="4" transform="rotate(-0.5 323 196)" fill="#EEF5F0"/>
+          <rect x="360" y="126" width="50" height="134" rx="4" transform="rotate(0.4 385 193)" fill="#EEF5F0"/>
+          <rect x="422" y="119" width="50" height="141" rx="4" transform="rotate(-0.6 447 189)" fill="#EEF5F0"/>
+          <rect x="484" y="112" width="50" height="148" rx="4" transform="rotate(0.5 509 186)" fill="#EEF5F0"/>
+          <rect x="546" y="105" width="50" height="155" rx="4" transform="rotate(-0.4 571 182)" fill="#EEF5F0"/>
+          <rect x="608" y="97" width="50" height="163" rx="4" transform="rotate(0.6 633 178)" fill="#EEF5F0"/>
+          <rect x="56" y="164" width="38" height="96" rx="3" fill="#93701C" stroke="#93701C"/>
+          <rect x="118" y="167" width="38" height="93" rx="3" fill="#93701C" stroke="#93701C"/>
+          <rect x="180" y="171" width="38" height="89" rx="3" fill="#93701C" stroke="#93701C"/>
+          <rect x="242" y="174" width="38" height="86" rx="3" fill="#93701C" stroke="#93701C"/>
+          <rect x="304" y="177" width="38" height="83" rx="3" fill="#93701C" stroke="#93701C"/>
+          <rect x="366" y="180" width="38" height="80" rx="3" fill="#93701C" stroke="#93701C"/>
+          <rect x="428" y="183" width="38" height="77" rx="3" fill="#93701C" stroke="#93701C"/>
+          <rect x="490" y="186" width="38" height="74" rx="3" fill="#93701C" stroke="#93701C"/>
+          <rect x="552" y="189" width="38" height="71" rx="3" fill="#93701C" stroke="#93701C"/>
+          <rect x="614" y="191" width="38" height="69" rx="3" fill="#93701C" stroke="#93701C"/>
+          <!-- the terminal block, own scale -->
+          <path d="M664 150 L694 150" marker-end="url(#vp4aAr)"/>
+          <rect x="700" y="100" width="150" height="160" rx="6" transform="rotate(-0.7 775 180)" fill="url(#vp4aHc)"/>
+          <rect x="725" y="192" width="100" height="68" rx="4" transform="rotate(0.8 775 226)" fill="#93701C" stroke="#93701C"/>
+        </g>
+
+        <text class="vp4aV" x="75" y="149" text-anchor="middle">5.25</text>
+        <text class="vp4aV" x="137" y="144" text-anchor="middle">5.51</text>
+        <text class="vp4aV" x="199" y="138" text-anchor="middle">5.79</text>
+        <text class="vp4aV" x="261" y="132" text-anchor="middle">6.08</text>
+        <text class="vp4aV" x="323" y="126" text-anchor="middle">6.38</text>
+        <text class="vp4aV" x="385" y="120" text-anchor="middle">6.70</text>
+        <text class="vp4aV" x="447" y="113" text-anchor="middle">7.03</text>
+        <text class="vp4aV" x="509" y="106" text-anchor="middle">7.39</text>
+        <text class="vp4aV" x="571" y="99" text-anchor="middle">7.75</text>
+        <text class="vp4aV" x="633" y="91" text-anchor="middle">8.14</text>
+        <text class="vp4aW" x="75" y="250" text-anchor="middle">4.82</text>
+        <text class="vp4aW" x="137" y="250" text-anchor="middle">4.64</text>
+        <text class="vp4aW" x="199" y="250" text-anchor="middle">4.47</text>
+        <text class="vp4aW" x="261" y="250" text-anchor="middle">4.30</text>
+        <text class="vp4aW" x="323" y="250" text-anchor="middle">4.15</text>
+        <text class="vp4aW" x="385" y="250" text-anchor="middle">3.99</text>
+        <text class="vp4aW" x="447" y="250" text-anchor="middle">3.85</text>
+        <text class="vp4aW" x="509" y="250" text-anchor="middle">3.71</text>
+        <text class="vp4aW" x="571" y="250" text-anchor="middle">3.57</text>
+        <text class="vp4aW" x="633" y="250" text-anchor="middle">3.44</text>
+        <text class="vp4aL" x="75" y="278" text-anchor="middle">y1</text>
+        <text class="vp4aL" x="137" y="278" text-anchor="middle">y2</text>
+        <text class="vp4aL" x="199" y="278" text-anchor="middle">y3</text>
+        <text class="vp4aL" x="261" y="278" text-anchor="middle">y4</text>
+        <text class="vp4aL" x="323" y="278" text-anchor="middle">y5</text>
+        <text class="vp4aL" x="385" y="278" text-anchor="middle">y6</text>
+        <text class="vp4aL" x="447" y="278" text-anchor="middle">y7</text>
+        <text class="vp4aL" x="509" y="278" text-anchor="middle">y8</text>
+        <text class="vp4aL" x="571" y="278" text-anchor="middle">y9</text>
+        <text class="vp4aL" x="633" y="278" text-anchor="middle">y10</text>
+        <text class="vp4aB" x="775" y="88" text-anchor="middle">BEYOND YEAR 10</text>
+        <text class="vp4aL" x="775" y="128" text-anchor="middle">128.39 at year 10</text>
+        <text class="vp4aW" x="775" y="222" text-anchor="middle">54.24</text>
+        <text class="vp4aW" x="775" y="240" text-anchor="middle">today</text>
+        <text class="vp4aS" x="775" y="278" text-anchor="middle">drawn at its own scale</text>
+
+        <text class="vp4aS" x="30" y="302">pale bar = owner earnings that year · brass = what it is worth today · the ten brass bars add to 40.93</text>
+        <text class="vp4aN" x="30" y="326">The cash grows every year and its value today still shrinks: 9 percent of discount beats 5 percent of growth.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - year 10's cash is the largest and its present value the smallest; the block beyond year 10 outweighs all ten years together</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>How each year is discounted<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Grow the base one year at a time: 5.00 x 1.05 = 5.25 in year 1, 5.25 x 1.05 = 5.51 in year 2, and so on to 8.14 in year 10. Then ask what each year's cash is worth today. Year 1's cash arrives one year from now, so divide it by 1.09 once: 5.25 / 1.09 = 4.82. Year 2's arrives two years out, so divide by 1.09 twice: 5.51 / 1.09<sup>2</sup> = 4.64. Year 10's is divided by 1.09 ten times, which is 2.37, so 8.14 shrinks to 3.44.</p>
+        <div class="prompt-box good"><span class="label">★ The hand table · P&amp;G, 5% growth, 9% discount rate</span>year   owner earnings   worth today
+   1             5.25          4.82
+   2             5.51          4.64
+   3             5.79          4.47
+   4             6.08          4.30
+   5             6.38          4.15
+   6             6.70          3.99
+   7             7.03          3.85
+   8             7.39          3.71
+   9             7.75          3.57
+  10             8.14          3.44
+                             ------
+                              40.93</div>
+        <p>The right-hand column adds to <strong>40.93</strong>: everything the explicit decade is worth today. Notice the shape. The cash column rises, the present-value column falls, because the discount rate is larger than the growth rate. A business growing faster than its discount rate for a decade would show a rising right-hand column, and that should make you suspicious of the growth rate before it makes you excited about the value.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why 5 percent and 9 percent are choices, not facts<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Nothing in P&amp;G's filings says 5 percent. Its owner earnings per share rose from a five-year mean of 3.84 at the start of its run to 5.90 at the end, about 3.1 percent a year over 14 years, in nominal dollars. So 5 percent is above P&amp;G's own record: it is a round default the bench uses for every filer, so that the companies can be compared on the same sliders. The 9 percent is a judgment about the return you require for waiting and for risk, which is Part 2.</p>
+        <p>The honest way to write a DCF is to put the choices first, in a sentence: "base 5.00, ten-year mean owner earnings, all-capex approximation; 5 percent for ten years, then 2.5 percent; 9 percent discount rate". Anyone who disagrees with a choice can see it and change it. A value presented without its sentence is a number with its assumptions hidden.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Procter &amp; Gamble's base, from the filings.</strong> The 5.00 is the mean of P&amp;G's last ten fiscal years of owner earnings per share, net income plus D&amp;A minus all capital spending, divided by diluted shares, from its 10-K facts through fiscal 2026. Over the same ten years P&amp;G's capital spending ran at 1.19 times its D&amp;A, and its ten-year owner earnings totalled 127.2 billion against 132.6 billion of net income: one of the four filers where the all-capex approximation sits below profit. The base inherits every label from Analyst session 1.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the discount rate</span>
+      <h2>The discount rate is a judgment</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The discount rate does two jobs at once. It charges for time, because money tied up for ten years could have earned something safe in the meantime. And it charges for risk, because the cash in the table is a forecast, not a promise. No filing reports it and no formula hands it down from above. Move it one point and P&amp;G's value moves by more than a sixth.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 362" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn curve of P&amp;G value per share against the discount rate, with growth 5 percent for 10 years then 2.5 percent. At 8 percent the value is 113.24, at 9 percent 95.16, at 10 percent 81.95. Cutting the rate one point adds 18.08; raising it one point removes 13.21.">
+        <defs>
+          <filter id="vp4bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="47" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp4bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp4bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp4bH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp4bL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp4bS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp4bB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp4bV { font: 800 16px Inter, sans-serif; fill: #1C3628; }
+          .vp4bA { font: 700 11px Inter, sans-serif; fill: #2D5240; }
+          .vp4bN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp4bH" x="30" y="26">SAME BUSINESS, SAME CASH, THREE DISCOUNT RATES</text>
+        <text class="vp4bS" x="380" y="26">P&amp;G value per share · 5% for 10 years, then 2.5%</text>
+
+        <g filter="url(#vp4bSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M120 80 L120 280 L760 280"/>
+          <path d="M220 280 L220 288"/>
+          <path d="M440 280 L440 288"/>
+          <path d="M660 280 L660 288"/>
+          <path d="M220 120 C300 150 360 166 440 175 C520 186 590 204 660 214"/>
+          <path d="M220 128 L220 274" stroke="#C8D6CC" stroke-dasharray="4 5" stroke-width="1.4"/>
+          <path d="M440 220 L440 274" stroke="#C8D6CC" stroke-dasharray="4 5" stroke-width="1.4"/>
+          <path d="M660 222 L660 274" stroke="#C8D6CC" stroke-dasharray="4 5" stroke-width="1.4"/>
+          <circle cx="220" cy="120" r="7" fill="#FFFFFF"/>
+          <circle cx="440" cy="175" r="8" fill="#93701C" stroke="#93701C"/>
+          <circle cx="660" cy="214" r="7" fill="#FFFFFF"/>
+          <!-- doodle: the direction of the lever -->
+          <path d="M560 92 L700 92" marker-end="url(#vp4bAr)"/>
+        </g>
+
+        <text class="vp4bV" x="220" y="106" text-anchor="middle">113.24</text>
+        <text class="vp4bV" x="440" y="160" text-anchor="middle">95.16</text>
+        <text class="vp4bV" x="682" y="204">81.95</text>
+        <text class="vp4bB" x="440" y="210" text-anchor="middle">the default</text>
+        <text class="vp4bL" x="220" y="304" text-anchor="middle">8%</text>
+        <text class="vp4bL" x="440" y="304" text-anchor="middle">9%</text>
+        <text class="vp4bL" x="660" y="304" text-anchor="middle">10%</text>
+        <text class="vp4bA" x="440" y="324" text-anchor="middle">discount rate</text>
+        <text class="vp4bA" x="128" y="72">value per share</text>
+        <text class="vp4bS" x="560" y="80">higher rate, lower value</text>
+        <text class="vp4bS" x="560" y="114">one point down: +18.08</text>
+        <text class="vp4bS" x="560" y="132">one point up: -13.21</text>
+
+        <text class="vp4bN" x="30" y="350">The curve bends: a cut in the rate adds more than the same rise takes away. Nothing about P&amp;G changed.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - a two-point disagreement about the rate, 8 versus 10 percent, is a 31.29 disagreement about the value</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Time, risk, and the row of the grid<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Read the rate as the return you demand for handing over money today against a stream of cash you cannot be sure of. A safer, steadier stream earns a lower rate; a cyclical, indebted or poorly understood one earns a higher rate. That is a judgment about the business and about you, and two careful people can land a point apart.</p>
+        <p>One point is not a rounding error. Holding growth at 5 percent and the terminal at 2.5 percent, P&amp;G is worth <strong>113.24</strong> at 8 percent, <strong>95.16</strong> at 9 percent and <strong>81.95</strong> at 10 percent. The swing is lopsided because discounting compounds: every year's divisor changes, and the terminal value's divisor changes most of all, since it sits ten years out and also depends on the gap between the rate and terminal growth. Analyst session 6 sets this row beside the growth and terminal levers and asks which one moves the answer most.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>CAPM and betas: not covered<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Textbook finance derives a discount rate from a model of market returns, usually the capital asset pricing model, where a riskfree rate is topped up by a company's measured sensitivity to the market (its beta) times an equity risk premium. That derivation is not covered here. It needs market prices to estimate the beta, these pages use no market prices, and the derivation does not remove the judgment: it relocates it into the choice of premium and the period the beta is measured over.</p>
+        <p>If you want the full machinery, Aswath Damodaran publishes his cost-of-capital lectures, datasets and spreadsheets free at <a href="https://pages.stern.nyu.edu/~adamodar/">pages.stern.nyu.edu/~adamodar ↗</a>. For every exercise here, the rate is a stated choice, the range in Analyst session 6 brackets it by a point either way, and the sentence you write with the value says which rate you used.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Two analysts, one set of P&amp;G filings.</strong> Give two analysts the same ten years of 10-K facts, the same 5.00 base and the same growth path. One judges P&amp;G a steady consumer business and uses 8 percent; the other wants a cushion and uses 10. They report 113.24 and 81.95 a share, and neither has made an arithmetic mistake. The disagreement is real, it is about one input, and the only way a reader can see it is if both print the rate beside the value.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the terminal value</span>
+      <h2>The terminal value</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Stage two compresses forever into one number. If cash grows at a steady rate g for ever and you discount it at r, the whole stream is worth next year's cash divided by (r - g) at the point it starts. That is the Gordon growth formula, and it is standard finance. It is also where most of P&amp;G's value lives.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn bar 95.16 a share long, split into years 1 to 10 worth 40.93, 43.0 percent, and beyond year 10 worth 54.24, 57.0 percent, drawn in brass. Under the first part: the sum of ten present values from 4.82 to 3.44. Under the second: terminal value equals year-11 cash over r minus g, 128.39 at year 10, shrunk ten years at 9 percent to 54.24.">
+        <defs>
+          <filter id="vp4cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp4cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp4cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp4cH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp4cL { font: 600 12px Inter, sans-serif; fill: #17251D; }
+          .vp4cS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp4cB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp4cV { font: 800 20px Inter, sans-serif; fill: #1C3628; }
+          .vp4cW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp4cX { font: 800 20px Inter, sans-serif; fill: #FFFFFF; }
+          .vp4cN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp4cH" x="30" y="26">WHERE THE 95.16 COMES FROM</text>
+        <text class="vp4cS" x="250" y="26">P&amp;G, base 5.00, 5% for 10 years then 2.5%, discounted at 9%</text>
+
+        <g filter="url(#vp4cSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M60 74 L820 74"/>
+          <path d="M60 66 L60 82"/>
+          <path d="M820 66 L820 82"/>
+          <rect x="60" y="90" width="327" height="72" rx="6" transform="rotate(-0.4 223 126)" fill="#EEF5F0"/>
+          <rect x="387" y="90" width="433" height="72" rx="6" transform="rotate(0.3 603 126)" fill="#93701C" stroke="#93701C"/>
+          <path d="M223 196 L223 170" marker-end="url(#vp4cAr)"/>
+          <path d="M645 196 L645 170" marker-end="url(#vp4cAr)"/>
+          <rect x="60" y="200" width="330" height="62" rx="6" transform="rotate(0.6 225 231)" fill="#FFFFFF"/>
+          <rect x="460" y="200" width="360" height="62" rx="6" transform="rotate(-0.6 640 231)" fill="#FFFFFF"/>
+        </g>
+
+        <text class="vp4cL" x="440" y="60" text-anchor="middle">95.16 a share</text>
+        <text class="vp4cL" x="80" y="114">years 1 to 10</text>
+        <text class="vp4cV" x="80" y="144">40.93</text>
+        <text class="vp4cS" x="150" y="143">43.0 percent</text>
+        <text class="vp4cW" x="407" y="114">beyond year 10</text>
+        <text class="vp4cX" x="407" y="144">54.24</text>
+        <text class="vp4cW" x="477" y="143">57.0 percent</text>
+        <text class="vp4cS" x="76" y="224">the sum of ten present values</text>
+        <text class="vp4cL" x="76" y="246">4.82 + 4.64 + ... + 3.44 = 40.93</text>
+        <text class="vp4cS" x="476" y="224">TV = year-11 cash / (r - g) = 128.39 at year 10</text>
+        <text class="vp4cL" x="476" y="246">shrunk ten years at 9 percent: 54.24</text>
+
+        <text class="vp4cB" x="30" y="284">40.93 + 54.24 = 95.17: each part is rounded to cents, the unrounded total is 95.16</text>
+        <text class="vp4cN" x="30" y="306">More than half the value is a claim about the business after 2036, written as one division.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the brass part is the one sentence of the model you can least check, and it is the larger part</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Gordon growth, step by step<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Year 10's owner earnings are 8.14. Year 11's, the first year of stage two, are 2.5 percent higher. Divide year 11's cash by the gap between the discount rate and terminal growth, 0.09 - 0.025 = 0.065, and you get the value at the end of year 10 of everything that follows: <strong>128.39</strong>. That value sits ten years in the future, so it is divided by 1.09 ten times, like year 10's cash, giving <strong>54.24</strong> today.</p>
+        <p>Add the two stages: 40.93 + 54.24. On a calculator that is 95.17; the model prints <strong>95.16</strong>. Neither is wrong. Each part is rounded to cents before you add them; the model adds the unrounded parts and rounds once. Say so whenever you show the split, because a reader who adds your parts and gets a different total stops trusting the rest.</p>
+        <p>The terminal share, 54.24 of 95.16, is <strong>57.0 percent</strong>, and at these defaults it is the same for every base, because the base scales both parts equally. Print it beside every value. A DCF where most of the answer comes from beyond the forecast is a statement about the long run more than about the next decade.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What happens as g approaches r<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The divisor in the Gordon formula is r - g. At 9 and 2.5 percent it is 0.065. Raise terminal growth to 3.5 percent and P&amp;G's value rises to 105.65; lower it to 1.5 percent and it falls to 87.47. Keep raising it and the divisor heads toward zero while the terminal value heads toward infinity. At g equal to r the formula divides by zero, and above it the sum of the stream does not converge at all: each later year is worth as much or more today than the one before.</p>
+        <p>The intrinsic value bench in Analyst session 10 has a break button that sets terminal growth equal to the discount rate. It does not print an enormous number; it prints no value, and the reason. A model that returned a figure there would be lying.</p>
+        <p>Damodaran's terminal value lecture gives the economic reason for the cap, not just the arithmetic one: <strong>a stable growth rate cannot exceed the growth rate of the economy</strong>, though it can be lower, because a company growing faster than its economy for ever would eventually become the economy. He uses the riskfree rate as a simple proxy for nominal economic growth, which keeps terminal growth below the discount rate whenever the discount rate carries any premium for risk.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Vaguely right.</strong> In the 1986 letter's appendix on owner earnings, Buffett admits his maintenance-capex term must be a guess and still prefers it to a false precision: "I would rather be vaguely right than precisely wrong." A terminal value is the same kind of figure. Printing P&amp;G at 95.16 with two decimals and no terminal share is precise; printing 95.16 with "57.0 percent of it from beyond year 10, at 2.5 percent terminal growth" is closer to right.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Build the DCF function</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Python 3, standard library only, no data fetch tonight: the base is one number. We use P&amp;G's ten-year mean owner earnings per share unrounded, 4.998525, which displays as 5.00 everywhere else on the page. Using the rounded 5.00 would print 95.19 instead of 95.16, which is itself a small lesson in carrying full precision until the last step. The outputs printed below are what this code printed when run.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as four hand-drawn steps left to right: grow the base each year; discount each year by 1.09 to the power of the year; compute the terminal value as next year's cash over r minus terminal growth; add stage and terminal present values. Under each step, the check: year 1 worth 4.82, stage one 40.93, r above terminal growth, total 95.16.">
+        <defs>
+          <filter id="vp4dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="59" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="vp4dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#2D5240" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="vp4dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#17251D" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .vp4dH { font: 800 12px Inter, sans-serif; fill: #17251D; }
+          .vp4dS { font: 400 11px Inter, sans-serif; fill: #4F5F55; }
+          .vp4dB { font: 800 11px Inter, sans-serif; fill: #6B5112; }
+          .vp4dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .vp4dN { font: 400 12px Inter, sans-serif; fill: #4F5F55; }
+        </style>
+
+        <text class="vp4dH" x="30" y="26">FOUR STEPS INSIDE dcf(), AND THE CHECK AFTER EACH</text>
+
+        <g filter="url(#vp4dSk)" fill="none" stroke="#17251D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="180" height="60" rx="8" transform="rotate(-0.6 120 86)" fill="url(#vp4dHc)"/>
+          <rect x="246" y="56" width="180" height="60" rx="8" transform="rotate(0.5 336 86)" fill="#EEF5F0"/>
+          <rect x="462" y="56" width="180" height="60" rx="8" transform="rotate(-0.4 552 86)" fill="#EEF5F0"/>
+          <rect x="678" y="56" width="180" height="60" rx="8" transform="rotate(0.6 768 86)" fill="#93701C" stroke="#93701C"/>
+          <path d="M214 86 L240 86" marker-end="url(#vp4dAr)"/>
+          <path d="M430 86 L456 86" marker-end="url(#vp4dAr)"/>
+          <path d="M646 86 L672 86" marker-end="url(#vp4dAr)"/>
+          <rect x="30" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="246" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="462" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+          <rect x="678" y="140" width="180" height="56" rx="6" fill="#FFFFFF" stroke="#C8D6CC"/>
+        </g>
+
+        <text class="vp4dH" x="120" y="82" text-anchor="middle">1 · grow</text>
+        <text class="vp4dS" x="120" y="100" text-anchor="middle">cash x (1 + g), each year</text>
+        <text class="vp4dH" x="336" y="82" text-anchor="middle">2 · discount</text>
+        <text class="vp4dS" x="336" y="100" text-anchor="middle">divide by (1 + r) ** year</text>
+        <text class="vp4dH" x="552" y="82" text-anchor="middle">3 · terminal</text>
+        <text class="vp4dS" x="552" y="100" text-anchor="middle">next cash / (r - gt)</text>
+        <text class="vp4dW" x="768" y="82" text-anchor="middle">4 · add</text>
+        <text class="vp4dW" x="768" y="100" text-anchor="middle">stage + terminal PV</text>
+        <text class="vp4dB" x="120" y="164" text-anchor="middle">check: y1 worth 4.82</text>
+        <text class="vp4dS" x="120" y="182" text-anchor="middle">matches the hand table</text>
+        <text class="vp4dB" x="336" y="164" text-anchor="middle">check: stage 40.93</text>
+        <text class="vp4dS" x="336" y="182" text-anchor="middle">ten values added</text>
+        <text class="vp4dB" x="552" y="164" text-anchor="middle">check: r above gt</text>
+        <text class="vp4dS" x="552" y="182" text-anchor="middle">otherwise, no value</text>
+        <text class="vp4dB" x="768" y="164" text-anchor="middle">check: 95.16</text>
+        <text class="vp4dS" x="768" y="182" text-anchor="middle">and the 57.0% share</text>
+
+        <text class="vp4dN" x="30" y="226">Return the two parts, not only the total. The split is the first thing a careful reader asks for.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - step 3's guard is the line that keeps the function from printing a number where none exists</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Step 1 · Write the function.</strong> It returns three things: the value, what years 1 to n are worth today, and what everything beyond year n is worth today. The guard comes first, because a terminal growth at or above the discount rate has no value to return.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · dcf()</span>def dcf(base, r, n, g, gt):
+    """Two stages: n years growing at g, then gt forever.
+    Returns (value, stage-one PV, terminal PV), all per share."""
+    if r &lt;= gt:
+        raise ValueError("terminal growth must sit below the discount rate")
+    cash, stage = base, 0.0
+    for year in range(1, n + 1):
+        cash = cash * (1 + g)
+        stage += cash / (1 + r) ** year
+    tv = cash * (1 + gt) / (r - gt)
+    terminal = tv / (1 + r) ** n
+    return stage + terminal, stage, terminal</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 2 · Print the hand table.</strong> Before trusting the function, reproduce Part 1's table outside it and compare line by line with your calculator.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · the table, and what it printed</span>BASE = 4.998525   # P&amp;G ten-year mean owner earnings per share; displays as 5.00
+
+cash = BASE
+for year in range(1, 11):
+    cash = cash * 1.05
+    print(f"y{year:&lt;2}  owner earnings {cash:5.2f}   worth today {cash / 1.09 ** year:5.2f}")
+
+y1   owner earnings  5.25   worth today  4.82
+y2   owner earnings  5.51   worth today  4.64
+y3   owner earnings  5.79   worth today  4.47
+y4   owner earnings  6.08   worth today  4.30
+y5   owner earnings  6.38   worth today  4.15
+y6   owner earnings  6.70   worth today  3.99
+y7   owner earnings  7.03   worth today  3.85
+y8   owner earnings  7.39   worth today  3.71
+y9   owner earnings  7.75   worth today  3.57
+y10  owner earnings  8.14   worth today  3.44</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 3 · Run it on P&amp;G at the defaults.</strong> Print the value, the split, and the terminal share together, always.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · run, and what it printed</span>value, stage, terminal = dcf(BASE, r=0.09, n=10, g=0.05, gt=0.025)
+print(f"value {value:.2f} = years 1-10 {stage:.2f} + beyond year 10 {terminal:.2f}")
+print(f"terminal share {terminal / value:.1%}")
+
+value 95.16 = years 1-10 40.93 + beyond year 10 54.24
+terminal share 57.0%</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 4 · Loop over the discount rate.</strong> One point either side of the default. This is the row of the grid in Part 2, and the seed of the sensitivity grid in Analyst session 6.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · three rates, and what it printed</span>for r in (0.08, 0.09, 0.10):
+    value, _, _ = dcf(BASE, r=r, n=10, g=0.05, gt=0.025)
+    print(f"r {r:.0%}   value {value:7.2f}")
+
+r 8%   value  113.24
+r 9%   value   95.16
+r 10%   value   81.95</div>
+      </div>
+      <div class="step">
+        <p><strong>Step 5 · Break it on purpose.</strong> Set terminal growth equal to the discount rate and confirm the function refuses, rather than returning a huge number. Then write one sentence on why refusing is the correct behaviour.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · the guard, and what it printed</span>try:
+    dcf(BASE, r=0.09, n=10, g=0.05, gt=0.09)
+except ValueError as e:
+    print("no value:", e)
+
+no value: terminal growth must sit below the discount rate
+
+# your sentence: ______________________________________________</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Keep the sentence with the value.</strong> Wherever 95.16 travels, it travels as "P&amp;G, base 5.00 ten-year mean owner earnings (all-capex approximation), 5 percent for 10 years then 2.5 percent, at 9 percent; 57.0 percent from beyond year 10". Strip the sentence off and it becomes a price target in somebody else's deck, which it is not.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before Analyst session 5</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Do years 1 to 3 on paper</strong> for P&amp;G, without the code, and check them against the table. Then do year 10 and explain to someone else why its present value is the smallest of the ten.</li>
+      <li><strong>Run <code>dcf()</code> on another base</strong> from your Analyst session 2 work, for any of the four filers, at the defaults. Confirm the terminal share is still 57.0 percent, and write one line on why it does not depend on the base.</li>
+      <li><strong>Change the growth years</strong> from 10 to 5 and to 15 for P&amp;G. You should get 87.76 and 101.31. Write which way the terminal share moves and why.</li>
+      <li><strong>Write the sentence</strong> for your own valuation: base and its label, growth path, discount rate and why you chose it, terminal growth and why it sits below economic growth, and the terminal share.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and Analyst session 4 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · P&amp;G's year 3 owner earnings are 5.79 a share. At a 9 percent discount rate, what are they worth today?</p>
+      <button class="qopt" type="button">A · 5.31, dividing by 1.09 once</button>
+      <button class="qopt" type="button">B · 5.79, because owner earnings are already cash</button>
+      <button class="qopt" type="button">C · 4.47, dividing by 1.09 three times, because the cash arrives three years from now</button>
+      <button class="qopt" type="button">D · 4.27, subtracting 9 percent three times</button>
+      <p class="qwhy">Each year of waiting divides by 1.09 again: 5.79 / 1.09<sup>3</sup> = 4.47. Dividing once treats year 3's cash as if it arrived next year; subtracting a flat 9 percent each year is not how compounding works.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">2 · At P&amp;G's defaults, the discount rate one point either side gives 81.95 to 113.24; growth two points either side gives 81.84 to 110.71; terminal growth one point either side gives 87.47 to 105.65. What does that say?</p>
+      <button class="qopt" type="button">A · Terminal growth is the input the value is most sensitive to</button>
+      <button class="qopt" type="button">B · The inputs barely matter, since all three ranges include 95.16</button>
+      <button class="qopt" type="button">C · Growth matters most, because it is the only input taken from the filings</button>
+      <button class="qopt" type="button">D · A single point on the discount rate moves the value more than two points on stage-one growth, so the rate is the judgment to defend hardest</button>
+      <p class="qwhy">The rate's one-point range is 31.29 wide; growth's two-point range is 28.87; terminal growth's one-point range is 18.18. The rate touches every year's divisor and the terminal divisor at once. Analyst session 6 runs the full grid.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">3 · Why must terminal growth stay below the discount rate, and in practice well below it?</p>
+      <button class="qopt" type="button">A · It is a convention with no consequence; a higher value would simply be more optimistic</button>
+      <button class="qopt" type="button">B · At g equal to r the Gordon formula divides by zero and the stream has no finite value; and, in Damodaran's terms, stable growth cannot exceed the economy's growth, for which the riskfree rate is a simple proxy</button>
+      <button class="qopt" type="button">C · Because the filings cap growth at 2.5 percent</button>
+      <button class="qopt" type="button">D · Because a lower terminal growth always gives a more accurate value</button>
+      <p class="qwhy">The arithmetic cap is r - g greater than zero. The economic cap is tighter: a company cannot outgrow its economy for ever. Both are why the bench's break button prints no value rather than a large one.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Stable growth cannot exceed the growth rate of the economy, though it can be lower; the riskfree rate as a simple proxy for nominal economic growth</span><span class="note">Damodaran, A., valuation class slides, terminal value session, NYU Stern, 2023 (read at source)</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">P&amp;G base 5.00 (ten-year mean owner earnings per share), the year-by-year table, 40.93 / 54.24 / 95.16, terminal value 128.39, the rate row 113.24 / 95.16 / 81.95 and the one-input sensitivities</span><span class="note">SEC EDGAR XBRL company facts, read from a public mirror; base computed, values modelled on it at the stated assumptions</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Two-stage discounting and the Gordon growth terminal value</span><span class="note">Standard DCF mechanics, taught as standard finance; reproduced by the Python above</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">"Vaguely right than precisely wrong"</span><span class="note">Buffett, W., Berkshire Hathaway shareholder letter, 1986, appendix (read at source)</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Cost of capital from CAPM and betas</span><span class="note">Not covered; named and pointed to Damodaran's published pages</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Interest as the price of time</span><span class="note">Taught in Economics: money, inflation and interest; linked, not re-taught</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Analyst session 4 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Discount a year</b><span>Cash in year t, divided by (1 + r) to the power t.</span></div>
+      <div class="cheat-item"><b>Two stages</b><span>n explicit years at g, then a terminal value at gt, both shrunk to today.</span></div>
+      <div class="cheat-item"><b>Gordon growth</b><span>TV = next year's cash / (r - g). Requires r above g.</span></div>
+      <div class="cheat-item"><b>The rate is a judgment</b><span>P&amp;G: 113.24 at 8%, 95.16 at 9%, 81.95 at 10%.</span></div>
+      <div class="cheat-item"><b>Print the terminal share</b><span>57.0 percent at the defaults. Show the split; say why the parts add to 95.17.</span></div>
+      <div class="cheat-item"><b>Cap the terminal</b><span>No faster than the economy; no value at all when g reaches r.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>You can now turn a base into a value and say which choices built it. Analyst session 5 runs the machine backwards: type a test price, and solve for the growth that price already assumes. On P&amp;G's 95.16, a test price of twice the value, 190.33, implies 14.17 percent a year for ten years, a figure you can hold up against the 3.1 percent P&amp;G's owner earnings actually managed.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Analyst session 4 of 10 · learn-value-investing-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="p3-return-on-invested-capital.html">← Prev: Return on invested capital</a> &nbsp;·&nbsp; <a href="p5-what-the-price-assumes.html">Next: What the price already assumes →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=2"></script>
+</body>
+</html>
